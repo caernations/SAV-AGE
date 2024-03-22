@@ -9,23 +9,23 @@ protected:
     int itemID;
     std::string itemCode;
     std::string itemName;
-    double itemPrice;
+    int itemPrice;
 
 public:
-    Item(int itemID, const std::string& itemCode, const std::string& itemName, double itemPrice);
+    Item(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice);
     virtual ~Item(); // virtual dtor
 
     // getters
     int getItemID() const;
     std::string getItemCode() const;
     std::string getItemName() const;
-    double getItemPrice() const;
+    int getItemPrice() const;
 
     // setters
     void setItemID(int newItemID);
     void setItemCode(const std::string& newItemCode);
     void setItemName(const std::string& newItemName);
-    void setItemPrice(double newItemPrice);
+    void setItemPrice(int newItemPrice);
 
     // operator overloads
     bool operator==(const Item& other) const;

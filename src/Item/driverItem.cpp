@@ -5,7 +5,7 @@
 
 class DummyItem : public Item {
 public:
-    DummyItem(int itemID, const std::string& itemCode, const std::string& itemName, double itemPrice)
+    DummyItem(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice)
         : Item(itemID, itemCode, itemName, itemPrice) {}
 
     virtual void displayItem() const override {

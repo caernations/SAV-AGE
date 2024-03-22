@@ -1,7 +1,7 @@
 #include "Item.hpp"
 
 // ctor
-Item::Item(int itemID, const std::string& itemCode, const std::string& itemName, double itemPrice)
+Item::Item(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice)
     : itemID(itemID), itemCode(itemCode), itemName(itemName), itemPrice(itemPrice) {}
 
 // virtual dtor
@@ -12,14 +12,14 @@ Item::~Item() {}
 int Item::getItemID() const { return itemID; }
 std::string Item::getItemCode() const { return itemCode; }
 std::string Item::getItemName() const { return itemName; }
-double Item::getItemPrice() const { return itemPrice; }
+int Item::getItemPrice() const { return itemPrice; }
 
 
 // setters
 void Item::setItemID(int newID) { itemID = newID; }
 void Item::setItemCode(const std::string& newCode) { itemCode = newCode; }
 void Item::setItemName(const std::string& newName) { itemName = newName; }
-void Item::setItemPrice(double newPrice) { itemPrice = newPrice; }
+void Item::setItemPrice(int newPrice) { itemPrice = newPrice; }
 
 
 // operator overloads implementation
