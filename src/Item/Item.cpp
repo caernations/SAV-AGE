@@ -36,7 +36,7 @@ void Item::displayItem() const {
     std::cout << "ID: " << itemID << ", Code: " << itemCode << ", Name: " << itemName << ", Price: " << itemPrice << std::endl;
 }
 
-Item* Item::cloneItem() const {
-    // harus dioverride sama derived class
-    // throw std::logic_error("Clone not implemented for base Item");
-}
+// Item* Item::cloneItem() const {
+//     // harus dioverride sama derived class
+//     // throw std::logic_error("Clone not implemented for base Item");
+// }
