@@ -6,16 +6,31 @@
 
 class Player {
 private:
+    const int STARTING_WEIGHT = 40;
+    const int STARTING_GULDEN = 50;
+
     int gulden;
     int berat_badan;
     std::map<int, Item> inventory; 
 
 public:
-    Player(); // ctor
+    // Create player with default values and an empty inventory
+    Player();
+
+    // Create player with gulden, berat_badan, and inventory
+    Player(int gulden, int berat_badang, std::map<int, Item> inventory);
+
+    // dtor
+    ~Player();
+
     int changeGulden(int amt);
+
     void addToInv(Item item, int posX, int posY);
+
     Item takeFromInv(int posX, int posY);
+
     void consumeFromInv(int posX, int posY);
+    
     void consumeItem(Item item);
 };
 

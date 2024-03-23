@@ -4,6 +4,7 @@
 #include "Item.hpp"
 #include <string>
 #include <iostream>
+using namespace std;
 
 class Plant : public Item {
 private:
@@ -40,7 +41,7 @@ public:
     * @param itemName Nama tanaman
     * @param itemPrice Harga tanaman
     */
-    Plant(int plantID, const std::string& plantType, int duration_to_harvest, const std::string& itemCode, const std::string& itemName, double itemPrice);
+    Plant(int plantID, const std::string& itemCode, const std::string& itemName, const std::string& plantType, int duration_to_harvest, int itemPrice);
 
     // dtor
     ~Plant();
