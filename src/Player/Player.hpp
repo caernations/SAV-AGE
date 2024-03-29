@@ -21,7 +21,7 @@ public:
     Player();
 
     // Create player with gulden, berat_badan, and inventory
-    Player(int gulden, int berat_badan, std::map<int, Item> inventory);
+    Player(int gulden, int berat_badan);
 
     // dtor
     ~Player();
