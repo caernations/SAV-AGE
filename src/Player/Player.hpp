@@ -9,8 +9,11 @@ private:
     const int STARTING_WEIGHT = 40;
     const int STARTING_GULDEN = 50;
 
+    int inventorySizeWidth;
+    int inventorySizeHeight;
+
     int gulden;
-    int berat_badan;
+    int beratBadan;
     std::map<int, Item> inventory; 
 
 public:
@@ -18,7 +21,7 @@ public:
     Player();
 
     // Create player with gulden, berat_badan, and inventory
-    Player(int gulden, int berat_badang, std::map<int, Item> inventory);
+    Player(int gulden, int berat_badan, std::map<int, Item> inventory);
 
     // dtor
     ~Player();
