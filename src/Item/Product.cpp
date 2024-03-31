@@ -61,7 +61,7 @@ Item* Product::cloneItem() const {
 }
 
 bool Product::isProductConsumable() const {
-    return productType == "PRODUCT_FRUIT_PLANT" or productType == "PRODUCT_ANIMAL";
+    return productType == "PRODUCT_FRUIT_PLANT" || productType == "PRODUCT_ANIMAL";
 }
 
 
