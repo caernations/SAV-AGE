@@ -3,7 +3,7 @@
 
 
 // ctor
-Player::Player()
+Player::Player():
     // : playerType(PETANI), // ini gmn defaultnya yg bener
       playerID(0),
       playerName(""),
@@ -32,22 +32,21 @@ int Player::changeGulden(int guldenAmount) {
     return gulden;
 }
 
-void Player::addToInv(Item item, int posX, int posY) {
+void Player::addToInv(Item* item, int posX, int posY) {
     int index = posX + posY * inventorySizeWidth;
-    inventory[index] = item;
+    inventory.set(posX,posY,item);
 }
 
-Item Player::takeFromInv(int posX, int posY) {
-    int index = posX + posY * inventorySizeWidth; 
-    Item item = inventory[index];
-    inventory.erase(index);
+Item* Player::takeFromInv(int posX, int posY) {
+    Item* item = inventory[posX][posY];
+    inventory.remove(posX,posY);
     return item;
 }
 
 void Player::consumeFromInv(int posX, int posY) {
 }
 
-void Player::consumeItem(Item item) {
+void Player::consumeItem(Item* item) {
 }
 
 int Player::getGulden() const {

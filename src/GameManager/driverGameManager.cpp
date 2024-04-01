@@ -1,4 +1,5 @@
 #include "GameManager.hpp"
+#include "../Item/Item.hpp"
 #include <iostream>
 
 using namespace std;
@@ -8,6 +9,7 @@ int main(){
     GameManager test;
 
     cout << "STARTING DRIVER" << endl;
+    //test
 
     while(!quit){
         test.awaitLineInput("Your input : ");

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-//#include "../Player/Player.hpp"
+#include "../Player/Player.hpp"
 #include "../utils/StringProcessor.hpp"
 
 using namespace std;
@@ -15,16 +15,22 @@ class GameManager{
         string lastInput;
         vector<string> lastMultiInput;
         //GeneralStore& store;
-        //vector<Player> activePlayers;
+        vector<Player*> activePlayers;
     public:
         GameManager();
 
         ~GameManager();
         
+        //loadfrom
+        void load(string savename);
+
+        //startnew
+        void init();
+
         //getter
         string getLastInput();
-        vector<string> getLastMultiInput();
-        
+        vector<string> getLastMultiInput();        
+
         //GameLoop adalah loop utama yang mengandung semua interaksi player-CLI
         //Ada 2 cara untuk tau game udah selesai, return boolean atau throw exception
         void gameloop();

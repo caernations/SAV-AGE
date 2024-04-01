@@ -1,7 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include <map>
+#include "../Map/Map.hpp"
 #include <string>
 #include <vector>
 #include <utility>
@@ -24,7 +24,7 @@ private:
     std::string playerName;
     int gulden;
     int beratBadan;
-    std::map<int, Item> inventory; 
+    Map<Item> inventory; 
 
     int inventorySizeWidth;
     int inventorySizeHeight;
@@ -38,13 +38,13 @@ public:
 
     int changeGulden(int guldenAmount);
 
-    void addToInv(Item item, int posX, int posY);
+    void addToInv(Item* item, int posX, int posY);
 
-    Item takeFromInv(int posX, int posY);
+    Item* takeFromInv(int posX, int posY);
 
     void consumeFromInv(int posX, int posY);
     
-    void consumeItem(Item item);
+    void consumeItem(Item* item);
 
     // virtual void playerAction() = 0; // pure virtual
 

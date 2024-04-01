@@ -12,6 +12,15 @@ GameManager::~GameManager(){
     cout << "Ending game..." << endl;
 };
 
+void GameManager::load(string savename){
+
+};
+
+void GameManager::init(){
+    //activePlayers.push_back(new Walikota())
+};
+
+
 //get setters
 string GameManager::getLastInput(){
     return lastInput;
@@ -45,6 +54,18 @@ void GameManager::awaitMultiInput(string question,char splitter){
 //paling bawah
 void GameManager::gameloop(){
     while(true){
+        // Wait for input
+        awaitLineInput(">>> ");
 
+        // Check with commands
+        if (lastInput.compare("EXIT")){
+            break;
+        }
+        else if (lastInput.compare("TAX")){
+
+        }
+        else{
+            cout << "Invalid command" << endl;
+        }
     }
 }
