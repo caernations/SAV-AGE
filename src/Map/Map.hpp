@@ -3,33 +3,43 @@
 
 #include <vector>
 #include <string>
+using namespace std;
 
 template <class T>
 class Map{
     private:
-        // Ukuran map, map_size[0] adalah x, [1] adalah y
-        int map_size[2];
+        int panjang; // X axis
+        int lebar; // Y axis
         // List yang memegang map
-        std::vector<std::vector<T*>> map;
-
-        std::string name;
+        vector<vector<T*>> map;
+        string name;
     public:
         // inisialisasi map kosong
         Map();
 
         // inisialisasi map dengan ukuran tertentu
-        Map(const int& mapX, const int& mapY);
+        Map(int mapX, int mapY);
 
         // the above + name
-        Map(const int& mapX, const int& mapY, const std::string& name);
+        Map(int mapX, int mapY, const string& name);
 
         // print map seperti spek
         void displayMap();
 
+        vector<vector<T*>> getMap();
+
         // meng set suatu item ke map, menerima OBJEK, bukan konstanta
-        void set(const int& x, const int& y, T item);
+        void set(int x, int y, T* item);
 
         //debug tools : cek ukuran map dari ukuran list
         void reportsize();
+
+        bool isEmpty();
+
+        void print_divider(int items, int size);
+
+        void iterateAlphabet(int length);
+
+
 };
 #endif

@@ -1,12 +1,15 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include <map>
 #include <string>
 #include <vector>
 #include <utility>
 #include "../Item/Item.hpp"
+#include "../Map/Map.hpp"
+#include "../Item/Product.hpp"
+#include "../utils/StringProcessor.hpp"
 
+using namespace std;
 
 enum PlayerType {
     PETANI,
@@ -15,50 +18,102 @@ enum PlayerType {
 };
 
 class Player {
-private:
-    const int STARTING_WEIGHT = 40;
-    const int STARTING_GULDEN = 50;
+    private:
+        const int STARTING_WEIGHT = 40;
+        const int STARTING_GULDEN = 50;
 
-    PlayerType playerType;
-    int playerID;
-    std::string playerName;
-    int gulden;
-    int beratBadan;
-    std::map<int, Item> inventory; 
+        PlayerType playerType;
+        int playerID;
+        string playerName;
+        int gulden;
+        int beratBadan;
+        Map<Item> inventory; 
+        int invenSizeW;
+        int invenSizeH;
 
-    int inventorySizeWidth;
-    int inventorySizeHeight;
+    public:
+        Player();
 
-public:
-    Player();
+        Player(int playerID, const string& playerName, int gulden, int berat_badan, PlayerType playerType, int invenSizeW, int invenSizeH);
 
-    Player(int playerID, const std::string& playerName, int gulden, int berat_badan, PlayerType playerType);
+        virtual ~Player();
 
-    virtual ~Player();
+        /**
+         * mengganti jumlah gulden player
+         * @param guldenAmount jumlah gulden yang ingin ditambah/dikurangi
+         * guldenAmount positif jika ingin menambahkan gulden
+         * guldenAmount negatif jika ingin mengurangi gulden
+        */
+        void changeGulden(int guldenAmount);
 
-    int changeGulden(int guldenAmount);
+        /**
+         * Menambahkan item ke dalam inventory ke slot yang kosong
+         * @param item item yang ingin ditambahkan
+        */
+        void addToInv(Item* item);
 
-    void addToInv(Item item, int posX, int posY);
+        /**
+         * Mengambil item dari invento-ry
+         * @param ItemType tipe item yang ingin diambil
+         * @return item yang diambil
+        */
+        Item& takeFromInv(ItemType ItemType);
 
-    Item takeFromInv(int posX, int posY);
+        /**
+         * Memakan makanan dari inventory
+         * hanya dapat memakan makanan yang memiliki added_weight lebih dari 0
+        */
+        void consumeFromInv();
+        
+        // void consumeItem(const Item& item);
 
-    void consumeFromInv(int posX, int posY);
-    
-    void consumeItem(Item item);
+        // virtual void playerAction() = 0; // pure virtual
 
-    // virtual void playerAction() = 0; // pure virtual
+        // virtual void playerAction() {
+        //     cout << playerName << " melakukan aksi default." << endl;
+        // }
 
-    virtual void playerAction() {
-        std::cout << playerName << " melakukan aksi default." << std::endl;
-    }
+        /**
+         * Menampilkan inventory player
+        */
+        void displayInventory();
 
-    // getter
-    int getGulden() const;
-    int getBeratBadan() const;
-    std::string getPlayerName() const;
-    int getPlayerID() const;
-    void displayPlayerInfo() const;
-    PlayerType getType() const;
-};
+        // getter
+        /**
+         * Mendapatkan item dan jumlahnya dari inventory
+         * @return vector<pair<Item*, int>> vector yang berisi pasangan item dan jumlahnya
+        */
+        vector<pair<Item*, int>> getVarianItem();
+
+        /**
+         * Mengembalikan inventory player
+         * @return Map<Item>& inventory player
+        */
+        Map<Item>& getInventory();
+
+        /**
+         * Mengembalikan lebar inventory
+         * @return int lebar inventory player
+        */
+        int getInvenW();
+
+        /**
+         * Mengembalikan tinggi inventory
+         * @return int tinggi inventory player
+        */
+        int getInvenH();
+
+        int getGulden() const;
+
+        int getBeratBadan() const;
+
+        string getPlayerName() const;
+
+        int getPlayerID() const;
+
+        void displayPlayerInfo() const;
+
+        PlayerType getType() const;
+    };
 
 #endif 

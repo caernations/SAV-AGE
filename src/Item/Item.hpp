@@ -4,47 +4,52 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
 
 enum ItemType {
     BUILDING,
     PLANT,
     ANIMAL,
-    PRODUCT
+    PRODUCT,
+    RECIPE
 };
 
 class Item {
-protected:
-    int itemID;
-    std::string itemCode;
-    std::string itemName;
-    int itemPrice;
-    ItemType itemType;
+    protected:
+        int itemID;
+        string itemCode;
+        string itemName;
+        int itemPrice;
+        ItemType itemType;
+    public:
+        Item();
 
-public:
-    Item(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice, ItemType itemType);
-    virtual ~Item(); // virtual dtor
+        Item(int itemID, const string& itemCode, const string& itemName, int itemPrice, ItemType itemType);
+        
+        virtual ~Item(); // virtual dtor
 
-    // getters
-    int getItemID() const;
-    std::string getItemCode() const;
-    std::string getItemName() const;
-    int getItemPrice() const;
-    ItemType getItemType() const;
+        // getters
+        int getItemID() const;
+        string getItemCode() const;
+        string getItemName() const;
+        int getItemPrice() const;
+        ItemType getItemType() const;
 
-    // setters
-    void setItemID(int newItemID);
-    void setItemCode(const std::string& newItemCode);
-    void setItemName(const std::string& newItemName);
-    void setItemPrice(int newItemPrice);
-    void setItemType(ItemType newItemType);
+        // setters
+        void setItemID(int newItemID);
+        void setItemCode(const string& newItemCode);
+        void setItemName(const string& newItemName);
+        void setItemPrice(int newItemPrice);
+        void setItemType(ItemType newItemType);
 
-    // operator overloads
-    bool operator==(const Item& other) const;
-    bool operator<(const Item& other) const;
+        // operator overloads
+        bool operator==(const Item& other) const;
+        bool operator<(const Item& other) const;
 
-    // polymorphic behavior
-    virtual void displayItem() const = 0; // display each item differently
-    virtual Item* cloneItem() const = 0; // create copies tanpa tau tipe objeknya
+        // polymorphic behavior
+        virtual void displayItem() const = 0; // display each item differently
+
+        virtual Item* cloneItem() const = 0; // create copies tanpa tau tipe objeknya
 };
 
-#endif // ITEM_HPP
+#endif

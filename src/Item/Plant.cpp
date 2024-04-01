@@ -54,7 +54,6 @@ Plant& Plant::operator=(const Plant& other) {
 }
 
 void Plant::displayItem() const {
-    this->Item::displayItem();
     std::cout << "Plant ID: " << plantID << ", Type: " << plantType << ", Harvest Time: " << duration_to_harvest << ", Age: " << age << std::endl;
 }
 

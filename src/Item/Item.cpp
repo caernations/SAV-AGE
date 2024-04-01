@@ -1,5 +1,7 @@
 #include "Item.hpp"
 
+Item::Item() : itemID(0), itemCode(""), itemName(""), itemPrice(0), itemType(PRODUCT) {}
+
 // ctor
 Item::Item(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice, ItemType itemType)
     : itemID(itemID), itemCode(itemCode), itemName(itemName), itemPrice(itemPrice), itemType(itemType) {}
@@ -34,18 +36,18 @@ bool Item::operator<(const Item& other) const {
 
 
 // polymorphic behavior
-void Item::displayItem() const {
-    std::string typeName;
-    switch (itemType) {
-        case BUILDING: typeName = "Building"; break;
-        case PLANT:    typeName = "Plant";    break;
-        case ANIMAL:   typeName = "Animal";   break;
-        case PRODUCT:  typeName = "Product";  break;
-    }
-    std::cout << "Type: " << typeName << ", ID: " << itemID << ", Code: " << itemCode << ", Name: " << itemName << ", Price: " << itemPrice << std::endl;
-}
+// void Item::displayItem() const {
+//     std::string typeName;
+//     switch (itemType) {
+//         case BUILDING: typeName = "Building"; break;
+//         case PLANT:    typeName = "Plant";    break;
+//         case ANIMAL:   typeName = "Animal";   break;
+//         case PRODUCT:  typeName = "Product";  break;
+//         case RECIPE:   typeName = "Recipe";   break;
+//     }
+//     std::cout << "Type: " << typeName << ", ID: " << itemID << ", Code: " << itemCode << ", Name: " << itemName << ", Price: " << itemPrice << std::endl;
+// }
 
-// Item* Item::cloneItem() const {
-//     // harus dioverride sama derived class
-//     // throw std::logic_error("Clone not implemented for base Item");
+// Item* Item::cloneItem() {
+//     return new Item(*this);
 // }

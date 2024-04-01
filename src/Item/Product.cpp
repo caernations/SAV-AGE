@@ -52,7 +52,6 @@ Product& Product::operator=(const Product& other) {
 }
 
 void Product::displayItem() const {
-    this->Item::displayItem();
     std::cout << "product ID: " << productID << ", Type: " << productType << ", Origin: " << origin << ", Added Weight: " << added_weigth << std::endl;
 }
 
