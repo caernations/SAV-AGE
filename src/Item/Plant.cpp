@@ -61,8 +61,12 @@ Item* Plant::cloneItem() const {
     return new Plant(*this);
 }
 
-bool isReadyToHarvest(const Plant& plant) {
-    return plant.age >= plant.getDurationToHarvest();
+bool Plant::isReadyToHarvest() const {
+    return age >= duration_to_harvest;
+}
+
+void Plant::setAge(int newAge) {
+    age = newAge;
 }
 
 

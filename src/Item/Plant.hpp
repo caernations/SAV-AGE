@@ -84,6 +84,13 @@ class Plant : virtual public Item {
          */
         void setDurationToHarvest(int newDurationToHarvest);
 
+        // Menambahkan setter untuk age
+        /**
+         * Mengatur umur tanaman
+         * @param newAge Umur baru tanaman
+         */
+        void setAge(int newAge);
+
         // operator overloads
 
         /**

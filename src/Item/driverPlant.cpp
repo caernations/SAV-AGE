@@ -1,6 +1,4 @@
 #include "Plant.hpp"
-#include "Item.cpp"
-#include "Plant.cpp"
 
 using namespace std;
 
@@ -39,9 +37,21 @@ int main(){
 
     p3.displayItem();
 
-    if (isReadyToHarvest(p3)) {
+    if (p3.isReadyToHarvest()) {
         cout << "Sudah bisa dipanen" << endl;
     } else {
         cout << "Belum bisa dipanen" << endl;
     }
+
+    Plant p4(2, "P002", "Lettuce", "Sayur", 15, 3000);
+    p4.setAge(15);
+    p4.displayItem();
+    if (p4.isReadyToHarvest()) {
+        cout << "Sudah bisa dipanen" << endl;
+    } else {
+        cout << "Belum bisa dipanen" << endl;
+    }
+
+
+    return 0;
 }
