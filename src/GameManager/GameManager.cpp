@@ -58,14 +58,15 @@ void GameManager::gameloop(){
         awaitLineInput(">>> ");
 
         // Check with commands
-        if (lastInput.compare("EXIT")){
+        if (lastInput.compare("EXIT") == 0){
             break;
         }
-        else if (lastInput.compare("TAX")){
+        else if (lastInput.compare("TAX") == 0){
             cout << "MONEY" << endl;
         }
         else{
             cout << "Invalid command" << endl;
         }
+        cout << "LOOP" << endl;
     }
 }
