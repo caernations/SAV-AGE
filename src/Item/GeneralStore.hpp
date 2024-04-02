@@ -26,12 +26,15 @@ public:
     // Mengembalikan index dari item bila ada
     // Mengembalikan -1 bila tidak ada
     int isinStore(const Item* item) const;
+
+    int totalprice(int idx,int quantity);
     void displayStore();
 
     // setters
     
     void addItem(Item* item,int Quantity);
-    Item* sellItem(int idx,int Quantity);
+    void removeItem(int idx,int quantity);
+    Item* sellItem(int idx,int Quantity,int money);
     
 };
 

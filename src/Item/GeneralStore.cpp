@@ -26,21 +26,25 @@ int Store::getItemQuantity(const Item* item) const {
 }
 
 int Store::isinStore(const Item* item) const {
-    cout << "flag isinstore" << endl;
-    cout << this->items.size() << endl;
+    cout << "flag isinstore" << endl; // Buat debug saja
+    cout << this->items.size() << endl; // Buat debug saja
     for (int i = 0; i < this->items.size(); i++) {
-        cout << "flag isinstore loop ke-" << i << endl;
-        this->items[i]->displayItem();
-        item->displayItem();
-        cout << "item code in items " << this->items[i]->getItemCode() << endl;
-        cout << "item code input " << item->getItemCode() << endl;
+        cout << "flag isinstore loop ke-" << i << endl; // Buat debug saja
+        this->items[i]->displayItem(); // Buat debug saja
+        item->displayItem(); // Buat debug saja
+        cout << "item code in items " << this->items[i]->getItemCode() << endl; // Buat debug saja
+        cout << "item code input " << item->getItemCode() << endl; // Buat debug saja
         if (this->items[i]->getItemCode() == item->getItemCode()) {
-            cout << "flag isinstore loop ke-" << i << " finished" << endl;
+            cout << "flag isinstore loop ke-" << i << " finished" << endl; // Buat debug saja
             return i;
         }
         
     }
     return -1;
+}
+
+int Store::totalprice(int idx,int quantity){
+    return this->items[idx-1]->getItemPrice() * quantity;
 }
 
 void Store::displayStore() {
@@ -67,8 +71,11 @@ void Store::addItem(Item* item, int quantity) {
         this->Quantity.push_back(quantity);
     }
 }
+void Store::removeItem(int idx,int quantity){
+    this->Quantity[idx-1] -= quantity;
+}
 
-Item* Store::sellItem(int idx, int quantity) {
+Item* Store::sellItem(int idx, int quantity, int money) {
     if (idx <= 0 || idx > this->Quantity.size()) {
         throw out_of_range("Invalid index");
     }
@@ -77,16 +84,18 @@ Item* Store::sellItem(int idx, int quantity) {
         throw invalid_argument("StockNotEnough");
     }
     else {
+        if (this->totalprice(idx,quantity) > money){
+            throw invalid_argument("Not Enough Money");
+        }
         Item* sold = this->items[idx-1];
         if (quan != -1) {
-            int x = quan - quantity;
-            if (x == 0) {
-                delete this->items[idx - 1];
+            if (quan == quantity) {
+                //delete this->items[idx - 1];
                 this->items.erase(items.begin() + idx - 1);
                 this->Quantity.erase(Quantity.begin() + idx - 1);
             }
             else {
-                this->Quantity[idx - 1] = x;
+                this->removeItem(idx,quantity);
             }
 
         }
