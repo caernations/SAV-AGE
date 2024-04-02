@@ -11,13 +11,5 @@ int main(){
     cout << "STARTING DRIVER" << endl;
     //test
 
-    while(!quit){
-        test.awaitLineInput("Your input : ");
-        if (test.getLastInput() == "QUIT" || test.getLastInput() == "EXIT"){
-            quit = true;
-        }
-        else{
-            cout << "YOU TYPED : " << test.getLastInput() << endl; 
-        }
-    }
+    test.gameloop();
 }

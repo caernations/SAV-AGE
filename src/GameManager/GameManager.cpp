@@ -62,7 +62,7 @@ void GameManager::gameloop(){
             break;
         }
         else if (lastInput.compare("TAX")){
-
+            cout << "MONEY" << endl;
         }
         else{
             cout << "Invalid command" << endl;
