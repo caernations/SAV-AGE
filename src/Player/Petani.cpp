@@ -2,8 +2,6 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
-
 Petani::Petani() : Player() {
     lahan = Map<Plant>();
     jumlah_tumbuhan = 0;
@@ -19,9 +17,10 @@ Petani::Petani(int playerID, const string& playerName, int gulden, int berat_bad
     this->h_lahan = h_lahan;
 }
 
-Petani::~Petani() {}
+Petani::~Petani(){}
 
-void Petani::displayLahan(){
+void Petani::displayGrid(){
+    Color color;
     getLahan().iterateAlphabet(w_lahan);
     getLahan().print_divider(w_lahan,5);
     for (int i = 0; i < h_lahan; i++){
@@ -31,7 +30,12 @@ void Petani::displayLahan(){
             if (lahan.getMap()[j][i] == nullptr){
                 cout << "     " << "|";
             } else {
-                cout << " " << lahan.getMap()[j][i]->getItemCode() << " " << "|";
+                cout << " ";
+                if(lahan.getMap()[j][i]->isReadyToHarvest())
+                    color.colorGreen(lahan.getMap()[j][i]->getItemCode());
+                else
+                    color.colorRed(lahan.getMap()[j][i]->getItemCode());
+                cout << " " << "|";
             }
         }
         cout << endl;
@@ -64,3 +68,30 @@ Map<Plant>& Petani::getLahan() {
     return lahan;
 }
 
+void Petani::budidaya(){
+    // if (isInventoryFull()) throw InventoryFullException();
+    // if (jumlah_tumbuhan >= getMaxTumbuhan()) throw LahanFullException();
+    string slot;
+    tuple<int, int> pos;
+    Item& p = takeFromInv(PLANT);
+    Plant* plant = dynamic_cast<Plant*>(&p);
+
+    displayGrid();
+    while(true){
+        cout << "Slot: ";
+        cin >> slot;
+        pos = convertToCoordinate(slot);
+        if (lahan.getMap()[get<0>(pos)][get<1>(pos)] != nullptr){
+            cout << "Slot sudah terisi" << endl;
+        } else {
+            lahan.set(get<0>(pos), get<1>(pos), plant);
+            jumlah_tumbuhan++;
+            cout << "Cangkul, cangkul, cangkul yang dalam~!" << endl;
+            cout << convertToReadable(plant->getItemName()) << " berhasil ditanami" << endl;
+            return;
+        }
+
+
+    }
+
+}

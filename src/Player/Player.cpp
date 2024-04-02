@@ -1,5 +1,7 @@
 #include "Player.hpp"
 #include <iostream>
+#include <iomanip>
+using namespace std;
 
 Player::Player() :
     playerType(WALIKOTA),
@@ -29,7 +31,7 @@ void Player::changeGulden(int guldenAmount) {
     this->gulden += guldenAmount;
 }
 
-void Player::addToInv(Item* item) {
+void Player::addToInvEmptySlot(Item* item) {
     for (int i = 0; i < invenSizeW; i++) {
         for (int j = 0; j < invenSizeH; j++) {
             if (inventory.getMap()[i][j] == nullptr) {
@@ -40,10 +42,14 @@ void Player::addToInv(Item* item) {
     } 
 }
 
+void Player::addToInv(Item* item, int invenX, int invenY) {
+    inventory.set(invenX, invenY, item);
+}
+
 Item& Player::takeFromInv(ItemType ItemType) {
     string itemSlot;
     tuple<int, int> slot;
-    this->displayInventory();
+    Player::displayGrid();
     while(true) {
         cout << "Slot: ";
         cin >> itemSlot;
@@ -60,7 +66,6 @@ Item& Player::takeFromInv(ItemType ItemType) {
         cout << endl;
     }
 }
-
 
 void Player::consumeFromInv() {
     // if (inventory.isEmpty()) throw InventoryEmptyException();
@@ -85,7 +90,7 @@ void Player::consumeFromInv() {
     }
 }
 
-void Player::displayInventory() {
+void Player::displayGrid() {
     getInventory().iterateAlphabet(invenSizeW);
     getInventory().print_divider(invenSizeW,5);
     for (int i = 0; i <invenSizeH; i++){
@@ -162,4 +167,15 @@ int Player::getInvenW() {
 
 int Player::getInvenH() {
     return invenSizeH;
+}
+
+bool Player::isInventoryFull() {
+    for (int i = 0; i < invenSizeW; i++) {
+        for (int j = 0; j < invenSizeH; j++) {
+            if (inventory.getMap()[i][j] == nullptr) {
+                return false;
+            }
+        }
+    }
+    return true;
 }

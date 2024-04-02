@@ -4,6 +4,8 @@
 #include "Player.hpp"
 #include "../Map/Map.hpp"
 #include "../Item/Plant.hpp"
+#include "../utils/Color.hpp"
+
 
 class Petani : public Player{
     private:
@@ -11,6 +13,7 @@ class Petani : public Player{
         int jumlah_tumbuhan;
         int w_lahan;
         int h_lahan;
+        int maxTumbuhan;
     public:
         /**
          * Constructor
@@ -39,7 +42,7 @@ class Petani : public Player{
         /**
          * Menampilkan lahan yang dimiliki oleh Petani
          */
-        void displayLahan();
+        void displayGrid();
 
         /**
          * mengembalikan jumlah tumbuhan yang dimiliki oleh petani
@@ -68,6 +71,8 @@ class Petani : public Player{
          * @param tumbuhan tumbuhan yang akan ditanam
         */
         void setLahan(int lahanX, int lahanY, Plant* tumbuhan);
+        
+        void budidaya();
 
         /**
          * mengembalikan lahan yang dimiliki oleh petani

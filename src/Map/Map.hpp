@@ -1,8 +1,10 @@
-#ifndef __MAP_HPP__
-#define __MAP_HPP__
+#ifndef MAP_HPP
+#define MAP_HPP
 
 #include <vector>
 #include <string>
+#include "../Item/Item.hpp"
+
 using namespace std;
 
 template <class T>
@@ -33,9 +35,7 @@ class Map{
 
         //debug tools : cek ukuran map dari ukuran list
         void reportsize();
-
-        bool isEmpty();
-
+        
         void print_divider(int items, int size);
 
         void iterateAlphabet(int length);

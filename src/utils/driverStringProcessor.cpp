@@ -1,5 +1,4 @@
 #include "StringProcessor.hpp"
-#include "StringProcessor.cpp"
 #include <iostream>
 
 using namespace std;

@@ -30,6 +30,11 @@ class Player {
         Map<Item> inventory; 
         int invenSizeW;
         int invenSizeH;
+    protected:
+        /**
+         * budidaya mahkluk hidup
+        */
+        virtual void budidaya() = 0;
 
     public:
         Player();
@@ -50,7 +55,15 @@ class Player {
          * Menambahkan item ke dalam inventory ke slot yang kosong
          * @param item item yang ingin ditambahkan
         */
-        void addToInv(Item* item);
+        void addToInvEmptySlot(Item* item);
+
+        /**
+         * Menambahkan item ke dalam inventory pada slot tertentu
+         * @param item item yang ingin ditambahkan
+         * @param invenX
+         * @param invenY
+        */
+        void addToInv(Item* item, int invenX, int invenY);
 
         /**
          * Mengambil item dari invento-ry
@@ -76,7 +89,7 @@ class Player {
         /**
          * Menampilkan inventory player
         */
-        void displayInventory();
+        virtual void displayGrid();
 
         // getter
         /**
@@ -114,6 +127,9 @@ class Player {
         void displayPlayerInfo() const;
 
         PlayerType getType() const;
+
+        bool isInventoryFull();
+
     };
 
 #endif 

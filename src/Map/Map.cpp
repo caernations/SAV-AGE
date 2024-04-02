@@ -1,4 +1,5 @@
 #include "Map.hpp"
+#include <iomanip>
 #include <iostream>
 
 using namespace std;
@@ -35,32 +36,22 @@ std::vector<std::vector<T*>> Map<T>::getMap(){
 
 template<class T>
 void Map<T>::displayMap(){
-    print_divider(panjang,3);
+    iterateAlphabet(panjang);
+    print_divider(panjang,5);
     for (int i = 0; i < lebar; i++){
+        cout << setw(2) << setfill('0') << i+1 << " ";
         cout << "|";
         for (int j = 0; j < panjang; j++){
             if (map[j][i] == nullptr){
-                cout << "   " << "|";
-            }
-            else{   
-                cout << map[j][i] << "|";
+                cout << "     " << "|";
+            } else {
+                cout << " " << map[j][i]->getItemCode() << " " << "|";
             }
         }
         cout << endl;
-        print_divider(panjang,3);
-    }
-}
+        print_divider(panjang,5);
 
-template<class T>
-bool Map<T>::isEmpty(){
-    for (int i = 0; i < panjang; i++){
-        for (int j = 0; j < lebar; j++){
-            if (map[i][j] != nullptr){
-                return false;
-            }
-        }
     }
-    return true;
 }
 
 template<class T>
