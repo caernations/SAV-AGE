@@ -48,7 +48,6 @@ class Item {
 
         // polymorphic behavior
         virtual void displayItem() const = 0; // display each item differently
-
         virtual Item* cloneItem() const = 0; // create copies tanpa tau tipe objeknya
 };
 

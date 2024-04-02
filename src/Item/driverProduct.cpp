@@ -1,4 +1,4 @@
-#include "Product.cpp"
+#include "Product.hpp"
 #include <iostream>
 #include <memory>
 

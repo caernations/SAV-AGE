@@ -1,5 +1,4 @@
 #include "Product.hpp"
-#include "Item.cpp"
 
 Product::Product() : Item(0, "", "", 0,PRODUCT), productID(0), productType(""), origin(""), added_weigth(0) {}
 

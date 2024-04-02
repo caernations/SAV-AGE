@@ -1,5 +1,4 @@
 #include "Petani.hpp"
-#include "Player.hpp"
 #include <iostream>
 #include <iomanip>
 
