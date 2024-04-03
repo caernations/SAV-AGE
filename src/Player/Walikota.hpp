@@ -1,5 +1,5 @@
 #include "Player.hpp"
-#include "Recipe.hpp"
+#include "../Item/Recipe.hpp"
 #include "../utils/StringProcessor.hpp"
 #include <vector>
 #include <tuple>
