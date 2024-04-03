@@ -6,7 +6,7 @@
 #include <iostream>
 using namespace std;
 
-class Plant : virtual public Item {
+class Plant :public Item {
     private:
         // Kode unik untuk class Plant
         int plantID;

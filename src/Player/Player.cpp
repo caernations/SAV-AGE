@@ -10,8 +10,11 @@ Player::Player() :
     gulden(STARTING_GULDEN),
     beratBadan(STARTING_WEIGHT),
     invenSizeH(10),
-    invenSizeW(10) {
-        inventory = Map<Item>(invenSizeW, invenSizeH);
+    invenSizeW(10),
+    itemCountInInventory(0)
+    {
+        inventory = Map<Item>(invenSizeW, invenSizeH, "Penyimpanan");
+        maxItemInInventory = invenSizeW * invenSizeH;
     }
 
 Player::Player(int playerID, const std::string& playerName, int gulden, int berat_badan, PlayerType playerType, int invenSizeW, int invenSizeH) : 
@@ -21,8 +24,10 @@ Player::Player(int playerID, const std::string& playerName, int gulden, int bera
     gulden(gulden),
     beratBadan(berat_badan),
     invenSizeW(invenSizeW),
-    invenSizeH(invenSizeH) {
-        inventory = Map<Item>(invenSizeW, invenSizeH);
+    invenSizeH(invenSizeH),
+    itemCountInInventory(0) {
+        inventory = Map<Item>(invenSizeW, invenSizeH, "Penyimpanan");
+        maxItemInInventory = invenSizeW * invenSizeH;
     }
 
 Player::~Player(){}
@@ -36,6 +41,7 @@ void Player::addToInvEmptySlot(Item* item) {
         for (int j = 0; j < invenSizeH; j++) {
             if (inventory.getMap()[i][j] == nullptr) {
                 inventory.set(i, j, item);
+                itemCountInInventory++;
                 return;
             }
         }
@@ -50,9 +56,11 @@ Item& Player::takeFromInv(ItemType ItemType) {
     string itemSlot;
     tuple<int, int> slot;
     Player::displayGrid();
+    cout << endl;
     while(true) {
         cout << "Slot: ";
         cin >> itemSlot;
+        cout << endl;
         slot = convertToCoordinate(itemSlot);
         if (inventory.getMap()[get<0>(slot)][get<1>(slot)] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
@@ -62,7 +70,7 @@ Item& Player::takeFromInv(ItemType ItemType) {
             inventory.getMap()[get<0>(slot)][get<1>(slot)] = nullptr;
             return *inventory.getMap()[get<0>(slot)][get<1>(slot)];
         }
-        cout << "Silahkan masukan slot yang berisi " << ItemType << endl;
+        cout << "Silahkan masukan slot yang berisi " << itemTypeToString(ItemType) << endl;
         cout << endl;
     }
 }
@@ -91,6 +99,7 @@ void Player::consumeFromInv() {
 }
 
 void Player::displayGrid() {
+    getInventory().printTitle(invenSizeW, 5);
     getInventory().iterateAlphabet(invenSizeW);
     getInventory().print_divider(invenSizeW,5);
     for (int i = 0; i <invenSizeH; i++){
@@ -109,11 +118,11 @@ void Player::displayGrid() {
     }
 }
 
-vector<pair<Item*, int>> Player::getVarianItem() {
+vector<pair<Item*, int>> Player::getVarianItem(ItemType ItemType) {
     vector<pair<Item*, int>> items;
     for (int i = 0; i < invenSizeW; i++) {
         for (int j = 0; j < invenSizeH; j++) {
-            if (inventory.getMap()[i][j] != nullptr) {
+            if (inventory.getMap()[i][j] != nullptr && inventory.getMap()[i][j]->getItemType() == ItemType){
                 bool found = false;
                 for (auto& item : items) {
                     if (item.first->getItemCode() == inventory.getMap()[i][j]->getItemCode()) {
@@ -169,13 +178,31 @@ int Player::getInvenH() {
     return invenSizeH;
 }
 
+int Player::getMaxItemInInventory() const {
+    return maxItemInInventory;
+}
+
+int Player::getItemCountInInventory() const {
+    return itemCountInInventory;
+}
+
 bool Player::isInventoryFull() {
-    for (int i = 0; i < invenSizeW; i++) {
-        for (int j = 0; j < invenSizeH; j++) {
-            if (inventory.getMap()[i][j] == nullptr) {
-                return false;
-            }
-        }
+    return itemCountInInventory == maxItemInInventory;
+}
+
+string Player::itemTypeToString(ItemType type) {
+    static const char* itemTypeStrings[] = {
+        "building",
+        "plant",
+        "animal",
+        "product",
+        "recipe" 
+    };
+
+    // Check if the type is within range
+    if (type >= 0 && type < NUM_ITEM_TYPES) {
+        return itemTypeStrings[type];
+    } else {
+        return "UNKNOWN";
     }
-    return true;
 }

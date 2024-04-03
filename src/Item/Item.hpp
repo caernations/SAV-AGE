@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -11,7 +12,9 @@ enum ItemType {
     PLANT,
     ANIMAL,
     PRODUCT,
-    RECIPE
+    RECIPE,
+    NUM_ITEM_TYPES
+
 };
 
 class Item {
@@ -48,6 +51,7 @@ class Item {
 
         // polymorphic behavior
         virtual void displayItem() const = 0; // display each item differently
+        
         virtual Item* cloneItem() const = 0; // create copies tanpa tau tipe objeknya
 };
 

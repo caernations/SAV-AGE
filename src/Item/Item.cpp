@@ -1,4 +1,5 @@
 #include "Item.hpp"
+#include "Product.hpp"
 
 Item::Item() : itemID(0), itemCode(""), itemName(""), itemPrice(0), itemType(PRODUCT) {}
 
@@ -33,6 +34,7 @@ bool Item::operator==(const Item& other) const {
 bool Item::operator<(const Item& other) const {
     return itemID < other.itemID;
 }
+
 
 
 // polymorphic behavior

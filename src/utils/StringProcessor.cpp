@@ -27,9 +27,10 @@ vector<string> split(string input,char splittingchar){
     return retval;
 };
 
-std::string convertToReadable(const std::string& str) {
+
+std::string convertToReadable(const std::string& str, bool capitalizeFirstWord, bool capitalizeAllWords) {
     std::string result = str;
-    
+
     // Convert string to lowercase
     std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) {
         return std::tolower(c);
@@ -38,10 +39,42 @@ std::string convertToReadable(const std::string& str) {
     // Replace underscores with spaces
     std::replace(result.begin(), result.end(), '_', ' ');
 
+    // Capitalize first letter of first word if required
+    if (capitalizeFirstWord && !result.empty()) {
+        result[0] = std::toupper(result[0]);
+    }
+
+    // Capitalize all words if required
+    if (capitalizeAllWords) {
+        bool makeUpper = true;
+        for (char& c : result) {
+            if (std::isalpha(c)) {
+                if (makeUpper) {
+                    c = std::toupper(c);
+                    makeUpper = false;
+                }
+            } else {
+                makeUpper = true;
+            }
+        }
+    }
+
     return result;
-};
+}
 
 std::tuple<int,int> convertToCoordinate(const std::string& str) {
+    // Check if the string is valid
+    if (str.empty() || !std::isalpha(str[0]) || !std::isdigit(str[1])) {
+        return std::make_tuple(-1, -1);
+    }
+
+    // Check if the rest of the string contains any non-digit characters
+    for (size_t i = 2; i < str.size(); ++i) {
+        if (!std::isdigit(str[i])) {
+            return std::make_tuple(-1, -1);
+        }
+    }
+
     // Convert the string to uppercase
     std::string uppercaseStr = str;
     std::transform(uppercaseStr.begin(), uppercaseStr.end(), uppercaseStr.begin(), ::toupper);
@@ -54,4 +87,4 @@ std::tuple<int,int> convertToCoordinate(const std::string& str) {
     int columnIndex = columnLetter - 'A';
 
     return std::make_tuple(columnIndex, rowNumber);
-};
+}

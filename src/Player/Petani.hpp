@@ -72,7 +72,25 @@ class Petani : public Player{
         */
         void setLahan(int lahanX, int lahanY, Plant* tumbuhan);
         
+        /**
+         * Menanam di lahan yang kosong
+         * jika lahan penuh, maka tidak akan menanam
+         * jika lahan tidak kosong, maka tidak akan menanam
+        */
         void budidaya();
+
+        /**
+         * memanen tumbuhan yang sudah siap
+         * jika penyimpanan penuh, maka tidak akan memanen
+        */
+        void panennn(vector<Product*>& products);
+
+        /**
+         * Mendapatkan tanaman yang siap untuk dipanen
+         * @return tuple Item* dan jumlah item tersebut
+        */
+        vector<pair<Item*, int>> getVarianReadyToHarvest();
+
 
         /**
          * mengembalikan lahan yang dimiliki oleh petani

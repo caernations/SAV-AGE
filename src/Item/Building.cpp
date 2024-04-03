@@ -44,3 +44,5 @@ int Building::getBuildCost() const {
 std::vector<std::pair<std::string, int>> Building::getMaterials() const {
     return materials;
 }
+
+

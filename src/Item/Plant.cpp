@@ -1,6 +1,5 @@
 #include "Plant.hpp"
 
-
 Plant::Plant() : Item(0," "," ", 0 ,PLANT), plantID(0), plantType(""), duration_to_harvest(0), age(0) {
     cout << "Created empty plant" << endl;
 }
@@ -62,9 +61,9 @@ Item* Plant::cloneItem() const {
 }
 
 bool Plant::isReadyToHarvest() const {
-    return this->age >= getDurationToHarvest();
+    return this->age >= this->getDurationToHarvest();
 }
 
-
-
-
+void Plant::setAge(int newAge){
+    age = newAge;
+}
