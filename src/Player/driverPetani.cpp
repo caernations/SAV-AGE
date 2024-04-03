@@ -43,8 +43,8 @@ int main(){
     p.getInventory().set(3,5,p1);
 
     
-    p3.changeAge(5);
-    p4.changeAge(5);
+    p3.setAge(5);
+    p4.setAge(5);
     p.setLahan(0, 0, &p3);
     p.setLahan(0, 1, &p4);
     vector<pair<Item*, int>> varians = p.getVarianItem(PLANT);

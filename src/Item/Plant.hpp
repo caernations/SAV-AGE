@@ -125,8 +125,6 @@ class Plant :public Item {
          */
         bool isReadyToHarvest() const;
 
-        void changeAge(int newAge);
-
 };
 
 #endif

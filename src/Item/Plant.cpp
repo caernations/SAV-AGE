@@ -64,6 +64,6 @@ bool Plant::isReadyToHarvest() const {
     return this->age >= this->getDurationToHarvest();
 }
 
-void Plant::changeAge(int newAge){
+void Plant::setAge(int newAge){
     age = newAge;
 }
