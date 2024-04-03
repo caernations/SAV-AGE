@@ -3,7 +3,7 @@ SOURCE	= 	src
 
 #THE THING YOU WANT TO TEST GOES HERE
 #ALAMAT NYA
-TESTEE	=	$(SOURCE)/GameManager/GameManager.cpp
+TESTEE	=	$(SOURCE)/Item/driverPlant.cpp
 TARGET	=	$(BIN)/test
 
 build : game clean
@@ -14,13 +14,13 @@ clean :
 
 game : item player util 
 	@echo "Linking files"
-	@g++ $(BIN)/*.o -o filler.o
+	@g++ -c $(SOURCE)/GameManager/Codex.cpp -o $(BIN)/Codex.o
+	@g++ -c $(SOURCE)/GameManager/GameManager.cpp -o $(BIN)/GameManager.o
 	@echo "Done!"
-	@echo "Removing .o files..."
 
-test : item player util
+test : item player util game
 	@echo "Generating test app"
-	@g++ $(TESTEE) $(SOURCE)/GameManager/driverGameManager.cpp $(BIN)/*.o -o $(TARGET)
+	@g++ $(TESTEE) $(BIN)/*.o -o $(TARGET)
 
 testrun : test clean
 	@./$(TARGET)
@@ -31,8 +31,8 @@ item :
 	@echo "Generating item"
 	@g++ -c $(SOURCE)/Item/Item.cpp -o $(BIN)/Item.o
 	@echo "Finishing job"
-#	@g++ $(SOURCE)/Item/Animal.cpp -o $(BIN)/Animal.o
-#	@g++ $(SOURCE)/Item/Building.cpp -o $(BIN)/Building.o
+#	@g++ -c $(SOURCE)/Item/Animal.cpp -o $(BIN)/Animal.o
+#	@g++ -c $(SOURCE)/Item/Building.cpp -o $(BIN)/Building.o
 	@g++ -c $(SOURCE)/Item/Plant.cpp -o $(BIN)/Plant.o
 	@g++ -c $(SOURCE)/Item/Product.cpp -o $(BIN)/Product.o
 	@echo "Item job done!"
