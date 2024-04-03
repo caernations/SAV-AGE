@@ -14,19 +14,21 @@ class Map{
     private:
         int panjang; // X axis
         int lebar; // Y axis
-        // List yang memegang map
+        // vector yang memegang map
         vector<vector<T*>> map;
         string name;
     public:
         // inisialisasi map kosong
         Map(){
-
+            this->lebar = 0;
+            this->panjang = 0;
+            map = vector<vector<T*>>(lebar, vector<T*>(panjang, nullptr));
         };
 
         // inisialisasi map dengan ukuran tertentu
         Map(int mapX, int mapY){
-            this->lebar = lebar;
-            this->panjang = panjang;
+            this->lebar = mapY;
+            this->panjang = mapX;
             map = vector<vector<T*>>(lebar, vector<T*>(panjang, nullptr));
         };
 
@@ -46,7 +48,7 @@ class Map{
                 if (map[j][i] == nullptr){
                     cout << "     " << "|";
                 } else {
-                    cout << " " << map[j][i]->getItemCode() << " " << "|";
+                    cout << " " << map[j][i] << " " << "|";
                 }
             }
             cout << endl;
@@ -69,6 +71,26 @@ class Map{
             cout << "MAP SIZE " << map.size() << "*" << map[0].size();
         };
         
+        void printTitle(int width, int size) {
+            int mapLength;
+
+            mapLength = 1 + width + size*width;
+            mapLength = mapLength - name.length() - 4;
+            cout << "   ";
+            for (int i = 0; i < mapLength/2; i++) {
+                cout << "=";
+            }
+            mapLength -= mapLength/2;
+            cout << "[ " << name << " ]";
+            for (int i = 0; i < mapLength; i++) {
+                cout << "=";
+            }
+            cout << endl;
+            cout << endl;
+
+        }
+
+        //debug tools : cek isi map         
         void print_divider(int items, int size){
         cout << "   +";
         for (int i = 0; i < items; i++){
@@ -90,6 +112,6 @@ class Map{
         cout << std::endl;
         };
 
-
 };
+
 #endif

@@ -1,4 +1,5 @@
 #include "StringProcessor.hpp"
+#include "StringProcessor.cpp"
 #include <iostream>
 
 using namespace std;
@@ -17,10 +18,10 @@ int main(){
     }
 
     string input = "TEAK_WOOD";
-    string output = convertToReadable(input);
+    string output = convertToReadable(input, true, false);
     cout << output << std::endl;
 
-    string input2 = "A02";
+    string input2 = "dfghdfghA02dsafgadf";
     tuple<int,int> output2 = convertToCoordinate(input2);
     cout << "Column : " << get<0>(output2) << endl;
     cout << "Row : " << get<1>(output2) << endl;

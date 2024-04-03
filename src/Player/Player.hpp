@@ -23,18 +23,35 @@ class Player {
         const int STARTING_GULDEN = 50;
 
         PlayerType playerType;
+
         int playerID;
+
         string playerName;
+
         int gulden;
+
         int beratBadan;
+
         Map<Item> inventory; 
+
         int invenSizeW;
+
         int invenSizeH;
+
+        int maxItemInInventory;
+
+        int itemCountInInventory;
+
     protected:
         /**
          * budidaya mahkluk hidup
         */
         virtual void budidaya() = 0;
+
+        /**
+         * panen mahkluk hidup
+        */
+        virtual void panennn(vector<Product*>& products) = 0;
 
     public:
         Player();
@@ -96,7 +113,7 @@ class Player {
          * Mendapatkan item dan jumlahnya dari inventory
          * @return vector<pair<Item*, int>> vector yang berisi pasangan item dan jumlahnya
         */
-        vector<pair<Item*, int>> getVarianItem();
+        vector<pair<Item*, int>> getVarianItem(ItemType ItemType);
 
         /**
          * Mengembalikan inventory player
@@ -124,11 +141,17 @@ class Player {
 
         int getPlayerID() const;
 
+        int getMaxItemInInventory() const;
+
+        int getItemCountInInventory() const;
+
         void displayPlayerInfo() const;
 
         PlayerType getType() const;
 
         bool isInventoryFull();
+
+        string itemTypeToString(ItemType type);
 
     };
 

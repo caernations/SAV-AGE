@@ -6,7 +6,7 @@
 #include <iostream>
 using namespace std;
 
-class Plant : virtual public Item {
+class Plant :public Item {
     private:
         // Kode unik untuk class Plant
         int plantID;
@@ -124,6 +124,8 @@ class Plant : virtual public Item {
          * @return true jika age >= duration_to_harvest, false jika tidak
          */
         bool isReadyToHarvest() const;
+
+        void changeAge(int newAge);
 
 };
 

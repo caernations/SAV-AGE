@@ -9,7 +9,7 @@ using namespace std;
 
 vector<string> split(string input,char splitterchar);
 
-string convertToReadable(const string& str);
+string convertToReadable(const string& str, bool capitalizeFirstWord, bool capitalizeAllWords);
 
 tuple<int,int> convertToCoordinate(const string& str);
 

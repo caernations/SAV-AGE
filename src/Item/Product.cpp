@@ -18,10 +18,6 @@ std::string Product::getOrigin() const {
     return origin;
 }
 
-int Product::getAddedWeight() const {
-    return added_weigth;
-}
-
 void Product::setProductID(int newproductID) {
     productID = newproductID;
 }
@@ -61,6 +57,7 @@ Item* Product::cloneItem() const {
 bool Product::isProductConsumable() const {
     return productType == "PRODUCT_FRUIT_PLANT" || productType == "PRODUCT_ANIMAL";
 }
+
 
 
 
