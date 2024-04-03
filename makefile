@@ -1,6 +1,11 @@
 BIN		=	bin
 SOURCE	= 	src
 
+#THE THING YOU WANT TO TEST GOES HERE
+#ALAMAT NYA
+TESTEE	=	$(SOURCE)/GameManager/GameManager.cpp
+TARGET	=	$(BIN)/test
+
 build : game clean
 
 clean : 
@@ -15,10 +20,10 @@ game : item player util
 
 test : item player util
 	@echo "Generating test app"
-	@g++ $(SOURCE)/GameManager/GameManager.cpp $(SOURCE)/GameManager/driverGameManager.cpp $(BIN)/*.o -o $(BIN)/test
+	@g++ $(TESTEE) $(SOURCE)/GameManager/driverGameManager.cpp $(BIN)/*.o -o $(TARGET)
 
 testrun : test clean
-	@./$(BIN)/test
+	@./$(TARGET)
 
 test_plant : item
 
