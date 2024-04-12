@@ -13,4 +13,6 @@ string convertToReadable(const string& str, bool capitalizeFirstWord, bool capit
 
 tuple<int,int> convertToCoordinate(const string& str);
 
+int findIn(const string& object, const string source[], const int& size);
+
 #endif

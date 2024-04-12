@@ -87,4 +87,14 @@ std::tuple<int,int> convertToCoordinate(const std::string& str) {
     int columnIndex = columnLetter - 'A';
 
     return std::make_tuple(columnIndex, rowNumber);
+};
+
+int findIn(const string& object, const string source[], const int& size){
+    int retval = -1;
+    for (int i = 0; i < size; i++){
+        if (source[i].compare(object) == 0){
+            return i;
+        }
+    }
+    return retval;
 }
