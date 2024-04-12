@@ -1,6 +1,9 @@
 #include "Player.hpp"
 #include "../Item/Recipe.hpp"
 #include "../utils/StringProcessor.hpp"
+#include "../Item/Product.hpp"
+#include "../Item/Building.hpp"
+#include "../Item/Item.hpp"
 #include <vector>
 #include <tuple>
 #include <iostream>
@@ -23,7 +26,7 @@ class Walikota : public Player {
          * @param gulden jumlah gulden
          * @param berat_badan berat badan
         */
-        Walikota(int playerID, const string& playerName, int gulden, int berat_badan);
+        Walikota(int playerID, const string& playerName, int gulden, int berat_badan, int invenW, int invenH);
 
         /**
          * dtor
@@ -84,6 +87,12 @@ class Walikota : public Player {
         void removePlayer();
         
         /**
+         * mengembalikan pair Product dan jumlahnya
+         * @return pair product dan item
+        */
+        vector<pair<Product*, int>> getVarianMaterial();
+
+        /**
          * menghitung pajak untuk tiap pemain
         */
         vector<tuple<string, string, int>> calculateTax(vector<Player> players);
@@ -93,5 +102,7 @@ class Walikota : public Player {
          * diurutkan berdasarkan leksikografis
         */
         vector<Player> sortPlayerTax(vector<tuple<string, string, int>> players);
+
+        Recipe getRecipe(const string& buildingName);
 
 };

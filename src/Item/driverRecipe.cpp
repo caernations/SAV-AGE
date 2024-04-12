@@ -1,4 +1,9 @@
 #include "Recipe.hpp"
+// #include "Recipe.cpp"
+// #include "Item.cpp"
+// #include "../utils/StringProcessor.cpp"
+
+// g++ -o driverRecipe driverRecipe.cpp Recipe.cpp Item.cpp ../utils/StringProcessor.c
 #include <iostream>
 using namespace std;
 

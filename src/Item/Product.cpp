@@ -1,8 +1,8 @@
 #include "Product.hpp"
 
-Product::Product() : Item(0, "", "", 0,PRODUCT), productID(0), productType(""), origin(""), added_weigth(0) {}
+Product::Product() : Item(0, "", "", 0,PRODUCT), productID(0), productType(), origin(""), added_weigth(0) {}
 
-Product::Product(int productID,std::string productType,std::string origin,int added_weigth,const std::string& itemCode, const std::string& itemName, double itemPrice) : Item(0, itemCode, itemName, itemPrice, PRODUCT), productID(productID), productType(productType),origin(origin), added_weigth(added_weigth) {}
+Product::Product(int productID,ProductType productType,std::string origin,int added_weigth,const std::string& itemCode, const std::string& itemName, double itemPrice) : Item(0, itemCode, itemName, itemPrice, PRODUCT), productID(productID), productType(productType),origin(origin), added_weigth(added_weigth) {}
 
 Product::~Product() {}
 
@@ -10,7 +10,7 @@ int Product::getProductID() const {
     return productID;
 }
 
-std::string Product::getProductType() const {
+ProductType Product::getProductType() const {
     return productType;
 }
 
@@ -22,7 +22,20 @@ void Product::setProductID(int newproductID) {
     productID = newproductID;
 }
 
-void Product::setProductType(const std::string& newproductType) {
+string Product::convertProductTypeToString(ProductType productType) const {
+    switch (productType) {
+        case PRODUCT_FRUIT_PLANT:
+            return "PRODUCT_FRUIT_PLANT";
+        case PRODUCT_ANIMAL:
+            return "PRODUCT_ANIMAL";
+        case PRODUCT_MATERIAL_PLANT:
+            return "PRODUCT_MATERIAL_PLANT";
+        default:
+            return "";
+    }
+}
+
+void Product::setProductType(const ProductType& newproductType) {
     productType = newproductType;
 }
 
@@ -55,10 +68,12 @@ Item* Product::cloneItem() const {
 }
 
 bool Product::isProductConsumable() const {
-    return productType == "PRODUCT_FRUIT_PLANT" || productType == "PRODUCT_ANIMAL";
+    return added_weigth > 0;
 }
 
-
+bool Product::isMaterial() const {
+    return productType == PRODUCT_MATERIAL_PLANT;
+}
 
 
 

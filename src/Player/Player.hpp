@@ -46,13 +46,12 @@ class Player {
         /**
          * budidaya mahkluk hidup
         */
-        virtual void budidaya() = 0;
+        virtual void budidaya();
 
         /**
          * panen mahkluk hidup
         */
-        virtual void panennn(vector<Product*>& products) = 0;
-
+        virtual void panennn(vector<Product*>& products);
     public:
         Player();
 
@@ -95,18 +94,22 @@ class Player {
         */
         void consumeFromInv();
         
-        // void consumeItem(const Item& item);
-
-        // virtual void playerAction() = 0; // pure virtual
-
-        // virtual void playerAction() {
-        //     cout << playerName << " melakukan aksi default." << endl;
-        // }
+        /**
+         * menghapus item pada inventory
+         * @param itemCode item yang ingin dihapus
+        */
+        void removeFromInv(const string& itemName, int amount);
 
         /**
          * Menampilkan inventory player
         */
         virtual void displayGrid();
+
+        /**
+         * mengubah berat badan pemain
+         * @param addedWeight
+        */
+        void addWeight(int addedWeight);
 
         // getter
         /**
@@ -152,6 +155,10 @@ class Player {
         bool isInventoryFull();
 
         string itemTypeToString(ItemType type);
+
+        virtual int hitungKekayaan() const = 0;
+
+        pair<Player*,int> hitungPajak();
 
     };
 

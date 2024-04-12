@@ -79,7 +79,12 @@ void Petani::budidaya(){
     cout << endl;   
     Item& p = takeFromInv(PLANT);
     Plant* plant = dynamic_cast<Plant*>(&p);
-    displayGrid();
+
+    cout << "Kamu memilih " << convertToReadable(plant->getItemName(), true, true) <<"."<<endl;
+    cout << endl;
+    cout << "Pilih petak tanah yang akan ditanami" << endl << endl;
+
+    displayGrid(); 
     while(true){
         cout << "Slot: ";
         cin >> slot;
@@ -145,7 +150,7 @@ void Petani::panennn(vector<Product*>& products){
     }
 
     chosenPlant = varianReadyToHarvest[choicePlant-1];
-    
+
     for(int i = 0; i < products.size(); i++){
         if (products[i]->getOrigin() == chosenPlant.first->getItemName()){
             plantProduct = new Product(*products[i]);
@@ -186,8 +191,6 @@ void Petani::panennn(vector<Product*>& products){
         while(true){
             cout << "Petak ke-" << i+1 << ": ";
             cin >> slot;
-            
-            cout << endl;
             pos = convertToCoordinate(slot);
             int x = get<0>(pos);
             int y = get<1>(pos);
