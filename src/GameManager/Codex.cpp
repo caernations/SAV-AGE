@@ -82,5 +82,6 @@ void Codex::populatecodex(const string& path){
     }
     else{
         cout << "OPEN FAILED " << path + "/plant.txt" << endl ;
+        throw 1;
     }
 }
