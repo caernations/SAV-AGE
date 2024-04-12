@@ -10,6 +10,6 @@ int main(){
 
     cout << "STARTING DRIVER" << endl;
     //test
-
+    test.initloop();
     test.gameloop();
 }
