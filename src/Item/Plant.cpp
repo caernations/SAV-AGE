@@ -1,10 +1,10 @@
 #include "Plant.hpp"
 
-Plant::Plant() : Item(0," "," ", 0 ,PLANT), plantID(0), plantType(""), duration_to_harvest(0), age(0) {
+Plant::Plant() : Item(0," "," ", 0 ,PLANT), plantID(0), plantType(), duration_to_harvest(0), age(0) {
     cout << "Created empty plant" << endl;
 }
 
-Plant::Plant(int plantID, const std::string& itemCode, const std::string& itemName, const std::string& plantType, int duration_to_harvest, int itemPrice) 
+Plant::Plant(int plantID, const string& itemCode, const std::string& itemName, const PlantType& plantType, int duration_to_harvest, int itemPrice) 
     : Item(0, itemCode, itemName, itemPrice, PLANT), plantID(plantID), plantType(plantType), duration_to_harvest(duration_to_harvest), age(0) {
         cout << "Created Plant" << endl;
         cout << "Item ID: " << getItemID() << ", Item Code: " << getItemCode() << ", Item Name: " << getItemName() << ", Item Price: " << getItemPrice() << endl;
@@ -19,7 +19,7 @@ int Plant::getPlantID() const {
     return plantID;
 }
 
-std::string Plant::getPlantType() const {
+PlantType Plant::getPlantType() const {
     return plantType;
 }
 
@@ -31,7 +31,7 @@ void Plant::setPlantID(int newPlantID) {
     plantID = newPlantID;
 }
 
-void Plant::setPlantType(const std::string& newPlantType) {
+void Plant::setPlantType(const PlantType& newPlantType) {
     plantType = newPlantType;
 }
 
@@ -64,6 +64,10 @@ bool Plant::isReadyToHarvest() const {
     return this->age >= this->getDurationToHarvest();
 }
 
-void Plant::setAge(int newAge){
+void Plant::setAge(int newAge) {
     age = newAge;
+}
+
+void Plant::addAge(){
+    age++;
 }

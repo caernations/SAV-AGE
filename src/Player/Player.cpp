@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 using namespace std;
 
 Player::Player() :
@@ -52,6 +53,8 @@ void Player::addToInv(Item* item, int invenX, int invenY) {
     inventory.set(invenX, invenY, item);
 }
 
+
+
 Item& Player::takeFromInv(ItemType ItemType) {
     string itemSlot;
     tuple<int, int> slot;
@@ -62,13 +65,17 @@ Item& Player::takeFromInv(ItemType ItemType) {
         cin >> itemSlot;
         cout << endl;
         slot = convertToCoordinate(itemSlot);
-        if (inventory.getMap()[get<0>(slot)][get<1>(slot)] == nullptr) {
+        int x = get<0>(slot);
+        int y = get<1>(slot);
+        if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
-        } else if (inventory.getMap()[get<0>(slot)][get<1>(slot)]->getItemType() != ItemType) {
-            cout << "Kamu tidak bisa mengambil " << inventory.getMap()[get<0>(slot)][get<1>(slot)]->getItemName() << endl;
+        } else if (inventory.getMap()[x][y]->getItemType() != ItemType) {
+            cout << "Kamu tidak bisa mengambil " << inventory.getMap()[x][y]->getItemName() << endl;
         } else {
-            inventory.getMap()[get<0>(slot)][get<1>(slot)] = nullptr;
-            return *inventory.getMap()[get<0>(slot)][get<1>(slot)];
+            Item& item = *inventory.getMap()[x][y];
+            inventory.set(x, y, nullptr);
+            itemCountInInventory--;
+            return item;
         }
         cout << "Silahkan masukan slot yang berisi " << itemTypeToString(ItemType) << endl;
         cout << endl;
@@ -77,25 +84,38 @@ Item& Player::takeFromInv(ItemType ItemType) {
 
 void Player::consumeFromInv() {
     // if (inventory.isEmpty()) throw InventoryEmptyException();
-    int posX, posY;
+    string slot;
+    tuple<int,int> slots;
+    cout <<"Pilih makanan dari penyimpanan"<<endl << endl;
+    Player::displayGrid();
+    Product* product;
+    
     while (true) {
-        cin >> posX >> posY;
-        if (inventory.getMap()[posX][posY] == nullptr) {
+        cout << "Slot: ";
+        cin >> slot;
+        slots = convertToCoordinate(slot);
+        int x = get<0>(slots);
+        int y = get<1>(slots);
+        cout << endl << endl;
+        if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
-        } else if (Product* product = dynamic_cast<Product*>(inventory.getMap()[posX][posY])) {
+        } else if (product = dynamic_cast<Product*>(inventory.getMap()[x][y])) {
             if (product->isProductConsumable()) {
-                beratBadan += product->added_weigth;
-                inventory.getMap()[posX][posY] = nullptr;
-                delete product;
+                addWeight(product->added_weigth);
+                cout << "Dengan lahapnya, kamu memakanan hidangan itu" << endl;
+                cout << "Alhasil, berat badan kamu naik menjadi " << beratBadan << endl;
+                inventory.getMap()[x][y] = nullptr;
                 return;
             } else {
                 cout << "Apa yang kamu lakukan??\\!! Kamu mencoba untuk memakan itu?\\!!" << "\n";
             }
         } else {
-            cout << "Kamu tidak bisa memakan " << inventory.getMap()[posX][posY]->getItemName() << "\n";
+            cout << "Kamu tidak bisa memakan " << inventory.getMap()[x][y]->getItemName() << "\n";
         }
         cout << "Silahkan masukan slot yang berisi makanan." << "\n";
     }
+    
+
 }
 
 void Player::displayGrid() {
@@ -116,6 +136,10 @@ void Player::displayGrid() {
         getInventory().print_divider(invenSizeW,5);
 
     }
+}
+
+void Player::addWeight(int addedWeight){
+    this->beratBadan+=addedWeight;
 }
 
 vector<pair<Item*, int>> Player::getVarianItem(ItemType ItemType) {
@@ -183,7 +207,7 @@ int Player::getMaxItemInInventory() const {
 }
 
 int Player::getItemCountInInventory() const {
-    return itemCountInInventory;
+    return this->itemCountInInventory;
 }
 
 bool Player::isInventoryFull() {
@@ -205,4 +229,69 @@ string Player::itemTypeToString(ItemType type) {
     } else {
         return "UNKNOWN";
     }
+}
+
+void Player::budidaya() {
+    cout << "Player melakukan budidaya" << endl;
+}
+
+void Player::panennn(vector<Product*>& products) {
+    cout << "Player melakukan panen" << endl;
+}
+
+void Player::removeFromInv(const string& itemName, int amount) {
+    if (amount == 0) return;
+    for (int i = 0; i < invenSizeW; i++) {
+        for (int j = 0; j < invenSizeH; j++) {
+            Item* item = inventory.getMap()[i][j];
+            if (item != nullptr && item->getItemName() == itemName){
+                inventory.set(i, j, nullptr);
+                itemCountInInventory--;
+                removeFromInv(itemName, amount - 1);
+            }
+        }
+    }
+}
+
+pair<Player*, int> Player::hitungPajak() {
+    int netoKekayaan;
+    int KKP;
+    int KTKP;
+    int tarif;
+    int pajak;
+
+    netoKekayaan += getGulden();
+    netoKekayaan += hitungKekayaan();
+
+    if (getType() == PETANI) {
+        KTKP = 11;
+    } else if (getType() == PETERNAK) {
+        KTKP = 13;
+    } else {
+        KTKP = 0;
+    }
+    
+    if (netoKekayaan <= 6) {
+        tarif = 0.05;
+    } else if (netoKekayaan <= 25) {
+        tarif = 0.15;
+    } else if (netoKekayaan <= 50) {
+        tarif = 0.25;   
+    } else if (netoKekayaan <= 500) {
+        tarif = 0.30;
+    } else {
+        tarif = 0.35;
+    }
+
+    KKP = netoKekayaan - KTKP;
+
+    pajak = round(KKP * tarif);
+    
+    if (getGulden() - pajak <=0 ){
+        pajak = getGulden();
+    }
+
+        
+
+
 }

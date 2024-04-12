@@ -5,13 +5,20 @@
 #include <string>
 #include <iostream>
 #include <vector>
+using namespace std;
+
+enum ProductType {
+    PRODUCT_MATERIAL_PLANT,
+    PRODUCT_FRUIT_PLANT,
+    PRODUCT_ANIMAL
+};
 
 class Product : virtual public Item {
     private:
         // Kode unik untuk class Product
         int productID;
         // Tipe product
-        std::string productType;
+        ProductType productType;
         // Asal material (product/Animal)
         std::string origin;
         // Berat yang ditambahkan per konsumsi
@@ -41,7 +48,7 @@ class Product : virtual public Item {
         * @param itemName Nama tanaman
         * @param itemPrice Harga tanaman
         */
-        Product(int productId,std::string productType,std::string origin,int added_weigth,const std::string& itemCode, const std::string& itemName, double itemPrice);
+        Product(int productId, ProductType productType,string origin,int added_weigth,const string& itemCode, const string& itemName, double itemPrice);
         ~Product();
 
         // getter
@@ -55,13 +62,13 @@ class Product : virtual public Item {
          * Mengembalikan tipe tanaman
          * @return productType
          */
-        std::string getProductType() const;
+        ProductType getProductType() const;
 
         /**
          * Mengembalikan asal product berupa nama Plant atau Animal
          * @return origin
          */
-        std::string getOrigin() const;
+        string getOrigin() const;
 
         // setter
         /**
@@ -74,13 +81,13 @@ class Product : virtual public Item {
          * Mengubah tipe tanaman
          * @param newproductType Tipe tanaman baru
          */
-        void setProductType(const std::string& newproductType);
+        void setProductType(const ProductType& newproductType);
 
         /**
          * Mengubah origin product
          * @param newOrigin origin baru
          */
-        void setOrigin(const std::string& newOrigin);
+        void setOrigin(const string& newOrigin);
 
         /**
          * Mengubah added weigth
@@ -121,5 +128,17 @@ class Product : virtual public Item {
          * @return true jika added_weight > 0, false jika tidak
          */
         bool isProductConsumable() const;
+
+        /**
+         * apakah product sebuah material??
+         * @return true jika productType == PRODUCT_MATERIAL_PLANT
+        */
+        bool isMaterial() const;
+
+        /**
+         * konversi ProductType ke string
+         * @param productType tipe product
+        */
+        string convertProductTypeToString(ProductType productType) const;
 };
 #endif

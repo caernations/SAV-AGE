@@ -7,8 +7,8 @@ Recipe::Recipe() : Item(0, "0", "0", 0, RECIPE) {
     materials = std::map<string, int>();
 }
 
-Recipe::Recipe(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice, ItemType itemType) 
-:   Item(itemID, itemCode, itemName, itemPrice, itemType) {
+Recipe::Recipe(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice) 
+:   Item(itemID, itemCode, itemName, itemPrice, RECIPE) {
     materials = std::map<string, int>();
 }
 
@@ -30,15 +30,19 @@ int Recipe::getMaterialAmount(string material) {
 
 void Recipe::displayItem() const {
     cout << '\t' << this->getItemID() << ". ";
-    cout << this->getItemCode();
+    cout << this->getItemName();
     cout << " (" << this->getItemPrice() << " gulden,"; 
     for (auto it = materials.begin(); it != materials.end(); it++) {
-        cout << " " << convertToReadable(it->first) << " " << it->second;
+        cout << " " << convertToReadable(it->first, false, false) << " " << it->second;
         if (next(it) != materials.end()) {
             cout << ",";
         }
     }
     cout << ")" << endl;
+}
+
+map<string, int> Recipe::getMaterials() const {
+    return materials;
 }
 
 Item* Recipe::cloneItem() const {

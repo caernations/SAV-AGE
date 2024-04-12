@@ -1,13 +1,13 @@
 #include "Petani.hpp"
-#include "../Item/Plant.cpp"
-#include "Petani.cpp"
-#include "../Item/Product.cpp"
-#include "../utils/Color.cpp"
-#include "../utils/StringProcessor.cpp"
-#include "Player.cpp"
-#include "../Item/Item.cpp"
+// #include "../Item/Plant.cpp"
+// #include "Petani.cpp"
+// #include "../Item/Product.cpp"
+// #include "../utils/Color.cpp"
+// #include "../utils/StringProcessor.cpp"
+// #include "Player.cpp"
+// #include "../Item/Item.cpp"
 
-// g++ -o driverPetani driverPetani.cpp Petani.cpp ../Map/Map.cpp ../Item/Plant.cpp ../Item/Product.cpp ../utils/StringProcessor.cpp ../utils/Color.cpp Player.cpp
+// g++ -o driverPetani driverPetani.cpp Petani.cpp ../Item/Item.cpp ../Item/Plant.cpp ../Item/Product.cpp ../utils/StringProcessor.cpp ../utils/Color.cpp Player.cpp
 
 #include <iostream>
 #include <vector>
@@ -28,11 +28,11 @@ int main(){
     cout << p.getHLahan() << endl;
     cout << p.getMaxTumbuhan() << endl;
 
-    Plant* p1 = new Plant(1, "TWD", "TOWOWO", "MATERIAL", 5, 10);
-    Plant p2(2, "ASU", "TOWOWO", "MATERIAL", 5, 10);
-    Plant p3(3, "MMK", "TOWOWO_BRONTO", "MATERIAL", 5, 10);
-    Plant p4(4, "MMK", "TOWOWO_BRONTO", "MATERIAL", 5, 10);
-    Plant p5(5, "MMK", "TOWOWO_BRONTO", "MATERIAL", 5, 10);
+    Plant* p1 = new Plant(1, "TWD", "TOWOWO", MATERIAL_PLANT, 5, 10);
+    Plant p2(2, "ASU", "TOWOWO", MATERIAL_PLANT, 5, 10);
+    Plant p3(3, "MMK", "TOWOWO_BRONTO", MATERIAL_PLANT, 5, 10);
+    Plant p4(4, "MMK", "TOWOWO_BRONTO", MATERIAL_PLANT, 5, 10);
+    Plant p5(5, "MMK", "TOWOWO_BRONTO", MATERIAL_PLANT, 5, 10);
 
     p.setLahan(3,2,p1);
     p.addToInvEmptySlot(&p2);
@@ -58,9 +58,9 @@ int main(){
     }
 
     vector<Product*> products;
-    Product* product1 = new Product(1,"MATERIAL", "TOWOWO", 10, "ASU", "TOWOWOBOIII", 1000);
-    Product product2(2,"MATERIAL", "TOWOWODD", 10, "ASU", "TOWOWOBOIII", 1000);
-    Product product3(3,"MATERIAL", "TOWOWO_BRONTO", 10, "ASU", "TOWOWOBOIII", 1000);
+    Product* product1 = new Product(1,PRODUCT_MATERIAL_PLANT, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
+    Product product2(2,PRODUCT_MATERIAL_PLANT, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
+    Product product3(3,PRODUCT_MATERIAL_PLANT, "TOWOWO_BRONTO", 10, "ABU", "TOWOWOBOIII", 1000);
 
     products.push_back(product1);
     products.push_back(&product2);
@@ -70,7 +70,11 @@ int main(){
 
     p.panennn(products);
 
-    p.Player::displayGrid();
+    cout << endl;
+    cout << p.getBeratBadan() << endl;
+    cout << endl;
+
+    p.consumeFromInv();
 
     // p.displayGrid();
     delete p1;

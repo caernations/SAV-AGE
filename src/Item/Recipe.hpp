@@ -20,9 +20,8 @@ class Recipe : public Item {
          * @param itemCode kode item
          * @param itemName nama item
          * @param itemPrice harga item
-         * @param itemType tipe item
         */
-        Recipe(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice, ItemType itemType);
+        Recipe(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice);
 
         /**
          * dtor
@@ -57,6 +56,11 @@ class Recipe : public Item {
          * @param material material yang akan diambil
         */
         int getMaterialAmount(std::string material);
+
+        /**
+         * mengembalikan materials
+        */
+        map<string, int> getMaterials() const;
 
         Item* cloneItem() const;
         

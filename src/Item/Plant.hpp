@@ -6,12 +6,17 @@
 #include <iostream>
 using namespace std;
 
+enum PlantType {
+    MATERIAL_PLANT,
+    FRUIT_PLANT
+};
+
 class Plant :public Item {
     private:
         // Kode unik untuk class Plant
         int plantID;
         // Tipe tanaman
-        std::string plantType;
+        PlantType plantType;
         // Waktu yang dibutuhkan untuk memanen tanaman
         int duration_to_harvest;
 
@@ -41,7 +46,7 @@ class Plant :public Item {
         * @param itemName Nama tanaman
         * @param itemPrice Harga tanaman
         */
-        Plant(int plantID, const std::string& itemCode, const std::string& itemName, const std::string& plantType, int duration_to_harvest, int itemPrice);
+        Plant(int plantID, const string& itemCode, const string& itemName, const PlantType& plantType, int duration_to_harvest, int itemPrice);
 
         // dtor
         ~Plant();
@@ -57,7 +62,7 @@ class Plant :public Item {
          * Mengembalikan tipe tanaman
          * @return plantType
          */
-        std::string getPlantType() const;
+        PlantType getPlantType() const;
 
         /**
          * Mengembalikan waktu yang dibutuhkan untuk memanen tanaman
@@ -76,7 +81,7 @@ class Plant :public Item {
          * Mengubah tipe tanaman
          * @param newPlantType Tipe tanaman baru
          */
-        void setPlantType(const std::string& newPlantType);
+        void setPlantType(const PlantType& newPlantType);
 
         /**
          * Mengubah waktu yang dibutuhkan untuk memanen tanaman
@@ -124,6 +129,8 @@ class Plant :public Item {
          * @return true jika age >= duration_to_harvest, false jika tidak
          */
         bool isReadyToHarvest() const;
+
+        void addAge();
 
 };
 
