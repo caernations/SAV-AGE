@@ -4,6 +4,7 @@
 #include "../Item/Animal.hpp"
 #include "../Item/Product.hpp"
 #include "../Item/Building.hpp"
+#include "EnumConverter.hpp"
 #include <vector>
 #include <string>
 
@@ -19,24 +20,31 @@
 class Codex{
     private:
         vector<Plant> plants;
-        //vector<Animal> animals;
+        vector<Animal> animals;
         vector<Product> products;
-        //vector<Building> buildings;
+        vector<Building> buildings;
     public:
         void addPlant(const Plant& plant);
         void addPlant(const vector<string>& list);
 
-        // void addAnimal(const Animal& animal);
-        // void addAnimal(const vector<string>& list);
+        void addAnimal(const Animal& animal);
+        void addAnimal(const vector<string>& list);
 
         void addProduct(const Product& product);
         void addProduct(const vector<string>& list);
 
-        // void addBuilding(const Building& building);
-        // void addBuilding(const vector<string>& list);
+        void addBuilding(const Building& building);
+        void addBuilding(const vector<string>& list);
 
-        const Item* getSource(const Item*& thing);
+        Item* getSource(const Product* thing);
         const vector<Product> getProductList(const Item*& thing);
 
+        void showPlants();
+        void showAnimals();
+        void showProducts();
+        void showBuildings();
+
         void populatecodex(const string& path);
+
+        Product* getProduct(string name);
 };
