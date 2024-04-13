@@ -8,6 +8,8 @@ int main(){
     bool quit = false;
     GameManager test;
 
+    test.configpath = "config";
+
     cout << "STARTING DRIVER" << endl;
     //test
     test.initloop();

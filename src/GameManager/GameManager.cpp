@@ -78,10 +78,10 @@ void GameManager::initloop(){
         awaitLineInput(">>>");
         if (lastInput.compare("1") == 0){
             try{
-                codex.populatecodex("../config");
+                codex.populatecodex(configpath);
                 getCorrectInput = true;
                 // JANGAN LUPA GANTI KE WALIKOTA KALO UDAH DI FIX
-                Player* firstplayer = new Petani(0, "FARMER", 100, 60, 10, 10, 10, 10);
+                Player* firstplayer = new Petani(0,"Thoriq",100,99,6,6,6,6);
                 activePlayers.push_back(firstplayer);
             }
             catch(...){
@@ -106,16 +106,50 @@ void GameManager::initloop(){
 void GameManager::cheat(){
     awaitMultiInput("What is your command?: ",' ');
     string commands[] = {"VIEW","GIVE","TAKE"};
+    string codexpage[] = {"PLANTS","ANIMALS","PRODUCTS","BUILDINGS","SOURCE","PLAYERS"};
+    Item* thing; //placeholder for case 0,4
     switch (findIn(lastMultiInput[0],commands,3))
     {
+    case 0:
+        switch (findIn(lastMultiInput[1],codexpage,6)){
+            case 0:
+                codex.showPlants();
+                break;
+            case 1:
+                codex.showAnimals();
+                break;
+            case 2:
+                codex.showProducts();
+                break;
+            case 3:
+                codex.showBuildings();
+                break;
+            case 4:
+                thing = codex.getSource(codex.getProduct(lastMultiInput[2]));
+                if (thing != nullptr){
+                    thing->displayItem();
+                }
+                else{
+                    cout << "Invalid item or Product does not exist" << endl;
+                }
+                break;
+            case 5:
+                for (Player*& item : activePlayers){
+                    cout << item->getPlayerName() << " : " << PlayerTypeToString[item->getType()] << endl;
+                }
+                break;
+            default:
+                cout << "Table does not exist!" << endl;
+                break;
+        }
+
+        break;
     case 1:
-        /* code */
         break;
     case 2:
         break;
-    case 3:
-        break;
     default:
+        cout << "Cheat "<< lastMultiInput[0] << " doesnt exist!" << endl;
         break;
     }
 }
@@ -149,6 +183,14 @@ void GameManager::gameloop(){
             }
             else if (lastInput.compare("MAKAN") == 0){
                 activePlayers[turn]->consumeFromInv();
+            }
+            else if (lastInput.compare("CHEAT") == 0){
+                cheat();
+            }
+            else if (lastInput.compare("TANAM") == 0){
+                if (activePlayers[turn]->getType() == PETANI){
+                    //activePlayers[turn]->budidaya();
+                }
             }
             else{
                 throw string("Invalid command!");

@@ -7,6 +7,7 @@
 #include <string>
 #include "../Player/Player.hpp"
 #include "../Player/Petani.hpp"
+//#include "../Player/Walikota.hpp"
 #include "../utils/StringProcessor.hpp"
 #include "Codex.hpp"
 
@@ -29,6 +30,8 @@ class GameManager{
         vector<Player*> activePlayers;
         Codex codex;
     public:
+        string configpath;
+
         GameManager();
 
         ~GameManager();
