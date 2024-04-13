@@ -112,6 +112,19 @@ class Map{
         cout << std::endl;
         };
 
+        vector<T*> convertToList() const{
+            vector<T*> retval;
+
+            for (vector<T*> rows : map){
+                for (T* item : rows){
+                    if (item != nullptr) {
+                        retval.push_back(item);
+                    }
+                }
+            }
+            return retval;
+        }
+
 };
 
 #endif
