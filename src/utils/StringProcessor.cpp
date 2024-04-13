@@ -90,11 +90,17 @@ std::tuple<int,int> convertToCoordinate(const std::string& str) {
 };
 
 int findIn(const string& object, const string source[], const int& size){
+    //cout << "FINDING" << endl;
     int retval = -1;
     for (int i = 0; i < size; i++){
         if (source[i].compare(object) == 0){
+            //cout << "FOUND AT " << i << endl;
             return i;
         }
+        else{
+            //cout << object << source[i] << endl;
+        }
     }
+    //cout << "NOT FOUND !" << endl;
     return retval;
 }
