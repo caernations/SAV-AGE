@@ -15,7 +15,7 @@ Peternak::Peternak() : Player() {
 Peternak::Peternak(int playerID, const string& playerName, int gulden, int berat_badan, int w_kandang, int h_kandang, int invenSizeW, int invenSizeH) : 
     Player(playerID, playerName, gulden, berat_badan, PETERNAK, invenSizeW, invenSizeH) {
     inventory = Map<Item>(this->getInvenW(), this->getInvenH());
-    kandang = Map<Animal>(w_kandang, h_kandang);
+    kandang = Map<Animal>(w_kandang, h_kandang, "Kandang " + playerName);
     jumlah_hewan = 0;
     this->w_kandang = w_kandang;
     this->h_kandang = h_kandang;
@@ -109,8 +109,8 @@ void Peternak::budidaya() {
         } else {
             kandang.set(get<0>(pos), get<1>(pos), hewan);
             jumlah_hewan++;
-            cout << "Dengan hati-hati, kamu meletakkan seekor " << convertToReadable(hewan->getItemName()) << " di kandang." << endl;
-            cout << convertToReadable(hewan->getItemName()) << " telah menjadi peliharaanmu sekarang!" << endl;
+            cout << "Dengan hati-hati, kamu meletakkan seekor " << convertToReadable(std::string(hewan->getItemName()),true,true) << " di kandang." << endl;
+            cout << convertToReadable(std::string(hewan->getItemName()), true, true) << " telah menjadi peliharaanmu sekarang!" << endl;
             break;
         }
     }
@@ -173,7 +173,7 @@ void Peternak::memberiPangan() {
         for (int j = 0; j < w_inventory; ++j) {
             Item& item = takeFromInv(PRODUCT);
             Product* product = dynamic_cast<Product*>(&item);
-            if (isFoodTypeCompatible(animalType, product->getProductType())) {
+            if (isFoodTypeCompatible(convertToReadable(animalType, true, true), product->convertProductTypeToString(product->getProductType()))) {
                 foodAvailable = true;
                 break;
             }
@@ -215,10 +215,15 @@ void Peternak::memberiPangan() {
     // Memberikan makanan kepada hewan
     Product* foodItem = dynamic_cast<Product*>(inventory.getMap()[storageX][storageY]);
     Animal* animal = kandang.getMap()[x][y];
-    animal->setFed(foodItem->added_weigth, foodItem->getProductType()); // Assuming `setFed` accepts weight and type
+    animal->setFed(foodItem->added_weigth, foodItem->convertProductTypeToString(foodItem->getProductType())); 
     inventory.set(storageX, storageY, nullptr);
     delete foodItem;
 
     // Menampilkan informasi bahwa hewan sudah diberi makan
     cout << "Hewan telah diberi makan." << endl;
 }
+
+int Peternak::hitungKekayaan() const {
+    return this->getGulden();
+}
+

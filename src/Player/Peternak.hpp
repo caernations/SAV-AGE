@@ -84,6 +84,8 @@ class Peternak : public Player {
 
         void memberiPangan();
 
+        virtual int hitungKekayaan() const override;
+
         /**
          * mengembalikan kandang yang dimiliki oleh peternak
         */

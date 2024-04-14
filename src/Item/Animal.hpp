@@ -36,8 +36,8 @@ public:
     /**
     * Constructor awal dengan age = 0
     * @param animalID Kode unik untuk class Animal
-    * @param animalType Tipe tanaman
-    * @param weight_to_harvest Waktu yang dibutuhkan untuk memanen tanaman
+    * @param animalType Tipe animal
+    * @param weight_to_harvest Waktu yang dibutuhkan untuk memanen hewan
     * @param itemCode Kode unik untuk class Item
     * @param itemName Nama animal
     * @param itemPrice Harga animal
