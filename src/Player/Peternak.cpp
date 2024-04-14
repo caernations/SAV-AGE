@@ -24,6 +24,7 @@ Peternak::Peternak(int playerID, const string& playerName, int gulden, int berat
 Peternak::~Peternak() {}
 
 void Peternak::displayGrid() {
+    cout << "================[ Peternakan ]===================" << endl;
     Color color;
     getKandang().iterateAlphabet(w_kandang);
     getKandang().print_divider(w_kandang,5);
@@ -94,11 +95,13 @@ Map<Animal>& Peternak::getKandang() {
 }
 
 void Peternak::budidaya() {
+    cout << "Pilih hewan dari penyimpanan" << endl;
     string slot;
     tuple<int, int> pos;
     Item& a = takeFromInv(ANIMAL);
     Animal* hewan = dynamic_cast<Animal*>(&a);
 
+    cout << "Pilih petak tanah yang akan ditinggali" << endl;
     displayGrid();
     while(true){
         cout << "Slot: ";
@@ -117,11 +120,12 @@ void Peternak::budidaya() {
 }
 
 bool Peternak::isFoodTypeCompatible(const std::string& animalType, const std::string& foodType) {
-    if (animalType == "HERBIVORE") {
+    cout  << endl << "CHECK FOOD COMPATIBLE " << endl << animalType << endl << foodType << endl;
+    if (animalType == "Herbivore") {
         return (foodType == "PRODUCT_FRUIT_PLANT");
-    } else if (animalType == "CARNIVORE") {
+    } else if (animalType == "Carnivore") {
         return (foodType == "PRODUCT_ANIMAL");
-    } else if (animalType == "OMNIVORE") {
+    } else if (animalType == "Omnivore") {
         return true; // Omnivores can eat any type of food
     } else {
         cout << "Unhandled animal type." << endl;
@@ -130,68 +134,53 @@ bool Peternak::isFoodTypeCompatible(const std::string& animalType, const std::st
 }
 
 void Peternak::memberiPangan() {
-    // Periksa apakah peternakan kosong
-    if (jumlah_hewan == 0) {
-        cout << "Peternakan kosong. Tidak ada hewan yang bisa diberi makan." << endl;
-        return;
-    }
+    // if(kandang.isEmpty()) throw KandangKosongException();
+    // vector<pair<Item*, int>> varians = getVarianItem(ANIMAL);
 
     // Menampilkan peternakan
-    cout << "=================[ Peternakan ]==================" << endl;
     displayGrid();
 
     // Memilih petak kandang
-    cout << "Pilih petak kandang yang akan diberi makan: ";
-    string petak;
-    cin >> petak;
+    while(true) {
+        cout << "Pilih petak kandang yang akan diberi makan: ";
+        string petak;
+        cin >> petak;
 
-    // Mengonversi input petak menjadi koordinat
-    tuple<int, int> pos = convertToCoordinate(petak);
-    int x = get<0>(pos);
-    int y = get<1>(pos);
+        // Mengonversi input petak menjadi koordinat
+        tuple<int, int> pos = convertToCoordinate(petak);
+        int x = get<0>(pos);
+        int y = get<1>(pos);
 
-    // Periksa apakah petak yang dipilih valid
-    if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
-        cout << "Petak kandang tidak valid." << endl;
-        return;
-    }
-
-    // Periksa apakah ada hewan di petak kandang yang dipilih
-    if (kandang.getMap()[get<0>(pos)][get<1>(pos)] == nullptr) {
-        cout << "Tidak ada hewan di petak kandang yang dipilih." << endl;
-        return;
-    }
-
-    string animalType = kandang.getMap()[get<0>(pos)][get<1>(pos)]->getAnimalType();
-
-    // Memeriksa apakah di dalam penyimpanan ada makanan yang compatible dengan animalType
-    int w_inventory = this->getInvenW();
-    int h_inventory = this->getInvenH();
-
-    bool foodAvailable = false;
-    for (int i = 0; i < h_inventory; ++i) {
-        for (int j = 0; j < w_inventory; ++j) {
-            Item& item = takeFromInv(PRODUCT);
-            Product* product = dynamic_cast<Product*>(&item);
-            if (isFoodTypeCompatible(convertToReadable(animalType, true, true), product->convertProductTypeToString(product->getProductType()))) {
-                foodAvailable = true;
-                break;
-            }
+        // Periksa apakah petak yang dipilih valid
+        if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
+            cout << "Petak kandang tidak valid." << endl;
+            return;
         }
-        if (foodAvailable) break;
+
+        // Periksa apakah ada hewan di petak kandang yang dipilih
+        if (kandang.getMap()[get<0>(pos)][get<1>(pos)] == nullptr) {
+            cout << "Tidak ada hewan di petak kandang yang dipilih." << endl;
+            return;
+        }
+
+        string animalType = kandang.getMap()[get<0>(pos)][get<1>(pos)]->getAnimalType();
+        vector<pair<Item*, int>> varianReadyToFeed = getVarianReadyToFeed(animalType);
+
+        if(varianReadyToFeed.empty()){
+            cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
+            return;
+        }
     }
 
-    if (!foodAvailable) {
-        cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
-        return;
-    }
+    cout << endl << "Kamu memilih " << convertToReadable(kandang.getMap()[get<0>(pos)][get<1>(pos)]->getItemName(), true, true) << " untuk diberi makan." << endl;
+    cout << endl;
 
     // Menampilkan penyimpanan
-    cout << "================[ Penyimpanan ]=================" << endl;
+    cout << endl << "================[ Penyimpanan ]=================" << endl;
     displayInventory();
 
     // Memilih slot penyimpanan untuk pangan
-    cout << "Slot penyimpanan untuk pangan: ";
+    cout << "Pilih pangan yang akan diberikan:";
     string slot;
     cin >> slot;
 
@@ -227,3 +216,26 @@ int Peternak::hitungKekayaan() const {
     return this->getGulden();
 }
 
+vector<pair<Item*, int>> Peternak::getVarianReadyToFeed(animalType type){
+    vector<pair<Item*, int>> items;
+    for (int i = 0; i < w_lahan; i++) {
+        for (int j = 0; j < h_lahan; j++) {
+            if (inventory.getMap()[i][j] != nullptr && inventory.getMap()[i][j]->getItemType() == PRODUCT){
+                bool found = false;
+                for (auto& item : items) {
+                    Product* product = dynamic_cast<Product*>(&item);
+                    if (isFoodTypeCompatible(type, product->convertProductTypeToString(product->getProductType()))) {
+                        item.second--;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}

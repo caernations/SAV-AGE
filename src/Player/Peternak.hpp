@@ -91,6 +91,7 @@ class Peternak : public Player {
         */
         Map<Animal>& getKandang();
 
+        vector<pair<Item*, int>> getVarianReadyToFeed(animalType type)
 };
 
 #endif
