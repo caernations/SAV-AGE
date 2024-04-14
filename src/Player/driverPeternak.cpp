@@ -35,7 +35,7 @@ int main() {
     p.setKandang(0, 0, &hewan3);
     p.setKandang(0, 1, &hewan4);
 
-    cout << "Jumlah hewan: " << p.getJumlahHewan() + 3<< endl;
+    cout << "Jumlah hewan: " << p.getJumlahHewan() + 3 << endl;
     cout << "Lebar kandang: " << p.getWKandang() << endl;
     cout << "Tinggi kandang: " << p.getHKandang() << endl;
     cout << "Maksimum hewan yang bisa diternak: " << p.getMaxHewan() << endl;
@@ -43,7 +43,8 @@ int main() {
     cout << "BUDIDAYA GUYS" << endl << endl;
     p.budidaya();
 
-    cout << "Setelah budidaya, jumlah hewan: " << p.getJumlahHewan() << endl;
+    cout << endl;
+    cout << "Setelah budidaya, jumlah hewan: " << p.getJumlahHewan() + 3 << endl;
 
     cout << "Memberi makan..." << endl;
     p.memberiPangan();

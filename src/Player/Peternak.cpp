@@ -141,26 +141,25 @@ void Peternak::memberiPangan() {
     displayGrid();
 
     // Memilih petak kandang
+    tuple<int, int> pos; // Declaring pos here
     while(true) {
+        cout << endl;
         cout << "Pilih petak kandang yang akan diberi makan: ";
         string petak;
         cin >> petak;
 
-        // Mengonversi input petak menjadi koordinat
-        tuple<int, int> pos = convertToCoordinate(petak);
+        pos = convertToCoordinate(petak); // Assigning pos here
         int x = get<0>(pos);
         int y = get<1>(pos);
 
-        // Periksa apakah petak yang dipilih valid
         if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
             cout << "Petak kandang tidak valid." << endl;
-            return;
+            continue;
         }
 
-        // Periksa apakah ada hewan di petak kandang yang dipilih
         if (kandang.getMap()[get<0>(pos)][get<1>(pos)] == nullptr) {
             cout << "Tidak ada hewan di petak kandang yang dipilih." << endl;
-            return;
+            continue;
         }
 
         string animalType = kandang.getMap()[get<0>(pos)][get<1>(pos)]->getAnimalType();
@@ -168,11 +167,15 @@ void Peternak::memberiPangan() {
 
         if(varianReadyToFeed.empty()){
             cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
-            return;
+            continue;
         }
+        else {
+            cout << endl << "Kamu memilih " << convertToReadable(kandang.getMap()[get<0>(pos)][get<1>(pos)]->getItemName(), true, true) << " untuk diberi makan." << endl;
+        }
+
+        break;
     }
 
-    cout << endl << "Kamu memilih " << convertToReadable(kandang.getMap()[get<0>(pos)][get<1>(pos)]->getItemName(), true, true) << " untuk diberi makan." << endl;
     cout << endl;
 
     // Menampilkan penyimpanan
@@ -190,6 +193,8 @@ void Peternak::memberiPangan() {
     int storageY = get<1>(storagePos);
 
     // Periksa apakah slot penyimpanan valid
+    int w_inventory = this->getInvenW(); // Declaring w_inventory here
+    int h_inventory = this->getInvenH(); // Declaring h_inventory here
     if (storageX < 0 || storageX >= w_inventory || storageY < 0 || storageY >= h_inventory) {
         cout << "Slot penyimpanan tidak valid." << endl;
         return;
@@ -203,7 +208,7 @@ void Peternak::memberiPangan() {
 
     // Memberikan makanan kepada hewan
     Product* foodItem = dynamic_cast<Product*>(inventory.getMap()[storageX][storageY]);
-    Animal* animal = kandang.getMap()[x][y];
+    Animal* animal = kandang.getMap()[get<0>(pos)][get<1>(pos)]; // Using pos instead of x and y
     animal->setFed(foodItem->added_weigth, foodItem->convertProductTypeToString(foodItem->getProductType())); 
     inventory.set(storageX, storageY, nullptr);
     delete foodItem;
@@ -216,26 +221,27 @@ int Peternak::hitungKekayaan() const {
     return this->getGulden();
 }
 
-vector<pair<Item*, int>> Peternak::getVarianReadyToFeed(animalType type){
+vector<pair<Item*, int>> Peternak::getVarianReadyToFeed(const std::string& animalType) {
+    cout << "MASUKKKKKKK" << endl;
     vector<pair<Item*, int>> items;
-    for (int i = 0; i < w_lahan; i++) {
-        for (int j = 0; j < h_lahan; j++) {
-            if (inventory.getMap()[i][j] != nullptr && inventory.getMap()[i][j]->getItemType() == PRODUCT){
+    int w_inventory = this->getInvenW();
+    int h_inventory = this->getInvenH();
+    for (int i = 0; i < h_inventory; i++) {
+        for (int j = 0; j < w_inventory; j++) {
+            if (inventory.getMap()[i][j] != nullptr && inventory.getMap()[i][j]->getItemType() == PRODUCT) {
+                cout << "OKKKKKKKKKKK" << endl;
                 bool found = false;
                 for (auto& item : items) {
-                    Product* product = dynamic_cast<Product*>(&item);
-                    if (isFoodTypeCompatible(type, product->convertProductTypeToString(product->getProductType()))) {
-                        item.second--;
+                    Product* product = dynamic_cast<Product*>(item.first); 
+                    if (isFoodTypeCompatible(animalType, product->convertProductTypeToString(product->getProductType()))) {
+                        cout << endl << "COMPATIBILITY CHECK" << endl << animalType << endl << product->convertProductTypeToString(product->getProductType()) << endl;
                         found = true;
                         break;
                     }
                 }
-                if (found) {
-                    cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
-                    return true;
-                }
             }
         }
     }
-    return false;
+    return items;
 }
+
