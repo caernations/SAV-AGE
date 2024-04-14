@@ -49,6 +49,24 @@ int main() {
     cout << "Memberi makan..." << endl;
     p.memberiPangan();
 
+    vector<Product*> products;
+    Product* product1 = new Product(1,PRODUCT_ANIMAL, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
+    Product product2(2,PRODUCT_ANIMAL, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
+    Product product3(3,PRODUCT_ANIMAL, "TOWOWO_BRONTO", 10, "ABU", "TOWOWOBOIII", 1000);
+
+    products.push_back(product1);
+    products.push_back(&product2);
+    products.push_back(&product3);
+
+    cout << "PANEN GUYS" << endl << endl;
+    p.panennn(products);
+
+    cout << endl;
+    cout << p.getBeratBadan() << endl;
+    cout << endl;
+
+    p.consumeFromInv();
+
     delete hewan1;
 
     cout << "Ending program..." << endl;

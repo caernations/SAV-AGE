@@ -3,6 +3,7 @@
 #include "../utils/StringProcessor.hpp"
 #include <iostream>
 #include <iomanip>
+#include <limits>
 
 Peternak::Peternak() : Player() {
     inventory = Map<Item>();
@@ -245,3 +246,147 @@ vector<pair<Item*, int>> Peternak::getVarianReadyToFeed(const std::string& anima
     return items;
 }
 
+void Peternak::panennn(vector<Product*>& products){
+    // if (isInventoryFull()) throw InventoryFullException();
+    string slot;
+    tuple<int, int> pos;
+    int choiceAnimal;
+    int choiceSlot;
+    vector<pair<Item*, int>> varians = getVarianItem(ANIMAL);
+    vector<pair<Item*, int>> varianReadyToHarvest = getVarianReadyToHarvest();
+    pair<Item*,int> chosenAnimal;
+    tuple<int, int> posAnimal;
+    vector<string> slots;
+    Product* animalProduct = new Product();
+
+    displayGrid();
+    // if(varianReadyToHarvest.empty()) throw NoItemToHarvestException();
+    if (varianReadyToHarvest.empty()){
+        cout << "Tidak ada hewan yang siap dipanen" << endl;
+        cout << endl;
+        return;
+    }
+    cout << endl;
+    for (pair<Item*, int> item : varians){
+        cout <<" - " << item.first->getItemCode() << ": " << convertToReadable(item.first->getItemName(), true, true) << endl;
+    }
+    cout << endl;
+
+    cout << "Pilih hewan siap panen yang kamu miliki" << endl;
+    for (int i = 0; i < varianReadyToHarvest.size(); i++){
+        cout<< "    " << i+1 << ". " << varianReadyToHarvest[i].first->getItemCode() << " (" << varianReadyToHarvest[i].second << " petak siap panen)" << endl;
+    }
+
+    while (true){
+        cout << endl;
+        cout << "Nomor hewan yang ingin dipanen: ";
+        cin >> choiceAnimal;
+        if (cin.fail()){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Input tidak valid" << endl;
+        }
+        else if (choiceAnimal < 1 || choiceAnimal > varianReadyToHarvest.size()){
+            cout << "Pilihan tidak valid" << endl;
+        } else {
+            break;
+        }
+    }
+
+    chosenAnimal = varianReadyToHarvest[choiceAnimal-1];
+
+    for(int i = 0; i < products.size(); i++){
+        if (products[i]->getOrigin() == chosenAnimal.first->getItemName()){
+            animalProduct = new Product(*products[i]);
+            break;
+        }
+    }
+
+    if(animalProduct->getItemCode() == ""){
+        cout << "Produk tidak ditemukan" << endl;
+        return;
+    }
+
+    while (true){
+        cout << endl;
+        cout << "Berapa petak yang ingin dipanen: ";
+        cin >> choiceSlot;
+        if(cin.fail()){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Input tidak valid" << endl;
+        }
+        else if (Player::getItemCountInInventory() + choiceSlot > Player::getMaxItemInInventory()){
+            cout << "Jumlah penyimpanan tidak cukup!" << endl;
+            return;
+        } 
+        else if ( choiceSlot < 1 || choiceSlot > chosenAnimal.second){
+            cout << "Pilihan tidak valid" << endl;
+        }
+        else {
+            break;
+        }
+    }
+
+    displayGrid();
+    cout << endl;
+    cout << "Pilih petak yang ingin dipanen: " << endl;
+    for(int i = 0; i < choiceSlot; i++){
+        while(true){
+            cout << "Petak ke-" << i+1 << ": ";
+            cin >> slot;
+            pos = convertToCoordinate(slot);
+            int x = get<0>(pos);
+            int y = get<1>(pos);
+            Animal* mapItem = dynamic_cast<Animal*>(kandang.getMap()[x][y]);
+
+            if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang){
+                cout << "Petak tidak valid" << endl;
+            } else if (mapItem == nullptr){
+                cout << "Petak kosong" << endl;
+            } else if (mapItem->getItemCode() != chosenAnimal.first->getItemCode() && !mapItem->isReadyToHarvest()){
+                cout << "Hewan tidak sesuai" << endl;
+            } else if (mapItem->getItemCode() == chosenAnimal.first->getItemCode() && !mapItem->isReadyToHarvest()){
+                cout << "Hewan belum siap dipanen" << endl;
+            }
+            else {
+                kandang.set(x, y, nullptr);
+                this->jumlah_hewan--;
+                slots.push_back(slot);
+                addToInvEmptySlot(animalProduct);
+                break;
+            }
+        }
+    }
+
+    cout << endl;
+    cout << choiceSlot << " petak hewan " << chosenAnimal.first->getItemCode() << " ";
+    for(int i = 0; i < slots.size(); i++){
+        cout << slots[i];
+             cout << ", ";
+        }
+
+    cout << "berhasil dipanen" << endl;
+}
+
+vector<pair<Item*, int>> Peternak::getVarianReadyToHarvest(){
+    vector<pair<Item*, int>> items;
+    for (int i = 0; i < w_kandang; i++) {
+        for (int j = 0; j < h_kandang; j++) {
+            if (kandang.getMap()[i][j] != nullptr && kandang.getMap()[i][j]->getItemType() == ANIMAL && kandang.getMap()[i][j]->isReadyToHarvest()){
+                bool found = false;
+                for (auto& item : items) {
+                    if (item.first->getItemCode() == kandang.getMap()[i][j]->getItemCode() && kandang.getMap()[i][j]->isReadyToHarvest()) {
+                        item.second++;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    items.push_back(make_pair(kandang.getMap()[i][j], 1));
+                }
+            }
+        }
+    }
+    return items;
+}

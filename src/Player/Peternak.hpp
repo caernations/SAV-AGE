@@ -80,18 +80,19 @@ class Peternak : public Player {
         
         void budidaya();
 
+        void panennn(vector<Product*>& products);
+
         bool isFoodTypeCompatible(const std::string& animalType, const std::string& foodType);
 
         void memberiPangan();
 
         virtual int hitungKekayaan() const override;
 
-        /**
-         * mengembalikan kandang yang dimiliki oleh peternak
-        */
         Map<Animal>& getKandang();
 
         vector<pair<Item*, int>> getVarianReadyToFeed(const std::string& animalType);
+
+        vector<pair<Item*, int>> getVarianReadyToHarvest();
 };
 
 #endif
