@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <tuple>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,6 +14,13 @@ string convertToReadable(const string& str, bool capitalizeFirstWord, bool capit
 
 tuple<int,int> convertToCoordinate(const string& str);
 
+string coordinateToString(const std::tuple<int,int> coordinate);
+
 int findIn(const string& object, const string source[], const int& size);
+
+bool isOneOf(const string& input, const vector<string>& comparison);
+
+//returns true when A < B
+bool lexCompare(const string& a, const string& b);
 
 #endif

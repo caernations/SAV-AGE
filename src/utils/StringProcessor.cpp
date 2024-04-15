@@ -1,7 +1,6 @@
 #include "StringProcessor.hpp"
 
 #include <iostream>
-#include <algorithm>
 #include <string>
 
 vector<string> split(string input,char splittingchar){
@@ -89,6 +88,21 @@ std::tuple<int,int> convertToCoordinate(const std::string& str) {
     return std::make_tuple(columnIndex, rowNumber);
 };
 
+string coordinateToString(const std::tuple<int,int> coordinate){
+    string retval;
+    char x = 'A' + get<0>(coordinate);
+    string y = to_string(get<1>(coordinate) + 1);
+    cout << "DEBUG, Y :" << y << endl;
+    retval += x;
+    if (get<1>(coordinate) < 10){
+        retval += "0";
+    }
+
+    retval += y;
+
+    return (retval);
+}
+
 int findIn(const string& object, const string source[], const int& size){
     //cout << "FINDING" << endl;
     int retval = -1;
@@ -104,3 +118,17 @@ int findIn(const string& object, const string source[], const int& size){
     //cout << "NOT FOUND !" << endl;
     return retval;
 }
+
+//is in
+bool isOneOf(const string& input, const vector<string>& comparison){
+    for(string item : comparison){
+        if (input.compare(item) == 0){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool lexCompare(const string& a, const string& b){
+    return lexicographical_compare(a.begin(),a.end(),b.begin(),b.end());
+};
