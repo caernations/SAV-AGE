@@ -11,7 +11,7 @@ void GameManager::cheat(){
     tuple<int,int> pos;
     int x;
     int i = 0;
-    switch (findIn(lastMultiInput[0],commands,4))
+    switch (findIn(lastMultiInput[0],commands,5))
     {
     case 0:
         switch (findIn(lastMultiInput[1],codexpage,6)){
