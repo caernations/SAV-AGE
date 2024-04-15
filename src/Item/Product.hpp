@@ -8,7 +8,7 @@
 using namespace std;
 
 enum ProductType {
-    PRODUCT_MATERIAL_PLANT,
+    PRODUCT_MATERIAL_PLANT = 1,
     PRODUCT_FRUIT_PLANT,
     PRODUCT_ANIMAL
 };

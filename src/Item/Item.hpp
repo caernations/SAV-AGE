@@ -8,7 +8,7 @@
 using namespace std;
 
 enum ItemType {
-    BUILDING,
+    BUILDING = 1,
     PLANT,
     ANIMAL,
     PRODUCT,

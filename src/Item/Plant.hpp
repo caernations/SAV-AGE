@@ -7,7 +7,7 @@
 using namespace std;
 
 enum PlantType {
-    MATERIAL_PLANT,
+    MATERIAL_PLANT = 1,
     FRUIT_PLANT
 };
 

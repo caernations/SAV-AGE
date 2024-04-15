@@ -12,7 +12,7 @@
 using namespace std;
 
 enum PlayerType {
-    PETANI,
+    PETANI = 1,
     PETERNAK,
     WALIKOTA
 };
