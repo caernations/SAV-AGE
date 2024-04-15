@@ -194,6 +194,38 @@ void GameManager::nextTick(const int& tickammt){
     }
 }
 
+void GameManager::addPlayer(){
+    awaitMultiInput("Masukkan jenis pemain: ",' ');
+    if (lastMultiInput.size() > 1){
+        throw GMException("Incorrect type");
+    }
+    string input = lastMultiInput[0];
+    transform(input.begin(),input.end(),input.begin(), ::toupper);
+    PlayerType tipe = StringToPlayerType[input];
+    if (tipe == 0){
+        throw GMException("Internal error when converting to PlayerType",input);
+    }
+    else if (tipe == WALIKOTA){
+        throw GMException("Illegal type!","Cannot have more than 1 walikota");
+    }
+    awaitMultiInput("Masukkan nama pemain: ",' ');
+    if (lastMultiInput.size() > 1){
+        throw GMException("Illegal name","Cannot contain spaces");
+    }
+    Player* newbie = addPlayer(lastMultiInput[0],0,50,tipe);
+
+    //update turn thingy
+    for (Player* player : activePlayers){
+        if (player == newbie){
+            turn += 1;
+            break;
+        }
+        else if(player == activePlayers[turn]){
+            break;
+        }
+    }
+}
+
 Player *GameManager::addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType)
 {
     Player* player;
@@ -249,8 +281,9 @@ void GameManager::gameloop(){
             else if (checkLastInput({"CETAK_PENYIMPANAN","INVENTORY"})) {
                 activePlayers[turn]->Player::displayGrid();
             }
-            else if (checkLastInput({"PUNGUT_PAJAK","TAX"})){
-                //
+            else if (checkLastInput({"PUNGUT_PAJAK","TAX"}) && activePlayers[turn]->getType() == WALIKOTA){
+                Walikota* wk = dynamic_cast<Walikota*>(activePlayers[turn]);
+                wk->calculateTax(activePlayers);
             }
             else if ((checkLastInput({"CETAK_LADANG","FIELD"})) && activePlayers[turn]->getType() == PETANI){
                 activePlayers[turn]->displayGrid();
@@ -265,7 +298,8 @@ void GameManager::gameloop(){
                 activePlayers[turn]->budidaya();
             }
             else if ((checkLastInput({"BANGUN","BUILD"})) && activePlayers[turn]->getType() == WALIKOTA){
-                //
+                Walikota* wk = dynamic_cast<Walikota*>(activePlayers[turn]);
+                wk->buildBuilding();
             }
             else if (checkLastInput({"MAKAN"})){
                 activePlayers[turn]->consumeFromInv();
@@ -283,14 +317,18 @@ void GameManager::gameloop(){
                 activePlayers[turn]->panennn(codex.getProducts());
             }
             else if (checkLastInput({"SAVE","SIMPAN"})){
-                //saveloop();
                 saveState("config");
             }
             else if ((checkLastInput({"TAMBAH_PEMAIN"})) && activePlayers[turn]->getType() == WALIKOTA){
-                //
+                addPlayer();
             }
             else if (checkLastInput({"CHEAT"})){
-                cheat();
+                try{
+                    cheat();
+                }
+                catch(...){
+                    cout << "Incorrect cheat!" << endl;
+                }
             }
             else{
                 throw string("Invalid command!");
@@ -299,6 +337,9 @@ void GameManager::gameloop(){
         }
         catch (string e){
             cout << e << endl;
+        }
+        catch (GMException){
+
         }
         catch (exception e){
             cout << "Exception occured! : " << e.what();

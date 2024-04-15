@@ -88,6 +88,8 @@ class GameManager{
         void nextTick(const int& tickammt);
 
         Player* addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType);
+
+        void addPlayer();
 };
 
 #endif
