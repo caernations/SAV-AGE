@@ -83,7 +83,7 @@ class Petani : public Player{
          * memanen tumbuhan yang sudah siap
          * jika penyimpanan penuh, maka tidak akan memanen
         */
-        void panennn(vector<Product*>& products);
+        void panennn(const vector<Product>& products);
 
         /**
          * Mendapatkan tanaman yang siap untuk dipanen

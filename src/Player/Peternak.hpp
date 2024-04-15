@@ -80,7 +80,7 @@ class Peternak : public Player {
         
         void budidaya();
 
-        void panennn(vector<Product*>& products);
+        void panennn(const vector<Product>& products);
 
         bool isFoodTypeCompatible(const std::string& animalType, const std::string& foodType);
 

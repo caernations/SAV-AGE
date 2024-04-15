@@ -64,6 +64,15 @@ int Petani::getMaxTumbuhan() const {
 
 void Petani::setLahan(int x, int y, Plant* item){
     lahan.set(x, y, item);
+    
+    if(lahan.getMap()[y][x] == nullptr){
+        if (item != nullptr){
+            jumlah_tumbuhan++;
+        }
+    }
+    else if(item == nullptr){
+        jumlah_tumbuhan--;
+    }
 }
 
 Map<Plant>& Petani::getLahan() {
@@ -93,7 +102,6 @@ void Petani::budidaya(){
             cout << "Slot sudah terisi" << endl;
         } else {
             lahan.set(get<0>(pos), get<1>(pos), plant);
-            jumlah_tumbuhan++;
             cout << "Cangkul, cangkul, cangkul yang dalam~!" << endl;
             cout << convertToReadable(plant->getItemName(), false, false) << " berhasil ditanami" << endl;
             return;
@@ -102,13 +110,14 @@ void Petani::budidaya(){
 
 }
 
-void Petani::panennn(vector<Product*>& products){
+void Petani::panennn(const vector<Product>& products){
     // if (isInventoryFull()) throw InventoryFullException();
     string slot;
     tuple<int, int> pos;
     int choicePlant;
     int choiceSlot;
     vector<pair<Item*, int>> varians = getVarianItem(PLANT);
+    cout << "Getting harvest list..." << endl;
     vector<pair<Item*, int>> varianReadyToHarvest = getVarianReadyToHarvest();
     pair<Item*,int> chosenPlant;
     tuple<int, int> posPlant;
@@ -152,8 +161,8 @@ void Petani::panennn(vector<Product*>& products){
     chosenPlant = varianReadyToHarvest[choicePlant-1];
 
     for(int i = 0; i < products.size(); i++){
-        if (products[i]->getOrigin() == chosenPlant.first->getItemName()){
-            plantProduct = new Product(*products[i]);
+        if (products[i].getOrigin() == chosenPlant.first->getItemName()){
+            plantProduct = new Product(products[i]);
             break;
         }
     }
@@ -192,8 +201,8 @@ void Petani::panennn(vector<Product*>& products){
             cout << "Petak ke-" << i+1 << ": ";
             cin >> slot;
             pos = convertToCoordinate(slot);
-            int x = get<0>(pos);
-            int y = get<1>(pos);
+            int x = get<1>(pos);
+            int y = get<0>(pos);
             Plant* mapItem = dynamic_cast<Plant*>(lahan.getMap()[x][y]);
 
             if (x < 0 || x >= w_lahan || y < 0 || y >= h_lahan){
@@ -207,7 +216,6 @@ void Petani::panennn(vector<Product*>& products){
             }
             else {
                 lahan.set(x, y, nullptr);
-                jumlah_tumbuhan--;
                 slots.push_back(slot);
                 addToInvEmptySlot(plantProduct);
                 break;
@@ -227,8 +235,8 @@ void Petani::panennn(vector<Product*>& products){
 
 vector<pair<Item*, int>> Petani::getVarianReadyToHarvest(){
     vector<pair<Item*, int>> items;
-    for (int i = 0; i < w_lahan; i++) {
-        for (int j = 0; j < h_lahan; j++) {
+    for (int i = 0; i < h_lahan; i++) {
+        for (int j = 0; j < w_lahan; j++) {
             if (lahan.getMap()[i][j] != nullptr && lahan.getMap()[i][j]->getItemType() == PLANT && lahan.getMap()[i][j]->isReadyToHarvest()){
                 bool found = false;
                 for (auto& item : items) {

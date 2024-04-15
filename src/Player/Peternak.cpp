@@ -246,7 +246,7 @@ vector<pair<Item*, int>> Peternak::getVarianReadyToFeed(const std::string& anima
     return items;
 }
 
-void Peternak::panennn(vector<Product*>& products){
+void Peternak::panennn(const vector<Product>& products){
     // if (isInventoryFull()) throw InventoryFullException();
     string slot;
     tuple<int, int> pos;
@@ -296,8 +296,8 @@ void Peternak::panennn(vector<Product*>& products){
     chosenAnimal = varianReadyToHarvest[choiceAnimal-1];
 
     for(int i = 0; i < products.size(); i++){
-        if (products[i]->getOrigin() == chosenAnimal.first->getItemName()){
-            animalProduct = new Product(*products[i]);
+        if (products[i].getOrigin() == chosenAnimal.first->getItemName()){
+            animalProduct = new Product(products[i]);
             break;
         }
     }
