@@ -32,3 +32,13 @@ map<PlayerType, string> PlayerTypeToString = {
     {WALIKOTA, "WALIKOTA"}
 };
 
+map<string,PlayerType> LCaseToPlayerType {
+    {"Petani",PETANI},
+    {"Peternak",PETERNAK},
+    {"Walikota",WALIKOTA}
+};
+map<PlayerType, string> PlayerTypeToLCase = {
+    {PETANI, "Petani"},
+    {PETERNAK, "Peternak"},
+    {WALIKOTA, "Walikota"}
+};

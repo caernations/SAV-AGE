@@ -14,5 +14,7 @@ extern map<ProductType,string> ProductTypeToString;
 #include "../Player/Player.hpp"
 extern map<string,PlayerType> StringToPlayerType;
 extern map<PlayerType, string> PlayerTypeToString;
+extern map<string,PlayerType> LCaseToPlayerType;
+extern map<PlayerType, string> PlayerTypeToLCase;
 
 #endif
