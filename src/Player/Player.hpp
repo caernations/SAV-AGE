@@ -156,10 +156,7 @@ class Player {
 
         string itemTypeToString(ItemType type);
 
-        virtual int hitungKekayaan() const = 0;
-
-        pair<Player*,int> hitungPajak();
-
+        virtual int hitungKekayaan() const;
     };
 
 #endif 

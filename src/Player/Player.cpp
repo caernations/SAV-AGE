@@ -126,10 +126,10 @@ void Player::displayGrid() {
         cout << setw(2) << setfill('0') << i+1 << " ";
         cout << "|";
         for (int j = 0; j < invenSizeW; j++){
-            if (getInventory().getMap()[j][i] == nullptr){
+            if (getInventory().getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
-                cout << " " << getInventory().getMap()[j][i]->getItemCode() << " " << "|";
+                cout << " " << getInventory().getMap()[i][j]->getItemCode() << " " << "|";
             }
         }
         cout << "\n";
@@ -253,45 +253,12 @@ void Player::removeFromInv(const string& itemName, int amount) {
     }
 }
 
-pair<Player*, int> Player::hitungPajak() {
-    int netoKekayaan;
-    int KKP;
-    int KTKP;
-    int tarif;
-    int pajak;
 
-    netoKekayaan += getGulden();
-    netoKekayaan += hitungKekayaan();
-
-    if (getType() == PETANI) {
-        KTKP = 11;
-    } else if (getType() == PETERNAK) {
-        KTKP = 13;
-    } else {
-        KTKP = 0;
+int Player::hitungKekayaan() const{
+    int retval = 0;
+    vector<Item*> items = inventory.convertToList();
+    for (Item*& item : items){
+        retval += item->getItemPrice();
     }
-    
-    if (netoKekayaan <= 6) {
-        tarif = 0.05;
-    } else if (netoKekayaan <= 25) {
-        tarif = 0.15;
-    } else if (netoKekayaan <= 50) {
-        tarif = 0.25;   
-    } else if (netoKekayaan <= 500) {
-        tarif = 0.30;
-    } else {
-        tarif = 0.35;
-    }
-
-    KKP = netoKekayaan - KTKP;
-
-    pajak = round(KKP * tarif);
-    
-    if (getGulden() - pajak <=0 ){
-        pajak = getGulden();
-    }
-
-        
-
-
+    return retval;
 }
