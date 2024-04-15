@@ -38,10 +38,10 @@ void Player::changeGulden(int guldenAmount) {
 }
 
 void Player::addToInvEmptySlot(Item* item) {
-    for (int i = 0; i < invenSizeW; i++) {
-        for (int j = 0; j < invenSizeH; j++) {
+    for (int i = 0; i < invenSizeH; i++) {
+        for (int j = 0; j < invenSizeW; j++) {
             if (inventory.getMap()[i][j] == nullptr) {
-                inventory.set(i, j, item);
+                inventory.set(j, i, item);
                 itemCountInInventory++;
                 return;
             }
@@ -235,7 +235,7 @@ void Player::budidaya() {
     cout << "Player melakukan budidaya" << endl;
 }
 
-void Player::panennn(vector<Product*>& products) {
+void Player::panennn(const vector<Product>& products) {
     cout << "Player melakukan panen" << endl;
 }
 
