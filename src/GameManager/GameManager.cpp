@@ -5,7 +5,7 @@ GMException::GMException(){
     cout << "[GameManager] Generic Exception occured!" << endl;
 }
 
-GMException::GMException(char* message){
+GMException::GMException(string message){
     cout << "[GameManager] Exception : " << message << endl;
 }
 
@@ -27,11 +27,33 @@ const Codex GameManager::get_codex(){
     return codex;
 }
 
-void GameManager::load(string savename){
-
-};
 
 void GameManager::init(){
+    //initialize codex
+    codex.populatecodex(configpath);
+    //initialize misc
+    ifstream misc(configpath + "/misc.txt");
+    if (misc.is_open()){
+        string line;
+        vector<string> multiline;
+        getline(misc,line);
+        goldToWin = stoi(line);
+        getline(misc,line);
+        weightToWin = stoi(line);
+        getline(misc,line);
+        multiline = split(line,' ');
+        invSize = {stoi(multiline[0]),stoi(multiline[1])};
+        getline(misc,line);
+        multiline = split(line,' ');
+        lahanSize = {stoi(multiline[0]),stoi(multiline[1])};
+        getline(misc,line);
+        multiline = split(line,' ');
+        ternakSize = {stoi(multiline[0]),stoi(multiline[1])};
+    }
+    else{
+        cout << "OPEN FAILED " << configpath  + "/misc.txt" << endl ;
+        throw 1;
+    }
     //activePlayers.push_back(new Walikota())
 };
 
@@ -54,6 +76,10 @@ void GameManager::awaitLineInput(string question){
     getline(cin, lastInput);
 }
 
+bool GameManager::checkLastInput(const vector<string>& comparison){
+    return isOneOf(lastInput,comparison);
+};
+
 //awaitMultiInput group
 void GameManager::awaitMultiInput(char splitter){
     getline(cin, lastInput);
@@ -68,6 +94,16 @@ void GameManager::awaitMultiInput(string question,char splitter){
 
 
 void GameManager::initloop(){
+    cout << "Populating codex..." << endl;
+    try{
+        init();
+    }
+    catch(...){
+        cout << "Exception occured!";
+        throw 1;
+    }
+    cout << "Load complete!" << endl << endl;
+
     cout << "|| SAV-AGE ||" << endl;
     
     bool getCorrectInput = false;
@@ -78,19 +114,26 @@ void GameManager::initloop(){
         awaitLineInput(">>>");
         if (lastInput.compare("1") == 0){
             try{
-                codex.populatecodex(configpath);
                 getCorrectInput = true;
                 // JANGAN LUPA GANTI KE WALIKOTA KALO UDAH DI FIX
-                Player* firstplayer = new Petani(0,"Thoriq",100,99,6,6,6,6);
+                Player* firstplayer = new Petani(0,"Thoriq",100,99,5,7,5,7);
                 activePlayers.push_back(firstplayer);
             }
+            catch(GMException){}
+            catch(CodexException){}
             catch(...){
                 cout << "Exception occured!" << endl;
             }   
         }
         
         else if (lastInput.compare("2") == 0){
-
+            awaitLineInput("Save file location from current : ");
+            try{
+                loadState(lastInput);
+                getCorrectInput = true;
+                // JANGAN LUPA GANTI KE WALIKOTA KALO UDAH DI FIX
+            }
+            catch(GMException){}
         }
         else if (lastInput.compare("3") == 0){
 
@@ -102,56 +145,35 @@ void GameManager::initloop(){
     }
 };
 
-//cheat menu, if you will
-void GameManager::cheat(){
-    awaitMultiInput("What is your command?: ",' ');
-    string commands[] = {"VIEW","GIVE","TAKE"};
-    string codexpage[] = {"PLANTS","ANIMALS","PRODUCTS","BUILDINGS","SOURCE","PLAYERS"};
-    Item* thing; //placeholder for case 0,4
-    switch (findIn(lastMultiInput[0],commands,3))
-    {
-    case 0:
-        switch (findIn(lastMultiInput[1],codexpage,6)){
-            case 0:
-                codex.showPlants();
-                break;
-            case 1:
-                codex.showAnimals();
-                break;
-            case 2:
-                codex.showProducts();
-                break;
-            case 3:
-                codex.showBuildings();
-                break;
-            case 4:
-                thing = codex.getSource(codex.getProduct(lastMultiInput[2]));
-                if (thing != nullptr){
-                    thing->displayItem();
-                }
-                else{
-                    cout << "Invalid item or Product does not exist" << endl;
-                }
-                break;
-            case 5:
-                for (Player*& item : activePlayers){
-                    cout << item->getPlayerName() << " : " << PlayerTypeToString[item->getType()] << endl;
-                }
-                break;
-            default:
-                cout << "Table does not exist!" << endl;
-                break;
-        }
+void GameManager::buyLoop(){
+    Player* actor = activePlayers[turn];
+    store.displayStore();
+    cout << "Uang anda : " << actor->getGulden() << endl;
+    cout << "Slot penyimpanan tersedia : " << actor->getInventory().remainingSlots() << endl;
 
-        break;
-    case 1:
-        break;
-    case 2:
-        break;
-    default:
-        cout << "Cheat "<< lastMultiInput[0] << " doesnt exist!" << endl;
-        break;
+    awaitLineInput("Barang yang ingin dibeli : ");
+
+}
+
+void GameManager::sellLoop(){
+    //bruh
+}
+
+void GameManager::playerLexSort(vector<Player>){
+    vector<Player*> newlist;
+    for(Player* item : activePlayers){
+        if(newlist.empty()){
+            newlist.push_back(item);
+        }
+        else{
+            auto i = newlist.begin();
+            while (i != newlist.end() && !lexCompare(item->getPlayerName(),(*i)->getPlayerName())){
+                i++;
+            }
+            newlist.insert(i,item);
+        }
     }
+    activePlayers = newlist;
 }
 
 //paling bawah
@@ -163,13 +185,10 @@ void GameManager::gameloop(){
         // Try input
         try{
             // Check with commands
-            if (lastInput.compare("EXIT") == 0 || lastInput.compare("QUIT") == 0){
+            if (checkLastInput({"EXIT","QUIT"})){
                 break;
             }
-            else if (lastInput.compare("TAX") == 0){ //TO BE REPLACED WITH SKILL
-                cout << "MONEY" << endl;
-            }
-            else if (lastInput.compare("NEXT") == 0){
+            else if (checkLastInput({"NEXT"})){
                 if (activePlayers.size() <= 1){
                     throw string("You are the last man standing");
                 }
@@ -177,20 +196,52 @@ void GameManager::gameloop(){
                     turn = (turn + 1) % activePlayers.size();
                     cout << "NEXT TURN :" << endl;
                 };
+            } 
+            else if (checkLastInput({"CETAK_PENYIMPANAN","INVENTORY"})) {
+                activePlayers[turn]->Player::displayGrid();
             }
-            else if (lastInput.compare("CETAK PENYIMPANAN") == 0){
+            else if (checkLastInput({"PUNGUT_PAJAK","TAX"})){
+                cout << "MONEY" << endl;
+            }
+            else if ((checkLastInput({"CETAK_LADANG","FIELD"})) && activePlayers[turn]->getType() == PETANI){
                 activePlayers[turn]->displayGrid();
             }
-            else if (lastInput.compare("MAKAN") == 0){
+            else if ((checkLastInput({"CETAK_PETERNAKAN","FARM"})) && activePlayers[turn]->getType() == PETERNAK){
+                activePlayers[turn]->displayGrid();
+            }
+            else if ((checkLastInput({"TANAM"})) && activePlayers[turn]->getType() == PETANI){
+                //
+            }
+            else if ((checkLastInput({"TERNAK"})) && activePlayers[turn]->getType() == PETERNAK){
+                //
+            }
+            else if ((checkLastInput({"BANGUN","BUILD"})) && activePlayers[turn]->getType() == WALIKOTA){
+                //
+            }
+            else if (checkLastInput({"MAKAN"}) == 0){
                 activePlayers[turn]->consumeFromInv();
             }
-            else if (lastInput.compare("CHEAT") == 0){
-                cheat();
+            else if (checkLastInput({"KASIH_MAKAN","FEED"}) == 0){
+                activePlayers[turn]->consumeFromInv();
             }
-            else if (lastInput.compare("TANAM") == 0){
-                if (activePlayers[turn]->getType() == PETANI){
-                    //activePlayers[turn]->budidaya();
-                }
+            else if (checkLastInput({"BELI"}) == 0){
+                buyLoop(); //
+            }
+            else if (checkLastInput({"JUAL"}) == 0){
+                sellLoop(); //
+            }
+            else if ((checkLastInput({"PANEN"})) && activePlayers[turn]->getType() == PETANI){
+                //
+            }
+            else if (checkLastInput({"SAVE","SIMPAN"}) == 0){
+                //saveloop();
+                saveState("config");
+            }
+            else if ((checkLastInput({"TAMBAH_PEMAIN"})) && activePlayers[turn]->getType() == WALIKOTA){
+                //
+            }
+            else if (checkLastInput({"CHEAT"}) == 0){
+                cheat();
             }
             else{
                 throw string("Invalid command!");

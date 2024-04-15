@@ -10,6 +10,8 @@
 //#include "../Player/Walikota.hpp"
 #include "../utils/StringProcessor.hpp"
 #include "Codex.hpp"
+#include "../Item/GeneralStore.hpp"
+#include <fstream>
 
 using namespace std;
 
@@ -17,7 +19,7 @@ using namespace std;
 class GMException : public exception{
     public:
         GMException();
-        GMException(char* message);
+        GMException(string message);
         ~GMException();
 };
 
@@ -26,9 +28,14 @@ class GameManager{
         int turn;
         string lastInput;
         vector<string> lastMultiInput;
-        //GeneralStore& store;
+        Store store;
         vector<Player*> activePlayers;
         Codex codex;
+        int goldToWin;
+        int weightToWin;
+        tuple<int,int> invSize;
+        tuple<int,int> lahanSize;
+        tuple<int,int> ternakSize;
     public:
         string configpath;
 
@@ -38,10 +45,7 @@ class GameManager{
         
         const Codex get_codex();
 
-        //loadfrom
-        void load(string savename);
-
-        //startnew
+        //read config
         void init();
 
         //getter
@@ -61,9 +65,11 @@ class GameManager{
         //sama aja tapi nulis text sebelum await cin
         void awaitLineInput(string question);
 
-        void saveState();
+        bool checkLastInput(const vector<string>& comparison);
 
-        void loadState();
+        void saveState(const string& path);
+
+        void loadState(const string& path);
 
         void awaitMultiInput(char splitter);
 
@@ -71,7 +77,11 @@ class GameManager{
 
         void cheat();
 
+        void buyLoop();
 
+        void sellLoop();
+
+        void playerLexSort(vector<Player> playerlist);
 };
 
 #endif
