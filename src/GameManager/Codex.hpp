@@ -3,7 +3,8 @@
 #include "../Item/Plant.hpp"
 #include "../Item/Animal.hpp"
 #include "../Item/Product.hpp"
-#include "../Item/Building.hpp"
+///#include "../Item/Building.hpp"
+#include "../Item/Recipe.hpp"
 #include "EnumConverter.hpp"
 #include <vector>
 #include <string>
@@ -22,6 +23,7 @@ class CodexException : public exception{
     public:
         CodexException();
         CodexException(string message);
+        CodexException(string message, string context);
         ~CodexException();
 };
 
@@ -30,7 +32,7 @@ class Codex{
         vector<Plant> plants;
         vector<Animal> animals;
         vector<Product> products;
-        vector<Building> buildings;
+        vector<Recipe> buildings;
     public:
         void addPlant(const Plant& plant);
         void addPlant(const vector<string>& list);
@@ -41,7 +43,7 @@ class Codex{
         void addProduct(const Product& product);
         void addProduct(const vector<string>& list);
 
-        void addBuilding(const Building& building);
+        void addBuilding(const Recipe& building);
         void addBuilding(const vector<string>& list);
 
         Item* getSource(const Product* thing);
@@ -60,7 +62,7 @@ class Codex{
         vector<Plant> getPlants() const;
         vector<Animal> getAnimals() const;
         vector<Product> getProducts() const;
-        vector<Building> getBuildings() const;
+        vector<Recipe> getBuildings() const;
 
         //returns 
         Plant getPlantbyName(string name);

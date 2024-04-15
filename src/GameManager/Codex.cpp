@@ -11,6 +11,10 @@ CodexException::CodexException(){
 CodexException::CodexException(string message){
     cout << "[Codex] Exception : " << message << endl;
 }
+CodexException::CodexException(string message, string context){
+    cout << "[Codex] Exception : " << message << endl;
+    cout << "Context : " << context << endl;
+};
 
 CodexException::~CodexException(){}
 
@@ -39,18 +43,22 @@ void Codex::addProduct(const vector<string>& list){
     products.push_back(item);
 };
 
-void Codex::addBuilding(const Building& building){
+
+//quirk : Buildings are stored as Recipes, basically the same
+void Codex::addBuilding(const Recipe& building){
     buildings.push_back(building);
 };
 void Codex::addBuilding(const vector<string>& list){
     if (list.size()%2 == 1){ //ganjil
-        throw ("Incorrect size!");
+        throw CodexException("Building missing ammount or material name");
     }
-    vector<pair<string,int>> materials;
+    //vector<pair<string,int>> materials;
+    Recipe item(atoi(list[0].c_str()),list[1],list[2],atoi(list[3].c_str()));
     for (int i = 4; i < list.size(); i+=2){
-        materials.push_back({list[i],atoi(list[i+1].c_str())});
+        //materials.push_back({list[i],atoi(list[i+1].c_str())});
+        item.addMaterial(list[i],atoi(list[i+1].c_str()));
     };
-    Building item(atoi(list[0].c_str()),list[1],list[2],atoi(list[3].c_str()),materials);
+    //Building item(atoi(list[0].c_str()),list[1],list[2],atoi(list[3].c_str()),materials);
     buildings.push_back(item);
 };
 
@@ -137,7 +145,7 @@ void Codex::showProducts() {
 
 void Codex::showBuildings() {
     cout << "LIST OF BUILDINGS :" << endl;
-    for (Building& item : buildings){
+    for (Recipe& item : buildings){
         item.displayItem();
     }
 };
@@ -249,9 +257,9 @@ Item* Codex::getItemByName(string name){
             return item;
         }
     }
-    for(Building& building : buildings){
+    for(Recipe& building : buildings){
         if (building.getItemName().compare(name) == 0){
-            Building* item = new Building(building);
+            Recipe* item = new Recipe(building);
             return item;
         }
     }
@@ -269,6 +277,6 @@ vector<Animal> Codex::getAnimals() const{
 vector<Product> Codex::getProducts() const{
     return products;
 };
-vector<Building> Codex::getBuildings() const{
+vector<Recipe> Codex::getBuildings() const{
     return buildings;
 };
