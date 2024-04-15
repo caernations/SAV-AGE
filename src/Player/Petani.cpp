@@ -29,14 +29,14 @@ void Petani::displayGrid(){
         cout << setw(2) << setfill('0') << i+1 << " ";
         cout << "|";
         for (int j = 0; j < w_lahan; j++){
-            if (lahan.getMap()[j][i] == nullptr){
+            if (lahan.getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
                 cout << " ";
-                if(lahan.getMap()[j][i]->isReadyToHarvest())
-                    color.colorGreen(lahan.getMap()[j][i]->getItemCode());
+                if(lahan.getMap()[i][j]->isReadyToHarvest())
+                    color.colorGreen(lahan.getMap()[i][j]->getItemCode());
                 else
-                    color.colorRed(lahan.getMap()[j][i]->getItemCode());
+                    color.colorRed(lahan.getMap()[i][j]->getItemCode());
                 cout << " " << "|";
             }
         }
@@ -245,4 +245,17 @@ vector<pair<Item*, int>> Petani::getVarianReadyToHarvest(){
         }
     }
     return items;
+}
+
+//hitung kekayaan
+int Petani::hitungKekayaan() const{
+
+    vector<Plant*> lahanlist = lahan.convertToList();
+    int retval = Player::hitungKekayaan();
+
+    for (Plant*& tanaman : lahanlist){
+        retval += tanaman->getItemPrice();
+    }
+
+    return retval;
 }

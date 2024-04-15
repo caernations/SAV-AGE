@@ -97,6 +97,7 @@ class Petani : public Player{
         */
         Map<Plant>& getLahan();
 
+        int hitungKekayaan() const;
 };
 
 #endif
