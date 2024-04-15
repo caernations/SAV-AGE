@@ -55,6 +55,7 @@ void GameManager::loadState(const string& path){
     string filename = "state.txt";
     ifstream reader(path+"/"+filename);
     string line;
+    int walikota = 0;
 
     if(!reader.is_open()){
         throw GMException("Failed to open file! : " + path + "/" + filename);
@@ -71,20 +72,22 @@ void GameManager::loadState(const string& path){
         PlayerType ptype = (LCaseToPlayerType[lineholder[1]]);
         Player* player;
 
+        //enforcing single walikota rule && exception for non existent roles :
+        if (ptype == 0){
+            throw GMException("Invalid player type");
+        }
+        if (ptype == WALIKOTA){
+            if (walikota == 0){
+                walikota++;
+            }
+            else{
+                throw GMException("Walikota cannot go over 1");
+            }
+        }
+
         cout << "Setup for : " << lineholder[0] << endl; //DEBUG
         //create player
-        if (ptype == PETANI){
-            player = new Petani(1,lineholder[0],stoi(lineholder[3]),stoi(lineholder[2]),get<1>(lahanSize),get<0>(lahanSize),get<1>(invSize),get<0>(invSize));
-        }
-        else if (ptype == PETERNAK) {
-
-        }
-        else if (ptype == WALIKOTA){
-
-        }
-        else{
-            throw GMException("Player type doesnt exist!");
-        }
+        player = addPlayer(lineholder[0],stoi(lineholder[2]),stoi(lineholder[3]),ptype);
 
         //populate inventory
         getline(reader,line);
@@ -96,6 +99,7 @@ void GameManager::loadState(const string& path){
                 player->addToInvEmptySlot(codex.getItemByName(line));
             }
             catch(CodexException){
+                throw GMException("Cancel load",line);
             }
         }
         
