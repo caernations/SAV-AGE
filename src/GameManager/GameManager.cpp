@@ -176,6 +176,19 @@ void GameManager::playerLexSort(vector<Player>){
     activePlayers = newlist;
 }
 
+void GameManager::nextTick(const int& tickammt){
+    for(Player* player : activePlayers){
+        if (player->getType() == PETANI){
+            Petani* petani = dynamic_cast<Petani*>(player);
+            for(Plant* plant : petani->getLahan().convertToList()){
+                for (int i = 0; i < tickammt; i++){
+                    plant->addAge();
+                }
+            }
+        }
+    }
+}
+
 //paling bawah
 void GameManager::gameloop(){
     while(true){
@@ -190,18 +203,20 @@ void GameManager::gameloop(){
             }
             else if (checkLastInput({"NEXT"})){
                 if (activePlayers.size() <= 1){
-                    throw string("You are the last man standing");
+                    cout << "You are the last man standing" << endl;
                 }
                 else{
                     turn = (turn + 1) % activePlayers.size();
                     cout << "NEXT TURN :" << endl;
                 };
+                nextTick(1);
+                cout << "All plants grew by 1!" << endl;
             } 
             else if (checkLastInput({"CETAK_PENYIMPANAN","INVENTORY"})) {
                 activePlayers[turn]->Player::displayGrid();
             }
             else if (checkLastInput({"PUNGUT_PAJAK","TAX"})){
-                cout << "MONEY" << endl;
+                //
             }
             else if ((checkLastInput({"CETAK_LADANG","FIELD"})) && activePlayers[turn]->getType() == PETANI){
                 activePlayers[turn]->displayGrid();
@@ -210,37 +225,37 @@ void GameManager::gameloop(){
                 activePlayers[turn]->displayGrid();
             }
             else if ((checkLastInput({"TANAM"})) && activePlayers[turn]->getType() == PETANI){
-                //
+                activePlayers[turn]->budidaya();
             }
             else if ((checkLastInput({"TERNAK"})) && activePlayers[turn]->getType() == PETERNAK){
-                //
+                activePlayers[turn]->budidaya();
             }
             else if ((checkLastInput({"BANGUN","BUILD"})) && activePlayers[turn]->getType() == WALIKOTA){
                 //
             }
-            else if (checkLastInput({"MAKAN"}) == 0){
+            else if (checkLastInput({"MAKAN"})){
                 activePlayers[turn]->consumeFromInv();
             }
-            else if (checkLastInput({"KASIH_MAKAN","FEED"}) == 0){
-                activePlayers[turn]->consumeFromInv();
+            else if (checkLastInput({"KASIH_MAKAN","FEED"})){
+                //activePlayers[turn]->consumeFromInv();
             }
-            else if (checkLastInput({"BELI"}) == 0){
+            else if (checkLastInput({"BELI"})){
                 buyLoop(); //
             }
-            else if (checkLastInput({"JUAL"}) == 0){
+            else if (checkLastInput({"JUAL"})){
                 sellLoop(); //
             }
-            else if ((checkLastInput({"PANEN"})) && activePlayers[turn]->getType() == PETANI){
-                //
+            else if (checkLastInput({"PANEN"}) && activePlayers[turn]->getType() == PETANI){
+                activePlayers[turn]->panennn(codex.getProducts());
             }
-            else if (checkLastInput({"SAVE","SIMPAN"}) == 0){
+            else if (checkLastInput({"SAVE","SIMPAN"})){
                 //saveloop();
                 saveState("config");
             }
             else if ((checkLastInput({"TAMBAH_PEMAIN"})) && activePlayers[turn]->getType() == WALIKOTA){
                 //
             }
-            else if (checkLastInput({"CHEAT"}) == 0){
+            else if (checkLastInput({"CHEAT"})){
                 cheat();
             }
             else{

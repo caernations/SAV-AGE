@@ -82,6 +82,8 @@ class GameManager{
         void sellLoop();
 
         void playerLexSort(vector<Player> playerlist);
+
+        void nextTick(const int& tickammt);
 };
 
 #endif
