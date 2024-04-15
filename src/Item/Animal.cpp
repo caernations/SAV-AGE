@@ -64,7 +64,7 @@ Animal& Animal::operator=(const Animal& other) {
 
 // Polymorphic behavior
 void Animal::displayItem() const {
-    this->Item::displayItem();
+    //this->Item::displayItem();
     std::cout << "Animal ID: " << animalID << ", Type: " << animalType << ", Harvest Weight: " << weight_to_harvest << ", Weight: " << weight << std::endl;
 }
 
