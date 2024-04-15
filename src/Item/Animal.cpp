@@ -43,40 +43,10 @@ void Animal::setWeightToHarvest(int newWeightToHarvest) {
     weight_to_harvest = newWeightToHarvest;
 }
 
-void Animal::setFed(int foodWeight, const std::string& foodType) {
-    std::string animalType = getAnimalType();
-
-    if (animalType == "HERBIVORE") {
-        if (foodType == "PRODUCT_MATERIAL_PLANT") {
-            std::cout << "Fed Status: Herbivores can't eat material." << std::endl;
-        } else if (foodType == "PRODUCT_FRUIT_PLANT") {
-            std::cout << "Fed Status: Adding weight for herbivore." << std::endl;
-            fed = true;
-            weight += foodWeight;
-        } else if (foodType == "PRODUCT_ANIMAL") {
-            std::cout << "Fed Status: Herbivores don't eat animal products." << std::endl;
-        }
-    } else if (animalType == "CARNIVORE") {
-        if (foodType == "PRODUCT_MATERIAL_PLANT") {
-            std::cout << "Fed Status: Carnivores can't eat material." << std::endl;
-        } else if (foodType == "PRODUCT_FRUIT_PLANT") {
-            std::cout << "Fed Status: Carnivores don't eat plant products." << std::endl;
-        } else if (foodType == "PRODUCT_ANIMAL") {
-            std::cout << "Fed Status: Adding weight for carnivore." << std::endl;
-            fed = true;
-            weight += foodWeight;
-        }
-    } else if (animalType == "OMNIVORE") {
-        if (foodType == "PRODUCT_MATERIAL_PLANT") {
-            std::cout << "Fed Status: Omnivores can't eat material." << std::endl;
-        } else {
-            std::cout << "Fed Status: Adding weight for omnivore." << std::endl;
-            fed = true;
-            weight += foodWeight;
-        }
-    } else {
-        std::cout << "Unhandled" << std::endl;
-    }
+void Animal::setFed(Animal* animal, int foodWeight, const std::string& foodType) {
+    fed = true;
+    weight += foodWeight;
+    std::cout << "Animal sudah diberi makan dan beratnya menjadi " << animal->getWeight() << std::endl;
 }
 
 // Operator overloads
