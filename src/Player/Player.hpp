@@ -42,16 +42,6 @@ class Player {
 
         int itemCountInInventory;
 
-    protected:
-        /**
-         * budidaya mahkluk hidup
-        */
-        virtual void budidaya();
-
-        /**
-         * panen mahkluk hidup
-        */
-        virtual void panennn(vector<Product*>& products);
     public:
         Player();
 
@@ -157,6 +147,16 @@ class Player {
         string itemTypeToString(ItemType type);
 
         virtual int hitungKekayaan() const;
+
+        /**
+         * budidaya mahkluk hidup
+        */
+        virtual void budidaya();
+
+        /**
+         * panen mahkluk hidup
+        */
+        virtual void panennn(const vector<Product>& products);
     };
 
 #endif 
