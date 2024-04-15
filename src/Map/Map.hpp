@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <tuple>
 #include "../Item/Item.hpp"
 
 using namespace std;
@@ -41,14 +42,14 @@ class Map{
         void displayMap(){
             iterateAlphabet(panjang);
             print_divider(panjang,5);
-            for (int i = 0; i < lebar; i++){
+            for (int i = 0; i < panjang; i++){
             cout << setw(2) << setfill('0') << i+1 << " ";
             cout << "|";
-            for (int j = 0; j < panjang; j++){
-                if (map[j][i] == nullptr){
+            for (int j = 0; j < lebar; j++){
+                if (map[i][j] == nullptr){
                     cout << "     " << "|";
                 } else {
-                    cout << " " << map[j][i] << " " << "|";
+                    cout << " " << map[i][j] << " " << "|";
                 }
             }
             cout << endl;
@@ -63,7 +64,7 @@ class Map{
 
         // meng set suatu item ke map, menerima OBJEK, bukan konstanta
         void set(int x, int y, T* item){
-            this->map[x][y] = item;
+            this->map[y][x] = item;
         };
 
         //debug tools : cek ukuran map dari ukuran list
@@ -119,6 +120,33 @@ class Map{
                 for (T* item : rows){
                     if (item != nullptr) {
                         retval.push_back(item);
+                    }
+                }
+            }
+            return retval;
+        }
+
+        vector<pair<tuple<int,int>,T*>> convertToPositionList() const{
+            vector<pair<tuple<int,int>,T*>> retval;
+            
+            for (int i = 0; i < lebar; i++){
+                for (int j = 0; j < panjang; j++){
+                    if (map[i][j] != nullptr){
+                        retval.push_back({{j,i},map[i][j]});
+                    }
+                }
+            }
+
+            return retval;
+        }
+
+        int remainingSlots() const{
+            int retval = 0;
+
+            for (vector<T*> rows : map){
+                for (T* item : rows){
+                    if (item == nullptr) {
+                        retval++;
                     }
                 }
             }
