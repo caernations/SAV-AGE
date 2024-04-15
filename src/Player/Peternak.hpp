@@ -10,7 +10,6 @@
 class Peternak : public Player {
     private:
         Map<Animal> kandang;
-        Map<Item> inventory;
         int jumlah_hewan;
         int w_kandang;
         int h_kandang;
@@ -90,7 +89,7 @@ class Peternak : public Player {
 
         Map<Animal>& getKandang();
 
-        vector<pair<Item*, int>> getVarianReadyToFeed(const std::string& animalType);
+        bool foodForAnimal(string animalType, Item* food);
 
         vector<pair<Item*, int>> getVarianReadyToHarvest();
 };

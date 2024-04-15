@@ -22,7 +22,7 @@ int main() {
     Product prod1(18, PRODUCT_FRUIT_PLANT, "PEACH_TREE", 5, "PCH", "PEACH", 6);
     Product prod2(19, PRODUCT_ANIMAL, "PIG", 8, "PIG", "PIG_MEAT", 7);
 
-    cout << "Adding hewan to kandang..."  << endl;
+    cout << endl << "Adding hewan to kandang..."  << endl << endl;
     p.setKandang(3, 2, hewan1);
     p.addToInvEmptySlot(&hewan2);
     p.addToInvEmptySlot(&hewan3);
@@ -40,13 +40,13 @@ int main() {
     cout << "Tinggi kandang: " << p.getHKandang() << endl;
     cout << "Maksimum hewan yang bisa diternak: " << p.getMaxHewan() << endl;
     cout << "Jumlah kekayaan: " << p.hitungKekayaan() << endl;
-    cout << "BUDIDAYA GUYS" << endl << endl;
+    cout << endl << "O BUDIDAYA TESTING" << endl;
     p.budidaya();
 
     cout << endl;
-    cout << "Setelah budidaya, jumlah hewan: " << p.getJumlahHewan() + 3 << endl;
+    cout << "Setelah budidaya, jumlah hewan: " << p.getJumlahHewan() + 3 << endl << endl;
 
-    cout << "Memberi makan..." << endl;
+    cout << "O MEMBERI PANGAN TESTING" << endl;
     p.memberiPangan();
 
     vector<Product*> products;
@@ -58,11 +58,10 @@ int main() {
     products.push_back(&product2);
     products.push_back(&product3);
 
-    cout << "PANEN GUYS" << endl << endl;
+    cout << "O PANEN TESTING" << endl;
     p.panennn(products);
 
-    cout << endl;
-    cout << p.getBeratBadan() << endl;
+    cout << "O MEMAKAN TESTING" << endl << "Berat badan saat ini: " << p.getBeratBadan() << endl;
     cout << endl;
 
     p.consumeFromInv();
