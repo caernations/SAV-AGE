@@ -2,12 +2,21 @@
 #include "../Item/Recipe.hpp"
 #include "../utils/StringProcessor.hpp"
 #include "../Item/Product.hpp"
-#include "../Item/Building.hpp"
+#include "../GameManager/EnumConverter.hpp"
+//#include "../Item/Building.hpp"
 #include "../Item/Item.hpp"
 #include <vector>
 #include <tuple>
 #include <iostream>
 using namespace std;
+
+class WKException : public exception{
+    public  :
+        string message;
+        WKException();
+        WKException(string message);
+        ~WKException();
+};
 
 class Walikota : public Player {
     private:
@@ -95,7 +104,7 @@ class Walikota : public Player {
         /**
          * menghitung pajak untuk tiap pemain
         */
-        vector<tuple<string, string, int>> calculateTax(vector<Player> players);
+        vector<tuple<Player*, int>> calculateTax(vector<Player*> players);
 
         /**
          * mengurutkan nama player berdasarkan uangnya jika uangnya sama maka

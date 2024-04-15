@@ -1,5 +1,15 @@
 #include "Walikota.hpp"
 #include <iostream>
+#include "../utils/StringProcessor.hpp"
+using namespace std;
+
+        WKException::WKException(){
+            message = "Generic WK Exception occured!";
+        };
+        WKException::WKException(string message){
+            this->message = message;
+        };
+        WKException::~WKException(){};
 
 Walikota::Walikota() : Player() {
     resep = vector<Recipe>();
@@ -43,7 +53,37 @@ Recipe Walikota::getRecipe(const string& buildingName) {
     return Recipe();
 }
 
-bool Walikota::isValidBuildingName(const string& buildingName) {
+bool Walikota::isAbleToBuild()
+{
+    for (Recipe& recipe : resep){
+        //cout << "RECIPE : " << recipe.getItemName() << endl;
+        vector<pair<Product*, int>> materials = getVarianMaterial();
+        if (getGulden() - recipe.getItemPrice() < 0){
+            continue;
+        }
+
+        map<string, int> needs = recipe.getMaterials();
+        for (auto& item : materials){
+            needs[item.first->getItemName()] = max(0,needs[item.first->getItemName()]-item.second);
+        }
+
+        bool canbuild = true;
+        for(auto& item : needs){
+            if (item.second > 0){
+                canbuild = false;
+                //cout << "MISSING : " << item.first << " x " << item.second << endl;
+            }
+        }
+            if (canbuild){
+                return true;
+            }
+
+        }
+    return false;
+}
+
+bool Walikota::isValidBuildingName(const string &buildingName)
+{
     for (int i = 0; i < resep.size(); i++) {
         if (resep[i].getItemName() == buildingName) {
             return true;
@@ -56,7 +96,7 @@ vector<pair<Product*, int>> Walikota::getVarianMaterial(){
     vector<pair<Product*, int>> materials;
     for (int i = 0; i < Player::getInvenW(); i++) {
         for (int j = 0; j < getInvenH(); j++) {
-            Product* product = dynamic_cast<Product*>(getInventory().getMap()[i][j]);
+            Product* product = dynamic_cast<Product*>(getInventory().getMap()[j][i]);
             if (product != nullptr && product->getItemType() == PRODUCT && product->isMaterial()){
                 bool found = false;
                 for (auto& item : materials) {
@@ -75,10 +115,80 @@ vector<pair<Product*, int>> Walikota::getVarianMaterial(){
     return materials;
 }
 
+vector<tuple<Player*, int>> Walikota::calculateTax(vector<Player *> playerlist)
+{
+    vector<tuple<Player*, int>> retval;
+    int total = 0;
+
+    for (Player* player : playerlist){
+        cout << "TAXING " << player->getPlayerName() << endl;
+        if (player->getType() != WALIKOTA){
+            int tax = player->hitungKekayaan();
+            switch (player->getType()){
+                case PETANI :
+                    tax -= 13;
+                    break;
+                case PETERNAK :
+                    tax -= 11;
+                    break;
+            }
+            float mult;
+            if (tax > 500){
+                mult = 0.35;
+            }
+            else if (tax > 50){
+                mult = 0.30;
+            }
+            else if (tax > 25){
+                mult = 0.25;
+            }
+            else if (tax > 6){
+                mult = 0.15;
+            }
+            else{
+                mult = 0.05;
+            }
+
+            tax = tax * mult;
+            if (tax < 0){
+                tax = 0;
+            }
+
+            player->changeGulden(-tax);
+            changeGulden(tax);
+            total += tax;
+            //lex insertion
+            if (retval.empty()){
+                retval.push_back(make_tuple(player,tax));
+            }
+            else{
+                auto i = retval.begin();
+                //!lexCompare(player->getPlayerName(),get<0>(*i)->getPlayerName()) IN THEORY, karena player list udah lexografik, ini gkk perllu
+                while((i != retval.end() && tax <= get<1>(*i))){
+                    i++;
+                }
+                retval.insert(i,make_tuple(player,tax));
+            }
+            ///print
+        }
+    };
+    cout << "Cring cring cring..." << endl << "Pajak sudah dipungut!" << endl;
+            cout << "Berikut adalah detil dari pemungutan pajak:" << endl;
+
+            for (int i = 0; i < retval.size(); i++){
+                cout << "   " << i << ". " << get<0>(retval[i])->getPlayerName() << " - " << PlayerTypeToLCase[get<0>(retval[i])->getType()];
+                cout << ": " << get<1>(retval[i]) << " gulden" << endl;
+            }
+
+            cout << "Negara mendapatkan pemasukan sebesar " << total << " gulden." << endl;
+            cout << "Gunakan dengan baik dan jangan dikorupsi ya!" << endl;
+    return retval;
+}
+
 bool Walikota::isEnoughToBuild(const string& buildingName) {
     Recipe recipe = getRecipe(buildingName);
     vector<pair<Product*, int>> materials = getVarianMaterial();
-    int moneyLeft = recipe.getItemPrice() - getGulden();
+    int moneyLeft = getGulden() - recipe.getItemPrice();
 
     map<string, int> needs = recipe.getMaterials();
     for (auto it = needs.begin(); it != needs.end();) {
@@ -125,7 +235,12 @@ bool Walikota::isEnoughToBuild(const string& buildingName) {
 void Walikota::buildBuilding(){
     string buildingName;
     // if (!isEnoughToBuild()) throw NotEnoughRequirementException();
-    while(true) {
+
+    if (!isAbleToBuild()){
+        cout << "Anda tidak bisa membangun apapun!" << endl;
+    }
+    else{
+        while(true) {
         displayRecipe();
         cout << endl;
         cout << "Bangunan yang ingin dibangun: ";
@@ -140,20 +255,22 @@ void Walikota::buildBuilding(){
         else {
             break;
         }
+        }
+        Recipe* recipe = new Recipe(getRecipe(buildingName));
+        map<string, int> needs = recipe->getMaterials();
+        changeGulden(-recipe->getItemPrice());
+
+        for(auto it = needs.begin(); it != needs.end();){
+            removeFromInv(it->first, it->second);
+            ++it;
+        }
+        addToInvEmptySlot(recipe);
+
+        Player::displayGrid();
+        cout << convertToReadable(buildingName, true, false) << " berhasil dibangun dan telah menjadi hak milik walikota!" << endl;
+
     }
-    Recipe recipe = getRecipe(buildingName);
-    map<string, int> needs = recipe.getMaterials();
-    changeGulden(-recipe.getItemPrice());
-
-    for(auto it = needs.begin(); it != needs.end();){
-        removeFromInv(it->first, it->second);
-        ++it;
-    }
-    addToInvEmptySlot(&recipe);
-
-    Player::displayGrid();
-    cout << convertToReadable(buildingName, true, false) << " berhasil dibangun dan telah menjadi hak milik walikota!" << endl;
-
+    
 }
 
 
