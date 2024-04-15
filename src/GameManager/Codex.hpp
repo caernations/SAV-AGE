@@ -56,6 +56,12 @@ class Codex{
 
         Product* getProduct(string name);
 
+        //list getters
+        vector<Plant> getPlants() const;
+        vector<Animal> getAnimals() const;
+        vector<Product> getProducts() const;
+        vector<Building> getBuildings() const;
+
         //returns 
         Plant getPlantbyName(string name);
 

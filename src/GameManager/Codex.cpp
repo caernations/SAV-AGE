@@ -222,7 +222,7 @@ Product* Codex::getProduct(string name){
 };
 
 Plant Codex::getPlantbyName(string name){
-    for (Plant item : plants){
+    for (Plant& item : plants){
         if (item.getItemName().compare(name) == 0){
             return item;
         }
@@ -231,25 +231,25 @@ Plant Codex::getPlantbyName(string name){
 }
 
 Item* Codex::getItemByName(string name){
-    for(Plant plant : plants){
+    for(Plant& plant : plants){
         if (plant.getItemName().compare(name) == 0){
             Plant* item = new Plant(plant);
             return item;
         }
     }
-    for(Animal animal : animals){
+    for(Animal& animal : animals){
         if (animal.getItemName().compare(name) == 0){
             Animal* item = new Animal(animal);
             return item;
         }
     }
-    for(Product product : products){
+    for(Product& product : products){
         if (product.getItemName().compare(name) == 0){
             Product* item = new Product(product);
             return item;
         }
     }
-    for(Building building : buildings){
+    for(Building& building : buildings){
         if (building.getItemName().compare(name) == 0){
             Building* item = new Building(building);
             return item;
@@ -257,3 +257,18 @@ Item* Codex::getItemByName(string name){
     }
     throw CodexException("Item not found!");
 }
+
+//getters
+
+vector<Plant> Codex::getPlants() const{
+    return plants;
+};
+vector<Animal> Codex::getAnimals() const{
+    return animals;
+};
+vector<Product> Codex::getProducts() const{
+    return products;
+};
+vector<Building> Codex::getBuildings() const{
+    return buildings;
+};
