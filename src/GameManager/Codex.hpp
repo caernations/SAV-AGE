@@ -17,6 +17,14 @@
 //RECIPE :
 //<ID> <KODE_HURUF> <NAME> <PRICE> <MATERIAL_1> <MATERIAL_1_QUANTITY> <MATERIAL_2> <MATERIAL_2_QUANTITY> ... 
 
+//codex exceptions
+class CodexException : public exception{
+    public:
+        CodexException();
+        CodexException(string message);
+        ~CodexException();
+};
+
 class Codex{
     private:
         vector<Plant> plants;
@@ -47,4 +55,9 @@ class Codex{
         void populatecodex(const string& path);
 
         Product* getProduct(string name);
+
+        //returns 
+        Plant getPlantbyName(string name);
+
+        Item* getItemByName(string name);
 };

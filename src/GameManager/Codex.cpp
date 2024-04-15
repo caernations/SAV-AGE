@@ -4,6 +4,17 @@
 #include <fstream>
 using namespace std;
 
+CodexException::CodexException(){
+    cout << "[Codex] Generic Exception occured!" << endl;
+}
+
+CodexException::CodexException(string message){
+    cout << "[Codex] Exception : " << message << endl;
+}
+
+CodexException::~CodexException(){}
+
+
 void Codex::addPlant(const Plant& plant){
     plants.push_back(plant);
 };
@@ -209,3 +220,40 @@ Product* Codex::getProduct(string name){
     }
     return nullptr;
 };
+
+Plant Codex::getPlantbyName(string name){
+    for (Plant item : plants){
+        if (item.getItemName().compare(name) == 0){
+            return item;
+        }
+    }
+    throw 1;
+}
+
+Item* Codex::getItemByName(string name){
+    for(Plant plant : plants){
+        if (plant.getItemName().compare(name) == 0){
+            Plant* item = new Plant(plant);
+            return item;
+        }
+    }
+    for(Animal animal : animals){
+        if (animal.getItemName().compare(name) == 0){
+            Animal* item = new Animal(animal);
+            return item;
+        }
+    }
+    for(Product product : products){
+        if (product.getItemName().compare(name) == 0){
+            Product* item = new Product(product);
+            return item;
+        }
+    }
+    for(Building building : buildings){
+        if (building.getItemName().compare(name) == 0){
+            Building* item = new Building(building);
+            return item;
+        }
+    }
+    throw CodexException("Item not found!");
+}
