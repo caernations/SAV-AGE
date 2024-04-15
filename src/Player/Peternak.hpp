@@ -1,5 +1,5 @@
-#ifndef PETANI_HPP
-#define PETANI_HPP
+#ifndef PETERNAK_HPP
+#define PETERNAK_HPP
 
 #include "Player.hpp"
 #include "../Map/Map.hpp"
