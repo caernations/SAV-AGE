@@ -7,7 +7,8 @@
 #include <string>
 #include "../Player/Player.hpp"
 #include "../Player/Petani.hpp"
-//#include "../Player/Walikota.hpp"
+#include "../Player/Peternak.hpp"
+#include "../Player/Walikota.hpp"
 #include "../utils/StringProcessor.hpp"
 #include "Codex.hpp"
 #include "../Item/GeneralStore.hpp"
@@ -20,6 +21,7 @@ class GMException : public exception{
     public:
         GMException();
         GMException(string message);
+        GMException(string message, string context);
         ~GMException();
 };
 
@@ -81,9 +83,11 @@ class GameManager{
 
         void sellLoop();
 
-        void playerLexSort(vector<Player> playerlist);
+        void playerLexSort();
 
         void nextTick(const int& tickammt);
+
+        Player* addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType);
 };
 
 #endif

@@ -9,6 +9,11 @@ GMException::GMException(string message){
     cout << "[GameManager] Exception : " << message << endl;
 }
 
+GMException::GMException(string message, string context){
+    cout << "[GameManager] Exception : " << message << endl;
+    cout << "Context : " << context << endl;
+}
+
 GMException::~GMException(){}
 
 GameManager::GameManager(){
@@ -116,11 +121,11 @@ void GameManager::initloop(){
             try{
                 getCorrectInput = true;
                 // JANGAN LUPA GANTI KE WALIKOTA KALO UDAH DI FIX
-                Player* firstplayer = new Petani(0,"Thoriq",100,99,5,7,5,7);
-                activePlayers.push_back(firstplayer);
+                addPlayer("Petani1",40,50,PETANI);
+                addPlayer("Peternak1",40,50,PETERNAK);
+                addPlayer("Walikota",40,50,WALIKOTA);
             }
             catch(GMException){}
-            catch(CodexException){}
             catch(...){
                 cout << "Exception occured!" << endl;
             }   
@@ -159,7 +164,7 @@ void GameManager::sellLoop(){
     //bruh
 }
 
-void GameManager::playerLexSort(vector<Player>){
+void GameManager::playerLexSort(){
     vector<Player*> newlist;
     for(Player* item : activePlayers){
         if(newlist.empty()){
@@ -189,6 +194,35 @@ void GameManager::nextTick(const int& tickammt){
     }
 }
 
+Player *GameManager::addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType)
+{
+    Player* player;
+    if (playerType == PETERNAK){
+        Peternak* peternak = (new Peternak(0,name,gold,weight,get<1>(ternakSize),get<0>(ternakSize),get<1>(invSize),get<0>(invSize)));
+        player = peternak;
+    }
+    else if (playerType == PETANI){
+        Petani* petani = (new Petani(0,name,gold,weight,get<1>(lahanSize),get<0>(lahanSize),get<1>(invSize),get<0>(invSize)));
+        player = petani;
+    }
+    else if (playerType == WALIKOTA){
+        //add recipes to walikota
+        Walikota* wk = new Walikota(0,name,gold,weight,get<1>(invSize),get<0>(invSize));
+        for (Recipe& recipes : codex.getBuildings()){
+            wk->addRecipe(recipes);
+        }
+        player = wk;
+    }
+    else{
+        throw GMException("Invalid Player Type!");
+    }
+
+    activePlayers.push_back(player);
+    playerLexSort();
+    //insert to active playerlist and lexsort
+    return player;
+}
+
 //paling bawah
 void GameManager::gameloop(){
     while(true){
@@ -207,7 +241,7 @@ void GameManager::gameloop(){
                 }
                 else{
                     turn = (turn + 1) % activePlayers.size();
-                    cout << "NEXT TURN :" << endl;
+                    cout << "NEXT TURN :" << activePlayers[turn]->getPlayerName() << endl;
                 };
                 nextTick(1);
                 cout << "All plants grew by 1!" << endl;
