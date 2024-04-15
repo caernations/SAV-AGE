@@ -241,17 +241,18 @@ void Player::panennn(const vector<Product>& products) {
 
 void Player::removeFromInv(const string& itemName, int amount) {
     if (amount == 0) return;
-    for (int i = 0; i < invenSizeW; i++) {
-        for (int j = 0; j < invenSizeH; j++) {
+    for (int i = 0; i < invenSizeH; i++) {
+        for (int j = 0; j < invenSizeW; j++) {
             Item* item = inventory.getMap()[i][j];
             if (item != nullptr && item->getItemName() == itemName){
-                inventory.set(i, j, nullptr);
+                inventory.set(j, i, nullptr);
                 itemCountInInventory--;
                 removeFromInv(itemName, amount - 1);
             }
         }
     }
 }
+
 
 
 int Player::hitungKekayaan() const{
