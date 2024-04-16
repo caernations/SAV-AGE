@@ -56,6 +56,9 @@ void Codex::addBuilding(const vector<string>& list){
     Recipe item(atoi(list[0].c_str()),list[1],list[2],atoi(list[3].c_str()));
     for (int i = 4; i < list.size(); i+=2){
         //materials.push_back({list[i],atoi(list[i+1].c_str())});
+        if (getItemByName(list[i]) == nullptr){
+            throw CodexException("Item doesnt exist!",list[i]);
+        }
         item.addMaterial(list[i],atoi(list[i+1].c_str()));
     };
     //Building item(atoi(list[0].c_str()),list[1],list[2],atoi(list[3].c_str()),materials);
