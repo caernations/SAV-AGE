@@ -59,6 +59,19 @@ void GameManager::init(){
         cout << "OPEN FAILED " << configpath  + "/misc.txt" << endl ;
         throw 1;
     }
+
+    //init shoppe
+
+    for(Plant& item : codex.getPlants()){
+        Item* thing = &item;
+        store.addItem(thing,-1);
+    }
+    for(Animal& item : codex.getAnimals()){
+        Item* thing = &item;
+        store.addItem(thing,-1);
+    }
+
+    store.codex = &codex;
     //activePlayers.push_back(new Walikota())
 };
 
@@ -122,7 +135,7 @@ void GameManager::initloop(){
                 getCorrectInput = true;
                 // JANGAN LUPA GANTI KE WALIKOTA KALO UDAH DI FIX
                 addPlayer("Petani1",40,50,PETANI);
-                addPlayer("Peternak1",40,50,PETERNAK);
+                //addPlayer("Peternak1",40,50,PETERNAK);
                 addPlayer("Walikota",40,50,WALIKOTA);
             }
             catch(GMException){}
@@ -151,17 +164,17 @@ void GameManager::initloop(){
 };
 
 void GameManager::buyLoop(){
-    Player* actor = activePlayers[turn];
-    store.displayStore();
-    cout << "Uang anda : " << actor->getGulden() << endl;
-    cout << "Slot penyimpanan tersedia : " << actor->getInventory().remainingSlots() << endl;
+    // Player* actor = activePlayers[turn];
+    // store.displayStore();
+    // cout << "Uang anda : " << actor->getGulden() << endl;
+    // cout << "Slot penyimpanan tersedia : " << actor->getInventory().remainingSlots() << endl;
 
-    awaitLineInput("Barang yang ingin dibeli : ");
-
+    // awaitLineInput("Barang yang ingin dibeli : ");
+    store.buyAs(activePlayers[turn]);
 }
 
 void GameManager::sellLoop(){
-    //bruh
+    store.sellAs(activePlayers[turn]);
 }
 
 void GameManager::playerLexSort(){
@@ -213,30 +226,19 @@ void GameManager::addPlayerLoop(){
         throw GMException("Illegal name","Cannot contain spaces");
     }
     Player* newbie = addPlayer(lastMultiInput[0],0,50,tipe);
-
-    //update turn thingy
-    for (Player* player : activePlayers){
-        if (player == newbie){
-            turn += 1;
-            break;
-        }
-        else if(player == activePlayers[turn]){
-            break;
-        }
-    }
 }
 
 Player* GameManager::addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType)
 {
     Player* player;
-    if (playerType == PETERNAK){
-        Peternak* peternak = (new Peternak(0,name,gold,weight,get<1>(ternakSize),get<0>(ternakSize),get<1>(invSize),get<0>(invSize)));
-        player = peternak;
-    }
-    else if (playerType == PETANI){
+    if (playerType == PETANI){
         Petani* petani = (new Petani(0,name,gold,weight,get<1>(lahanSize),get<0>(lahanSize),get<1>(invSize),get<0>(invSize)));
         player = petani;
     }
+    // else if (playerType == PETERNAK){
+    //     Peternak* peternak = (new Peternak(0,name,gold,weight,get<1>(ternakSize),get<0>(ternakSize),get<1>(invSize),get<0>(invSize)));
+    //     player = peternak;
+    // }
     else if (playerType == WALIKOTA){
         //add recipes to walikota
         Walikota* wk = new Walikota(0,name,gold,weight,get<1>(invSize),get<0>(invSize));
@@ -249,8 +251,27 @@ Player* GameManager::addPlayer(const string& name,const int& weight, const int& 
         throw GMException("Invalid Player Type!");
     }
 
-    activePlayers.push_back(player);
-    playerLexSort();
+    //update turn order
+    if (activePlayers.size() > 0) {
+        Player* currentplayer = activePlayers[turn];
+        activePlayers.push_back(player);
+        playerLexSort();
+        //update turn thingy
+        for (Player* existingplayer : activePlayers){
+            if (existingplayer == player){
+                turn += 1;
+                break;
+            }
+            else if(existingplayer == currentplayer){
+                break;
+            }
+        }
+    }
+    else{
+        activePlayers.push_back(player);
+    }
+
+
     //insert to active playerlist and lexsort
     return player;
 }
@@ -283,7 +304,7 @@ void GameManager::gameloop(){
             }
             else if (checkLastInput({"PUNGUT_PAJAK","TAX"}) && activePlayers[turn]->getType() == WALIKOTA){
                 Walikota* wk = dynamic_cast<Walikota*>(activePlayers[turn]);
-                wk->calculateTax(activePlayers);
+                wk->collectTax(activePlayers);
             }
             else if ((checkLastInput({"CETAK_LADANG","FIELD"})) && activePlayers[turn]->getType() == PETANI){
                 activePlayers[turn]->displayGrid();
@@ -320,7 +341,10 @@ void GameManager::gameloop(){
                 saveState("config");
             }
             else if ((checkLastInput({"TAMBAH_PEMAIN"})) && activePlayers[turn]->getType() == WALIKOTA){
-                addPlayerLoop();
+                //addPlayerLoop();
+                Walikota* wk = dynamic_cast<Walikota*>(activePlayers[turn]);
+                tuple<PlayerType,string> newbie = wk->addPlayer(activePlayers);
+                addPlayer(get<1>(newbie),0,50,get<0>(newbie));
             }
             else if (checkLastInput({"CHEAT"})){
                 try{
