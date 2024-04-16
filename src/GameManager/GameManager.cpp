@@ -283,7 +283,7 @@ bool GameManager::checkWinners(){
             cout << goldToWin << " gulden! (" << pemain->getGulden() << ")" << endl;
             return true;
         }
-        else if (pemain->getGulden() > weightToWin){
+        else if (pemain->getBeratBadan() > weightToWin){
             cout << "BOOYAH ! Pemain " << pemain->getPlayerName() << " telah memenangkan game dengan meraih lebih dari ";
             cout << weightToWin << " KG berat badan! (" << pemain->getBeratBadan() << ")" << endl;
             return true;
@@ -383,10 +383,15 @@ void GameManager::gameloop(){
         }
         catch (GameException& e) {
         cout << e.what() << endl;
-    }
+        }
+        catch (exception e){
+        cout << "Misc exception catched! : " << e.what() << endl;
+        }
 
         //check money and weight
-
-
+        if (checkWinners()){
+            break;
+        }
+        
+        }
     }
-}
