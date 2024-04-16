@@ -110,6 +110,14 @@ Item& Player::takeFromInv(ItemType ItemType) {
         slot = convertToCoordinate(itemSlot);
         int y = get<0>(slot);
         int x = get<1>(slot);
+        
+        if (cin.fail() || x < 0 || x >= invenSizeW || y < 0 || y >= invenSizeH) {
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid slot." << endl;
+            continue; 
+        }
+
         if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
         } else if (inventory.getMap()[x][y]->getItemType() != ItemType) {
@@ -120,7 +128,7 @@ Item& Player::takeFromInv(ItemType ItemType) {
             itemCountInInventory--;
             return item;
         }
-        cout << "Silahkan masukan slot yang berisi " << itemTypeToString(ItemType) << endl;
+        cout << "Silahkan masukan slot yang berisi " << itemTypeToString(ItemType) << "." << endl;
         cout << endl;
     }
 }
