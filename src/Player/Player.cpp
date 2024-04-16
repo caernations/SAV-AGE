@@ -35,6 +35,9 @@ Player::Player(int playerID, const std::string& playerName, int gulden, int bera
 Player::~Player(){}
 
 void Player::changeGulden(int guldenAmount) {
+    if (gulden + guldenAmount < 0){
+        throw IllegalGoldChange();
+    }
     this->gulden += guldenAmount;
 }
 
@@ -226,7 +229,16 @@ Map<Item>& Player::getInventory() {
     return inventory;
 }
 
-string Player::getPlayerName() const {
+void Player::changeBeratBadan(const int& ammt)
+{
+    if (beratBadan - ammt < 0){
+        throw IllegalWeightChange();
+    }
+    beratBadan += ammt;
+}
+
+string Player::getPlayerName() const
+{
     return playerName;
 }
 

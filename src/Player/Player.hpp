@@ -135,6 +135,12 @@ class Player {
         int getBeratBadan() const;
 
         /**
+         * CHANGE BERAT BADAN
+         *
+         * 
+        */
+        void changeBeratBadan(const int& ammt);
+        /**
          * Mengembalikan nama player
          * @return string nama player
         */
@@ -217,6 +223,8 @@ class Player {
         virtual void panennn(const vector<Product>& products);
 
         void updateItemCount();
+
+        void checkWinners();
     };
 
 #endif 
