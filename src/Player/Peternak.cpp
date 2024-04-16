@@ -96,12 +96,18 @@ void Peternak::budidaya() {
     while(true){
         cout << "Slot: ";
         cin >> slot;
-        pos = convertToCoordinate(slot);
+
+        try{
+            pos = convertToCoordinate(slot);
+        }
+        catch(StringProcessorException){
+            continue;
+        }
         int y = get<0>(pos);
         int x = get<1>(pos);
         if (kandang.getMap()[x][y] != nullptr){
             cout << "Slot sudah terisi" << endl;
-        } else if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
+        } else if (x < 0 || x >= h_kandang || y < 0 || y >= w_kandang) {
             cout << "Petak kandang tidak valid." << endl;
         } else {
             setKandang(y, x, hewan);
@@ -217,7 +223,9 @@ void Peternak::memberiPangan() {
         if (foodForAnimal(kandang.getMap()[get<1>(pos)][get<0>(pos)]->getAnimalType(), foodItem)) {
             cout << kandang.getMap()[get<1>(pos)][get<0>(pos)]->getItemName() << " ingin diberi makan " << convertToReadable(foodItem->getItemName(), true, true) << "." << endl;
             Animal* animal = kandang.getMap()[get<1>(pos)][get<0>(pos)];
-            animal->setFed(animal, foodItem->added_weigth, foodItem->convertProductTypeToString(foodItem->getProductType())); 
+            //animal->setFed(animal, foodItem->added_weigth, foodItem->convertProductTypeToString(foodItem->getProductType()));
+            animal->addWeight(foodItem->added_weigth);
+            std::cout << "Animal sudah diberi makan dan beratnya menjadi " << animal->getWeight() << std::endl;
             cout << endl;
             break;
         } else {

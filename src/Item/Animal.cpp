@@ -43,10 +43,8 @@ void Animal::setWeightToHarvest(int newWeightToHarvest) {
     weight_to_harvest = newWeightToHarvest;
 }
 
-void Animal::setFed(Animal* animal, int foodWeight, const std::string& foodType) {
-    fed = true;
+void Animal::addWeight(int foodWeight) {
     weight += foodWeight;
-    std::cout << "Animal sudah diberi makan dan beratnya menjadi " << animal->getWeight() << std::endl;
 }
 
 // Operator overloads

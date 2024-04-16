@@ -101,7 +101,7 @@ public:
      * Tambahkan berat animal setelah diberi pangan, lalu set status pemberian makan pada animal
      * @param foodWeight Berat makanan yang diberikan
      */
-    void setFed(Animal* animal, int foodWeight, const std::string& foodType);
+    void addWeight(int foodWeight);
 
     // operator overloads
 
