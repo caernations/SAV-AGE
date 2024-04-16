@@ -1,6 +1,7 @@
 #ifndef CUSTOM_EXCEPTION_HPP
 #define CUSTOM_EXCEPTION_HPP
 
+#include <string>
 using namespace std;
 
 class GameException {
@@ -90,6 +91,19 @@ class NotEnoughGuldenException : public GameException {
     const char* what() const throw() {
         return "Gulden tidak cukup";
     }
+};
+
+class StringProcessorException : public GameException {
+    public:
+        string message;
+
+        StringProcessorException(string message){
+            this->message = message;
+        }
+
+        const char* what() const throw() {
+            return "Generic String Processor Exception!";
+        }
 };
 
 #endif
