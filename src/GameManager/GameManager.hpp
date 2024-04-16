@@ -89,7 +89,7 @@ class GameManager{
 
         Player* addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType);
 
-        void addPlayer();
+        void addPlayerLoop();
 };
 
 #endif

@@ -194,7 +194,7 @@ void GameManager::nextTick(const int& tickammt){
     }
 }
 
-void GameManager::addPlayer(){
+void GameManager::addPlayerLoop(){
     awaitMultiInput("Masukkan jenis pemain: ",' ');
     if (lastMultiInput.size() > 1){
         throw GMException("Incorrect type");
@@ -226,7 +226,7 @@ void GameManager::addPlayer(){
     }
 }
 
-Player *GameManager::addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType)
+Player* GameManager::addPlayer(const string& name,const int& weight, const int& gold , PlayerType playerType)
 {
     Player* player;
     if (playerType == PETERNAK){
@@ -320,7 +320,7 @@ void GameManager::gameloop(){
                 saveState("config");
             }
             else if ((checkLastInput({"TAMBAH_PEMAIN"})) && activePlayers[turn]->getType() == WALIKOTA){
-                addPlayer();
+                addPlayerLoop();
             }
             else if (checkLastInput({"CHEAT"})){
                 try{
