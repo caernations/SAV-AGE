@@ -1,3 +1,6 @@
+#ifndef __CODEX_HPP__
+#define __CODEX_HPP__
+
 //highly customizable storage for config results
 #include "../Item/Item.hpp"
 #include "../Item/Plant.hpp"
@@ -68,4 +71,8 @@ class Codex{
         Plant getPlantbyName(string name);
 
         Item* getItemByName(string name);
+        Item* getItemReferenceByName(string name);
+
 };
+
+#endif

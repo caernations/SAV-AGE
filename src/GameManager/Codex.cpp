@@ -269,6 +269,31 @@ Item* Codex::getItemByName(string name){
     throw CodexException("Item not found!");
 }
 
+Item *Codex::getItemReferenceByName(string name)
+{
+    for(Plant& plant : plants){
+        if (plant.getItemName().compare(name) == 0){
+            return &plant;
+        }
+    }
+    for(Animal& animal : animals){
+        if (animal.getItemName().compare(name) == 0){
+            return &animal;
+        }
+    }
+    for(Product& product : products){
+        if (product.getItemName().compare(name) == 0){
+            return &product;
+        }
+    }
+    for(Recipe& building : buildings){
+        if (building.getItemName().compare(name) == 0){
+            return &building;
+        }
+    }
+    throw CodexException("Item not found!");
+}
+
 //getters
 
 vector<Plant> Codex::getPlants() const{
