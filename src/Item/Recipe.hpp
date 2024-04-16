@@ -20,7 +20,7 @@ class Recipe : public Item {
          * @param itemCode kode item
          * @param itemName nama item
         */
-        Recipe(int itemID, const std::string& itemCode, const std::string& itemName);
+        Recipe(int itemID, const std::string& itemCode, const std::string& itemName, const int& price);
 
         /**
          * dtor

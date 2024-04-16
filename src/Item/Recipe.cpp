@@ -7,8 +7,8 @@ Recipe::Recipe() : Item(0, "0", "0", 0, RECIPE) {
     materials = std::map<string, int>();
 }
 
-Recipe::Recipe(int itemID, const std::string& itemCode, const std::string& itemName) 
-:   Item(itemID, itemCode, itemName, 0, RECIPE) {
+Recipe::Recipe(int itemID, const std::string& itemCode, const std::string& itemName, const int& price) 
+:   Item(itemID, itemCode, itemName, price, RECIPE) {
     materials = std::map<string, int>();
 }
 
