@@ -5,6 +5,7 @@
 #include <string>
 #include <tuple>
 #include <algorithm>
+#include "../Exception/Exception.hpp"
 
 using namespace std;
 

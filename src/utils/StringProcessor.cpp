@@ -63,6 +63,11 @@ std::string convertToReadable(const std::string& str, bool capitalizeFirstWord, 
 
 std::tuple<int,int> convertToCoordinate(const std::string& str) {
     // Check if the string is valid
+
+    if(str.size() < 3){
+        throw StringProcessorException("Incorrect size");
+    }
+
     if (str.empty() || !std::isalpha(str[0]) || !std::isdigit(str[1])) {
         return std::make_tuple(-1, -1);
     }
