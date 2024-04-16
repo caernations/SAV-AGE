@@ -27,6 +27,7 @@ Peternak::~Peternak() {}
 void Peternak::displayGrid() {
     cout << "================[ Peternakan ]===================" << endl;
     Color color;
+    getKandang().printTitle(w_kandang,5);
     getKandang().iterateAlphabet(w_kandang);
     getKandang().print_divider(w_kandang,5);
     for (int i = 0; i < h_kandang; i++){
@@ -38,9 +39,9 @@ void Peternak::displayGrid() {
             } else {
                 cout << " ";
                 if(kandang.getMap()[i][j]->isReadyToHarvest())
-                    color.colorGreen(kandang.getMap()[j][i]->getItemCode());
+                    color.colorGreen(kandang.getMap()[i][j]->getItemCode());
                 else
-                    color.colorRed(kandang.getMap()[j][i]->getItemCode());
+                    color.colorRed(kandang.getMap()[i][j]->getItemCode());
                 cout << " " << "|";
             }
         }
