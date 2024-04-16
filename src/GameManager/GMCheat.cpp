@@ -54,7 +54,8 @@ void GameManager::cheat(){
             cout << "Item does not exist!" << endl;
         }
         else{
-            activePlayers[turn]->addToInv(thing,get<0>(pos),get<1>(pos));
+            activePlayers[turn]->getInventory().set(get<0>(pos),get<1>(pos),thing);
+            activePlayers[turn]->updateItemCount();
             cout << "Conjured " << convertToReadable(thing->getItemName(),true, false) << " at " << coordinateToString(pos) << endl;
         }
         break;
