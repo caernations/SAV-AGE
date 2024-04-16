@@ -1,5 +1,5 @@
 #include "GeneralStore.hpp"
-
+#include "/root/Tubes1_OOP/PetaniPPP/src/utils/StringProcessor.hpp"
 Store::Store() {
     vector<Item*> item;
     vector<int> quantity;
@@ -59,6 +59,14 @@ void Store::displayStore() {
         }
     }
 }
+bool Store::canBuy(PlayerType Ptype, ItemType Itype){
+    return !(Ptype == WALIKOTA && Itype == BUILDING);
+}
+
+bool Store::canSell(PlayerType Ptype, ItemType Itype){
+    return !((Ptype == PETANI || Ptype == PETERNAK) && Itype == BUILDING);
+}
+
 
 void Store::addItem(Item* item, int quantity) {
     int idx = this->isinStore(item);
@@ -75,17 +83,16 @@ void Store::removeItem(int idx,int quantity){
     this->Quantity[idx-1] -= quantity;
 }
 
-Item* Store::sellItem(int idx, int quantity, int money) {
-    if (idx <= 0 || idx > this->Quantity.size()) {
-        throw out_of_range("Invalid index");
-    }
+Item* Store::sellItem(int idx, int quantity,Player*& buyer) {
+    int money = buyer->getGulden();
+    PlayerType type = buyer->getType();
     int quan = this->Quantity[idx - 1];
     if (quan < quantity && quan != -1) {
         throw invalid_argument("StockNotEnough");
     }
     else {
         if (this->totalprice(idx,quantity) > money){
-            throw invalid_argument("Not Enough Money");
+            throw invalid_argument("NotEnoughMoney");
         }
         Item* sold = this->items[idx-1];
         if (quan != -1) {
@@ -100,5 +107,108 @@ Item* Store::sellItem(int idx, int quantity, int money) {
 
         }
         return sold;
+    }
+}
+
+void Store::buyAs(Player*& buyer){
+    int idx,quantity,gulden,InvSpace;
+    this->displayStore();
+    gulden = buyer->getGulden();
+    cout << "Uang Anda : " << gulden << endl;
+    InvSpace = buyer->getMaxItemInInventory() - buyer->getItemCountInInventory();
+    cout << "Slot penyimpanan tersedia: " << InvSpace << endl;
+    cout << endl;
+    cout << "Barang ingin dibeli : "; cin >> idx;
+    if (idx <= 0 || idx > this->Quantity.size()) {
+        throw out_of_range("Invalid index");
+    }
+    if (!canBuy(buyer->getType(),this->items[idx-1]->getItemType())){throw invalid_argument("CantBuyException");}
+    cout << "Kuantitas : "; cin >> quantity;
+    if (InvSpace < quantity){throw invalid_argument("NotEnoughInventorySpace");}
+    Item* sold = this->sellItem(idx,quantity,buyer);
+    int sisa = gulden - sold->getItemPrice()*quantity;
+    cout << "Selamat Anda berhasil membeli " << quantity << sold->getItemName() << ". Uang Anda tersisa " << sisa << "gulden." << endl;
+    cout << "Pilih slot untuk menyimpan barang yang Anda beli!" << endl;
+
+    buyer->displayGrid();
+    
+    cout << "Petak slot: ";
+
+    for (int i = 0; i < quantity; ++i) {
+        string cord;
+        char comma;
+
+        // Read the number
+        cin >> cord;
+
+        // Check if it's the last input
+        if (i < quantity-1) {
+            // Read the comma
+            std::cin >> comma;
+            if (comma != ',') {
+                std::cerr << "Invalid input format." << std::endl;
+            }
+        }
+        tuple<int, int> pos = convertToCoordinate(cord);
+        int x = get<1>(pos);
+        int y = get<0>(pos);
+        Map<Item> inv = buyer->getInventory();
+        if (x < 0 || x >= buyer->getInvenW() || y < 0 || y >= buyer->getInvenH()){
+            cout << "Petak tidak valid" << endl;
+        } else if (inv.getMap()[x][y] != nullptr){
+            cout << "Petak tidak kosong" << endl;
+        }else{
+            buyer->addToInv(sold,x,y);
+        }
+    }
+    cout << sold->getItemName() << " berhasil disimpan dalam penyimpanan!" << endl;
+
+
+}
+
+void Store::sellAs(Player*& buyer){
+    string input;
+    cout << "Berikut merupakan penyimpanan Anda" << endl;
+    buyer->displayGrid();
+    cout << "Silahkan pilih petak yang ingin Anda jual!" << endl;
+    cout << "Petak : ";
+    getline(std::cin, input);
+    std::stringstream ss(input);
+    std::vector<std::string> cords;
+    std::string cord;
+    while (getline(ss, cord, ',')) {
+        cord.erase(0, cord.find_first_not_of(" \t\r\n"));
+        cord.erase(cord.find_last_not_of(" \t\r\n") + 1);
+        cords.push_back(cord);
+    }
+    int x,y,sellprice;
+    vector<tuple<int, int>> posList;
+    for (const auto& cord : cords){ // loop buat ngecheck apakah semua petak yang di input tidak kosong
+        tuple<int, int> pos = convertToCoordinate(cord);
+        x = get<1>(pos);
+        y = get<0>(pos);
+        Map<Item> inv = buyer->getInventory();
+        if (inv.getMap()[x][y] == nullptr){throw invalid_argument("PetakEmpty");}
+        else if (!canSell(buyer->getType(),inv.getMap()[x][y]->getItemType())){throw invalid_argument("CantSellException");}
+        posList.push_back(pos);
+    }
+    sellprice = 0;
+    for (const auto& pos : posList){
+        x = get<1>(pos); 
+        y = get<0>(pos);
+        Map<Item>& inv = buyer->getInventory();
+        Item* items = inv.getMap()[x][y];
+        sellprice += items->getItemPrice();
+        this->addItem(items,1);
+        buyer->addToInv(nullptr,x,y);
+    }
+    cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << sellprice << " gulden!" << endl;
+    
+}
+void Store::openAs(Player*& buyer, Action Aksi){
+    if (Aksi == BUY){
+        this->buyAs(buyer);
+    }else{
+        this->sellAs(buyer);
     }
 }

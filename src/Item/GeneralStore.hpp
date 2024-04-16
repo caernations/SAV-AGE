@@ -6,8 +6,13 @@
 #include <vector>
 #include <memory>
 #include "Item.hpp"
+#include "/root/Tubes1_OOP/PetaniPPP/src/Player/Player.hpp"
 using namespace std;
 
+enum Action{
+    BUY = 1,
+    SELL
+};
 
 class Store{
 private:
@@ -29,12 +34,17 @@ public:
 
     int totalprice(int idx,int quantity);
     void displayStore();
+    bool canBuy(PlayerType Ptype, ItemType Itype);
+    bool canSell(PlayerType Ptype, ItemType Itype);
+    void buyAs(Player*& buyer);
+    void sellAs(Player*& buyer);
+    void openAs(Player*& buyer, Action aksi); // aksi : BUY or SELL
 
     // setters
     
     void addItem(Item* item,int Quantity);
     void removeItem(int idx,int quantity);
-    Item* sellItem(int idx,int Quantity,int money);
+    Item* sellItem(int idx,int Quantity,Player*& buyer);
     
 };
 
