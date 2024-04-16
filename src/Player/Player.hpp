@@ -13,7 +13,7 @@
 using namespace std;
 
 enum PlayerType {
-    PETANI,
+    PETANI = 1,
     PETERNAK,
     WALIKOTA
 };
@@ -216,7 +216,7 @@ class Player {
         */
         virtual void panennn(const vector<Product>& products);
 
-
+        void updateItemCount();
     };
 
 #endif 
