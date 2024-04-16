@@ -16,6 +16,18 @@ struct InventoryFullException : public exception {
     }
 };
 
+struct IllegalWeightChange : public exception {
+    const char* what() const throw() {
+        return "Berat badan tidak bisa dibawah 0!";
+    }
+};
+
+struct IllegalGoldChange : public exception {
+    const char* what() const throw() {
+        return "Uang tidak bisa dibawah 0!";
+    }
+};
+
 struct LahanFullException : public exception {
     const char* what() const throw() {
         return "Lahan penuh";
