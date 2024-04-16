@@ -140,6 +140,23 @@ bool Peternak::isKandangKosong() {
 
 void Peternak::memberiPangan() {
     if(isKandangKosong()) throw KandangKosongException();
+    //cek bisa ngasih makan ato nggak
+    auto productlist = getVarianItem(PRODUCT);
+
+    if (productlist.empty()) throw NoFoodForAnimalException();
+    bool canfeed = false;
+    for (const auto& animal : kandang.convertToList()){
+        for (const auto& item : productlist) {
+                if (foodForAnimal(animal->getAnimalType(), item.first)) {
+                    canfeed = true;
+                    break;
+                }
+            }
+        if (canfeed) break;
+    }
+    if (!canfeed){
+        throw NoFoodForAnimalException();
+    }
 
     // Menampilkan peternakan
     cout << "Pilih petak kandang yang akan diberi makan" << endl << endl;
@@ -183,6 +200,7 @@ void Peternak::memberiPangan() {
 
         if(!found){
             cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
+            continue;
         }
         else {
             cout << "Kamu memilih " << convertToReadable(kandang.getMap()[get<1>(pos)][get<0>(pos)]->getItemName(), true, true) << " untuk diberi makan." << endl;
