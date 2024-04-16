@@ -238,6 +238,16 @@ Plant Codex::getPlantbyName(string name){
             return item;
         }
     }
+    throw CodexException("Invalid animal name!",name);
+}
+
+Animal Codex::getAnimalbyName(string name)
+{
+        for (Animal& item : animals){
+        if (item.getItemName().compare(name) == 0){
+            return item;
+        }
+    }
     throw 1;
 }
 
