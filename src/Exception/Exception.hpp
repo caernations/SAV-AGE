@@ -87,6 +87,12 @@ class KandangKosongException : public GameException {
     }
 };
 
+class NoFoodForAnimalException : public GameException {
+    const char* what() const throw() {
+        return "Tidak ada makanan valid untuk diberi ke hewan di ternak";
+    }
+};
+
 class NotEnoughGuldenException : public GameException {
     const char* what() const throw() {
         return "Gulden tidak cukup";
