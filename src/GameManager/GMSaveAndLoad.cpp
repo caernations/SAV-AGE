@@ -36,6 +36,17 @@ void GameManager::saveState(const string& path){
                 break;
             }
             case(PETERNAK) : {
+                //jumlah tanaman di ladang
+                Peternak* peternak = dynamic_cast<Peternak*>(player);
+                writer << peternak->getKandang().convertToList().size() << endl;
+                cout << "Converting to list..." << endl;
+                vector<pair<tuple<int,int>,Animal*>> field = peternak->getKandang().convertToPositionList();
+                cout << "Writing animals..." << endl;
+                for (pair<tuple<int,int>,Animal*> animal : field){
+                    writer << coordinateToString(animal.first) << " ";
+                    writer << animal.second->getItemName() << " ";
+                    writer << animal.second->getWeight() << endl;
+                }
                 break;
             }
             case(WALIKOTA) : {
@@ -118,6 +129,7 @@ void GameManager::loadState(const string& path){
             Petani* petani = dynamic_cast<Petani*>(player);
             for (int j = 0; j < fieldsize ; j++){
                 getline(reader,line);
+                cout << line << endl;
                 lineholder = split(line,' ');
                 tuple<int,int> location = convertToCoordinate(lineholder[0]);
                 Plant* plant = new Plant(codex.getPlantbyName(lineholder[1]));
@@ -127,7 +139,20 @@ void GameManager::loadState(const string& path){
             //petani->displayGrid();
             }
         else if (ptype == PETERNAK) {
-
+            getline(reader,line);
+            cout << "Populating field of size : " << line << endl; //DEBUG
+            int fieldsize = stoi(line);
+            Peternak* peternak = dynamic_cast<Peternak*>(player);
+            for (int j = 0; j < fieldsize ; j++){
+                getline(reader,line);
+                cout << line << endl;
+                lineholder = split(line,' ');
+                tuple<int,int> location = convertToCoordinate(lineholder[0]);
+                Animal* animal = new Animal(codex.getAnimalbyName(lineholder[1]));
+                animal->addWeight(stoi(lineholder[2]));
+                peternak->setKandang(get<0>(location),get<1>(location),animal);
+            }
+            //petani->displayGrid();
         };
 
     }
