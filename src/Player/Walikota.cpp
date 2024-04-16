@@ -118,7 +118,8 @@ void Walikota::collectTax(vector<Player*> playerlist)
     for (Player* player : playerlist){
         cout << "TAXING " << player->getPlayerName() << endl;
         if (player->getType() != WALIKOTA){
-            int tax = player->hitungKekayaan();
+            int tax = player->hitungKekayaan() + player->getGulden();
+            cout << "UNCUT " << tax << endl;
             switch (player->getType()){
                 case PETANI :
                     tax -= 13;
@@ -152,6 +153,7 @@ void Walikota::collectTax(vector<Player*> playerlist)
             player->changeGulden(-tax);
             changeGulden(tax);
             total += tax;
+            cout << "GET " << tax << endl;
             //lex insertion
             if (retval.empty()){
                 retval.push_back(make_tuple(player,tax));
