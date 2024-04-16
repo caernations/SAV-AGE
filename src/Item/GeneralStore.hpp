@@ -49,9 +49,14 @@ public:
     vector<int> legalSaleList(Player*& player);
 
     void addItem(Item*& item, int quantity);
+    void addItem(string& name, int quantity);
     void removeItem(int idx,int quantity);
     string sellItem(int idx,int Quantity,Player*& buyer);
     
+    vector<string> getItems();
+    vector<int> getQuantity();
+
+    vector<pair<string,int>> limitedItems();
 };
 
 #endif // ITEM_HPP

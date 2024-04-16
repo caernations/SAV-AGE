@@ -108,6 +108,12 @@ void Store::addItem(Item*& item, int quantity) {
     }
 }
 
+void Store::addItem(string& name, int quantity)
+{
+    Item* item = codex->getItemReferenceByName(name);
+    addItem(item,quantity);
+}
+
 void Store::removeItem(int idx,int quantity){
     this->Quantity[idx-1] -= quantity;
 }
@@ -140,7 +146,15 @@ string Store::sellItem(int idx, int quantity, Player*& buyer) {
     }
 }
 
+vector<string> Store::getItems()
+{
+    return Items;
+}
 
+vector<int> Store::getQuantity()
+{
+    return Quantity;
+}
 
 void Store::buyAs(Player*& buyer){
     int idx,quantity,gulden,InvSpace;
@@ -155,11 +169,9 @@ void Store::buyAs(Player*& buyer){
     string line;
     getline(cin, line);
     //verifikasi
-    for (char& c : line){
-        if (!isdigit(c)){
+    if (!digitOnly(line)){
             throw out_of_range("Invalid index");
         }
-    }
     idx = stoi(line);
 
     if (idx <= 0 || idx > legalList.size()) {
@@ -192,7 +204,16 @@ void Store::buyAs(Player*& buyer){
         bool inputcorrect = true;
 
         for (string s : split(input,',')){
-            auto cords = convertToCoordinate(removeSpaces(s));
+            tuple<int,int> cords;
+            try{
+                cords = convertToCoordinate(removeSpaces(s));
+            }
+            catch (StringProcessorException e){
+                cout << e.message << endl;
+                inputcorrect = false;
+                break;
+            }
+            
             if (cords == make_tuple(-1,-1)){
                 cout << "Invalid space (" << removeSpaces(s) << ")! try again." << endl;
                 inputcorrect = false;
@@ -234,34 +255,6 @@ void Store::buyAs(Player*& buyer){
         }
 
     }
-    
-    // for (int i = 0; i < quantity; ++i) {
-    //     string cord;
-    //     char comma;
-
-    //     // Read the number
-    //     cin >> cord;
-
-    //     // Check if it's the last input
-    //     if (i < quantity-1) {
-    //         // Read the comma
-    //         std::cin >> comma;
-    //         if (comma != ',') {
-    //             std::cerr << "Invalid input format." << std::endl;
-    //         }
-    //     }
-    //     tuple<int, int> pos = convertToCoordinate(cord);
-    //     int x = get<1>(pos);
-    //     int y = get<0>(pos);
-    //     Map<Item> inv = buyer->getInventory();
-    //     if (x < 0 || x >= buyer->getInvenW() || y < 0 || y >= buyer->getInvenH()){
-    //         cout << "Petak tidak valid" << endl;
-    //     } else if (inv.getMap()[x][y] != nullptr){
-    //         cout << "Petak tidak kosong" << endl;
-    //     }else{
-    //         buyer->addToInv(sold,x,y);
-    //     }
-    //}
     cout << sold << " berhasil disimpan dalam penyimpanan!" << endl;
 
 
@@ -314,3 +307,17 @@ void Store::openAs(Player*& buyer, Action Aksi){
         this->sellAs(buyer);
     }
 }
+
+vector<pair<string,int>> Store::limitedItems(){
+    vector<pair<string,int>> retval;
+    for (int i = 0; i < Items.size(); i++){
+        if (Quantity[i] <= 0){
+            continue;
+        }
+        else{
+            retval.push_back(make_pair(Items[i],Quantity[i]));
+        }
+    }
+    return retval;
+}
+
