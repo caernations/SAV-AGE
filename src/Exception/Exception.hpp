@@ -1,76 +1,80 @@
 #ifndef CUSTOM_EXCEPTION_HPP
 #define CUSTOM_EXCEPTION_HPP
 
-#include <exception>
 using namespace std;
 
-struct InventoryEmptyException : public exception {
+class GameException {
+    public:
+        virtual const char* what() const throw() = 0;
+};
+
+class InventoryEmptyException : public GameException {
     const char* what() const throw() {
         return "Inventory kosong";
     }
 };
 
-struct InventoryFullException : public exception {
+class InventoryFullException : public GameException {
     const char* what() const throw() {
         return "Inventory penuh";
     }
 };
 
-struct LahanFullException : public exception {
+class LahanFullException : public GameException {
     const char* what() const throw() {
         return "Lahan penuh";
     }
 };
 
-struct NoPlantInInventoryException : public exception {
+class NoPlantInInventoryException : public GameException {
     const char* what() const throw() {
         return "Tidak ada tumbuhan di inventory";
     }
 };
 
-struct NoPlantToHarvestException : public exception {
+class NoPlantToHarvestException : public GameException {
     const char* what() const throw() {
         return "Tidak ada tumbuhan yang bisa dipanen";
     }
 };
 
-struct NotAbleToBuildException : public exception {
+class NotAbleToBuildException : public GameException {
     const char* what() const throw() {
         return "Tidak bisa membangun";
     }
 };
 
-struct NoFoodInInventoryException : public exception {
+class NoFoodInInventoryException : public GameException {
     const char* what() const throw() {
         return "Tidak ada makanan di inventory";
     }
 };
 
-struct KandangFullException : public exception {
+class KandangFullException : public GameException {
     const char* what() const throw() {
         return "Kandang penuh";
     }
 };
 
-struct NoAnimalInInventoryException : public exception {
+class NoAnimalInInventoryException : public GameException {
     const char* what() const throw() {
         return "Tidak ada hewan di inventory";
     }
 };
 
-struct NoAnimalToHarvestException : public exception {
+class NoAnimalToHarvestException : public GameException {
     const char* what() const throw() {
         return "Tidak ada hewan yang bisa dipanen";
     }
 };
 
-struct KandangKosongException : public exception {
+class KandangKosongException : public GameException {
     const char* what() const throw() {
         return "Kandang kosong";
     }
 };
 
-struct NotEnoughGuldenException : public exception {
+class NotEnoughGuldenException : public GameException {
     const char* what() const throw() {
         return "Gulden tidak cukup";
     }
