@@ -60,11 +60,5 @@ int main(){
     products.push_back(&product2);
     products.push_back(&product3);
 
-    pair<Player*, int> pajak = p.hitungPajak();
-
-    cout << pajak.first->getPlayerName() << " " << pajak.second << endl;
-
-    cout << "MONEY = " << p.getGulden() << endl;
-
 
 }

@@ -255,7 +255,6 @@ vector<pair<Item*, int>> Petani::getVarianReadyToHarvest(){
     return items;
 }
 
-//hitung kekayaan
 int Petani::hitungKekayaan() const{
 
     vector<Plant*> lahanlist = lahan.convertToList();

@@ -189,6 +189,12 @@ void Player::addWeight(int addedWeight){
     this->beratBadan+=addedWeight;
 }
 
+void Player::displayPlayerInfo() const {
+    cout << "Player ID: " << playerID << ", Name: " << playerName
+              << ", Type: " << playerType << ", Gulden: " << gulden
+              << ", Weight: " << beratBadan << endl;
+}
+
 vector<pair<Item*, int>> Player::getVarianItem(ItemType ItemType) {
     vector<pair<Item*, int>> items;
     for (int i = 0; i < invenSizeW; i++) {
@@ -215,26 +221,8 @@ Map<Item>& Player::getInventory() {
     return inventory;
 }
 
-int Player::getGulden() const {
-    return gulden;
-}
-
-int Player::getBeratBadan() const {
-    return beratBadan;
-}
-
 string Player::getPlayerName() const {
     return playerName;
-}
-
-int Player::getPlayerID() const {
-    return playerID;
-}
-
-void Player::displayPlayerInfo() const {
-    cout << "Player ID: " << playerID << ", Name: " << playerName
-              << ", Type: " << playerType << ", Gulden: " << gulden
-              << ", Weight: " << beratBadan << endl;
 }
 
 PlayerType Player::getType() const {
@@ -253,6 +241,18 @@ string Player::playerTypeToString() const {
     }
 }
 
+int Player::getPlayerID() const {
+    return playerID;
+}
+
+int Player::getGulden() const {
+    return gulden;
+}
+
+int Player::getBeratBadan() const {
+    return beratBadan;
+}
+
 int Player::getInvenW() {
     return invenSizeW;
 }
@@ -267,6 +267,15 @@ int Player::getMaxItemInInventory() const {
 
 int Player::getItemCountInInventory() const {
     return this->itemCountInInventory;
+}
+
+int Player::hitungKekayaan() const{
+    int retval = 0;
+    vector<Item*> items = inventory.convertToList();
+    for (Item*& item : items){
+        retval += item->getItemPrice();
+    }
+    return retval;
 }
 
 bool Player::isInventoryFull() {
@@ -329,11 +338,3 @@ void Player::removeFromInv(const string& itemName, int amount) {
     }
 }
 
-int Player::hitungKekayaan() const{
-    int retval = 0;
-    vector<Item*> items = inventory.convertToList();
-    for (Item*& item : items){
-        retval += item->getItemPrice();
-    }
-    return retval;
-}

@@ -1,5 +1,6 @@
 #include "Walikota.hpp"
 #include <iostream>
+#include <cctype>
 #include "../utils/StringProcessor.hpp"
 using namespace std;
 
@@ -249,53 +250,39 @@ void Walikota::buildBuilding(){
     cout << convertToReadable(buildingName, true, false) << " berhasil dibangun dan telah menjadi hak milik walikota!" << endl;
 }
 
-// vector<pair<Player*, int>> Walikota::sortPlayerTax(vector<pair<Player*, int>>& taxes) {
-//     for (int i = 0; i < taxes.size(); i++) {
-//         for (int j = i + 1; j < taxes.size(); j++) {
-//             if (taxes[i].second < taxes[j].second) {
-//                 pair<Player*, int> temp = taxes[i];
-//                 taxes[i] = taxes[j];
-//                 taxes[j] = temp;
-//             } else if (taxes[i].second == taxes[j].second) {
-//                 if (taxes[i].first->getPlayerName() > taxes[j].first->getPlayerName()) {
-//                     pair<Player*, int> temp = taxes[i];
-//                     taxes[i] = taxes[j];
-//                     taxes[j] = temp;
-//                 }
-                
-//             }
-//         }
-//     }
-//     return taxes;
-// }
+tuple<string, string> Walikota::addPlayer(vector<Player*> listPlayer){
+    if (getGulden() - 50 < 0) throw NotEnoughGuldenException();
+    string jenisPemain;
+    string namaPemain;
 
-// void Walikota::collectTax(vector<Player*>& players) {
-//     vector<pair<Player*,int>> taxes;
-//     int totalTax = 0;
+    while(true){
+        cout << "Masukkan jenis pemain: ";
+        cin >> jenisPemain;
+        cout << endl;
+        if (jenisPemain == "walikota") {
+            cout << "Walikota hanya bisa satu" << endl;
+        }
+        else if (jenisPemain != "petani" || jenisPemain != "peternak") {
+            cout << "Jenis pemain tidak valid!" << endl;
+            continue;
+        }
+        else{
+            break;
+        }
+    }
 
-//     for (Player* player : players) {
-//         if (player->getType() != WALIKOTA) {
-//             taxes.push_back(player->hitungPajak());
-//             totalTax += taxes.back().second;
-//         }
-//     }
+    while(true){
+        cout << "Masukkan nama pemain: ";
+        cin >> namaPemain;
+        for (int i = 0; i < listPlayer.size(); i++) {
+            if (listPlayer[i]->getPlayerName() == namaPemain) {
+                cout << "Nama pemain sudah ada!" << endl;
+                continue;
+            }
+        }
+        break;
+    }
 
-//     taxes = sortPlayerTax(taxes);
-
-//     cout << "Cring cring cring..." << endl;
-//     cout << "Pajak sudah dipungut!" << endl;
-
-//     cout << endl;
-
-//     cout << "Berikut adalah detil dari pemungutan pajak: " << endl;
-//     for (int i = 0; i < taxes.size(); i++) {
-//         string tipePlayer = taxes[i].first->playerTypeToString();
-//         cout << i + 1 << ". " << taxes[i].first->getPlayerName() << " - " << tipePlayer << " " << taxes[i].second << " gulden." << endl;
-//     }
-
-//     cout << "Negara mendapatkan pemasukan sebesar " << totalTax << " gulden." << endl;
-//     cout << "Gunakan dengan baik dan jangan dikorupsi ya!" << endl;
-//     changeGulden(totalTax);
-
-// }
-
+    changeGulden(-50);
+    return make_tuple(jenisPemain, namaPemain);
+}
