@@ -1,10 +1,23 @@
 #include "GameManager.hpp"
 
+
 //SAVESTATE AND LOADSTATE
+void GameManager::saveLoop(){
+    awaitLineInput("Masukkan lokasi berkas save >>> ");
+    try{
+        saveState(lastInput);
+    }catch(GMException e){
+
+    }
+}
+
 void GameManager::saveState(const string& path){
     int playerCount = activePlayers.size();
-    string filename = "testsave.txt";
-    ofstream writer(path+"/"+filename);
+    //string filename = "testsave.txt";
+    ofstream writer(path);
+    if (!writer.is_open()){
+        throw GMException("Failed to save",path);
+    }
     //write player count
     writer << playerCount << endl;
     //write player state
@@ -72,6 +85,7 @@ void GameManager::loadState(const string& path){
     ifstream reader(path);
     string line;
     int walikota = 0;
+    bool allowNoWalikota = false;
 
     if(!reader.is_open()){
         throw GMException("Failed to open file! : " + path);
@@ -156,6 +170,11 @@ void GameManager::loadState(const string& path){
         };
 
     }
+    //cekk kalau ada walikot atau belum
+    if (!allowNoWalikota && walikota != 1){
+        throw GMException("Missing walikota");
+    }
+
     //populate shop
         getline(reader,line);
         cout << "POPULATING SHOP WITH ITEMS : " << line << endl;

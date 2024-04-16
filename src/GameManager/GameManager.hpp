@@ -93,6 +93,9 @@ class GameManager{
         void addPlayerLoop();
 
         bool checkWinners();
+
+        void saveLoop();
+
 };
 
 #endif

@@ -356,7 +356,7 @@ void GameManager::gameloop(){
                 activePlayers[turn]->panennn(codex.getProducts());
             }
             else if (checkLastInput({"SAVE","SIMPAN"})){
-                saveState("config");
+                saveLoop();
             }
             else if ((checkLastInput({"TAMBAH_PEMAIN"})) && activePlayers[turn]->getType() == WALIKOTA){
                 //addPlayerLoop();
