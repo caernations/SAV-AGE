@@ -25,7 +25,6 @@ Peternak::Peternak(int playerID, const string& playerName, int gulden, int berat
 Peternak::~Peternak() {}
 
 void Peternak::displayGrid() {
-    cout << "================[ Peternakan ]===================" << endl;
     Color color;
     getKandang().printTitle(w_kandang,5);
     getKandang().iterateAlphabet(w_kandang);
@@ -105,7 +104,7 @@ void Peternak::budidaya() {
         } else if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
             cout << "Petak kandang tidak valid." << endl;
         } else {
-            setKandang(x, y, hewan);
+            setKandang(y, x, hewan);
             jumlah_hewan++;
             cout << endl << "Dengan hati-hati, kamu meletakkan seekor " << convertToReadable(std::string(hewan->getItemName()),true,true) << " di kandang." << endl;
             cout << convertToReadable(std::string(hewan->getItemName()), true, true) << " telah menjadi peliharaanmu sekarang!" << endl;
@@ -155,23 +154,25 @@ void Peternak::memberiPangan() {
         cin >> petak;
 
         pos = convertToCoordinate(petak); 
-        int x = get<0>(pos);
-        int y = get<1>(pos);
+        int y = get<0>(pos);
+        int x = get<1>(pos);
 
         if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
             cout << "Petak kandang tidak valid." << endl;
             continue;
         }
 
-        if (kandang.getMap()[get<0>(pos)][get<1>(pos)] == nullptr) {
+        if (kandang.getMap()[x][y] == nullptr) {
             cout << "Tidak ada hewan di petak kandang yang dipilih." << endl;
             continue;
         }
 
-        string animalType = kandang.getMap()[get<0>(pos)][get<1>(pos)]->getAnimalType();
+        Animal* a = kandang.getMap()[get<1>(pos)][get<0>(pos)];
+        string animalType = a->getAnimalType();
 
         vector<Item*> inv = getInventory().convertToList();
         bool found = false;
+
         for (const auto& item : inv) {
             if (foodForAnimal(animalType, item)) {
                 found = true;
@@ -182,24 +183,22 @@ void Peternak::memberiPangan() {
 
         if(!found){
             cout << "Tidak ada makanan yang sesuai dengan jenis hewan di petak kandang." << endl;
-            continue;
         }
         else {
-            cout << "Kamu memilih " << convertToReadable(kandang.getMap()[get<0>(pos)][get<1>(pos)]->getItemName(), true, true) << " untuk diberi makan." << endl;
+            cout << "Kamu memilih " << convertToReadable(kandang.getMap()[get<1>(pos)][get<0>(pos)]->getItemName(), true, true) << " untuk diberi makan." << endl;
         }
         break;
     }
     cout << endl;
 
-    // Memilih slot penyimpanan untuk pangan
-    cout << "Pilih pangan yang akan diberikan" << endl << endl;
-
     while(true) {
+        cout << "Pilih pangan yang akan diberikan" << endl << endl;
         Item& p = takeFromInv(PRODUCT);
         Product* foodItem = dynamic_cast<Product*>(&p);
 
-        if (foodForAnimal(kandang.getMap()[get<0>(pos)][get<1>(pos)]->getAnimalType(), foodItem)) {
-            Animal* animal = kandang.getMap()[get<0>(pos)][get<1>(pos)];
+        if (foodForAnimal(kandang.getMap()[get<1>(pos)][get<0>(pos)]->getAnimalType(), foodItem)) {
+            cout << kandang.getMap()[get<1>(pos)][get<0>(pos)]->getItemName() << " ingin diberi makan " << convertToReadable(foodItem->getItemName(), true, true) << "." << endl;
+            Animal* animal = kandang.getMap()[get<1>(pos)][get<0>(pos)];
             animal->setFed(animal, foodItem->added_weigth, foodItem->convertProductTypeToString(foodItem->getProductType())); 
             cout << endl;
             break;

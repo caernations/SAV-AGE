@@ -49,17 +49,17 @@ int main() {
     cout << "O MEMBERI PANGAN TESTING" << endl;
     p.memberiPangan();
 
-    vector<Product*> products;
-    Product* product1 = new Product(1,PRODUCT_ANIMAL, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
-    Product product2(2,PRODUCT_ANIMAL, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
-    Product product3(3,PRODUCT_ANIMAL, "TOWOWO_BRONTO", 10, "ABU", "TOWOWOBOIII", 1000);
+    vector<Product> products;
+    Product product1(1, PRODUCT_ANIMAL, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
+    Product product2(2, PRODUCT_ANIMAL, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
+    Product product3(3, PRODUCT_ANIMAL, "TOWOWO_BRONTO", 10, "ABU", "TOWOWOBOIII", 1000);
 
     products.push_back(product1);
-    products.push_back(&product2);
-    products.push_back(&product3);
+    products.push_back(product2);
+    products.push_back(product3);
 
     cout << "O PANEN TESTING" << endl;
-    // p.panennn(products);
+    p.panennn(products);
 
     cout << "O MEMAKAN TESTING" << endl << "Berat badan saat ini: " << p.getBeratBadan() << endl;
     cout << endl;
