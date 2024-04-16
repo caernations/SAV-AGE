@@ -5,8 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include "../GameManager/Codex.hpp"
 #include "Item.hpp"
 #include "../Player/Player.hpp"
+#include <string>
 using namespace std;
 
 enum Action{
@@ -16,12 +18,14 @@ enum Action{
 
 class Store{
 private:
-    vector<Item*> items; // <item1,item2,item3,...>
+    vector<string> Items; // <item1,item2,item3,...>
     vector<int> Quantity; //<quantity of item1,quantity of item2,quantity of item3,...>
 
 public:
+    Codex* codex;
+
     Store();
-    Store(vector<Item*> ItemList,vector<int>& quantity);
+    Store(vector<string>& ItemList, vector<int>& quantity);
     ~Store(); // dtor
 
     // getters
@@ -33,6 +37,7 @@ public:
     int isinStore(const Item* item) const;
 
     int totalprice(int idx,int quantity);
+    void displayStore(const vector<int>& sellList);
     void displayStore();
     bool canBuy(PlayerType Ptype, ItemType Itype);
     bool canSell(PlayerType Ptype, ItemType Itype);
@@ -41,10 +46,11 @@ public:
     void openAs(Player*& buyer, Action aksi); // aksi : BUY or SELL
 
     // setters
-    
-    void addItem(Item* item,int Quantity);
+    vector<int> legalSaleList(Player*& player);
+
+    void addItem(Item*& item, int quantity);
     void removeItem(int idx,int quantity);
-    Item* sellItem(int idx,int Quantity,Player*& buyer);
+    string sellItem(int idx,int Quantity,Player*& buyer);
     
 };
 
