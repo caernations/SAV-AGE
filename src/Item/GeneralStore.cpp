@@ -87,11 +87,12 @@ void Store::displayStore(){
     }
 }
 bool Store::canBuy(PlayerType Ptype, ItemType Itype){
-    return !(Ptype == WALIKOTA && Itype == BUILDING);
+    return !(Ptype == WALIKOTA && Itype == RECIPE);
 }
 
 bool Store::canSell(PlayerType Ptype, ItemType Itype){
-    return !((Ptype == PETANI || Ptype == PETERNAK) && Itype == BUILDING);
+    //cout << "PTYPE " << Ptype << " ITYPE " << Itype << endl;
+    return !((Ptype == PETANI || Ptype == PETERNAK) && Itype == RECIPE);
 }
 
 
@@ -198,6 +199,22 @@ void Store::buyAs(Player*& buyer){
                 break;
             }
             else{
+                if (buyer->getInventory().getMap()[get<1>(cords)][get<0>(cords)] != nullptr){
+                    cout << "Item already exists! (" << s << ")" << endl;
+                    inputcorrect = false;
+                }
+                // check multi inputs of same space
+                for (auto insertedcord : spacelist){
+                    if (insertedcord == cords){
+                        cout << "Slot inputted twice! (" << s << ")" << endl;
+                        inputcorrect = false;
+                        break;
+                    }
+                }
+                if (!inputcorrect){
+                    break;
+                }
+
                 spacelist.push_back(cords);
             }
         }
@@ -253,7 +270,7 @@ void Store::buyAs(Player*& buyer){
 void Store::sellAs(Player*& buyer){
     string input;
     cout << "Berikut merupakan penyimpanan Anda" << endl;
-    buyer->displayGrid();
+    buyer->Player::displayGrid();
     cout << "Silahkan pilih petak yang ingin Anda jual!" << endl;
     cout << "Petak : ";
     getline(std::cin, input);
@@ -285,7 +302,7 @@ void Store::sellAs(Player*& buyer){
         sellprice += items->getItemPrice();
         this->addItem(items,1);
         //buyer->addToInv(nullptr,x,y);
-        buyer->getInventory().set(x,y,nullptr);
+        buyer->getInventory().set(y,x,nullptr);
     }
     cout << "Barang Anda berhasil dijual! Uang Anda bertambah " << sellprice << " gulden!" << endl;
     
