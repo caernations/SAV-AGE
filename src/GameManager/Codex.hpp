@@ -69,6 +69,7 @@ class Codex{
 
         //returns 
         Plant getPlantbyName(string name);
+        Animal getAnimalbyName(string name);
 
         Item* getItemByName(string name);
         Item* getItemReferenceByName(string name);
