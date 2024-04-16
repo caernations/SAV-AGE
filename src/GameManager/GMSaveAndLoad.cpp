@@ -52,13 +52,13 @@ void GameManager::saveState(const string& path){
 }
 
 void GameManager::loadState(const string& path){
-    string filename = "state.txt";
-    ifstream reader(path+"/"+filename);
+    //string filename = "state.txt";
+    ifstream reader(path);
     string line;
     int walikota = 0;
 
     if(!reader.is_open()){
-        throw GMException("Failed to open file! : " + path + "/" + filename);
+        throw GMException("Failed to open file! : " + path);
     }
 
     getline(reader,line);
@@ -124,8 +124,6 @@ void GameManager::loadState(const string& path){
         else if (ptype == PETERNAK) {
 
         };
-        
-        activePlayers.push_back(player);
     }
 
     reader.close();
