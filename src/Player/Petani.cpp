@@ -64,7 +64,7 @@ int Petani::getMaxTumbuhan() const {
 void Petani::setLahan(int x, int y, Plant* item){
     lahan.set(x, y, item);
     
-    if(lahan.getMap()[y][x] == nullptr){
+    if(lahan.getMap()[x][y] == nullptr){
         if (item != nullptr){
             jumlah_tumbuhan++;
         }
@@ -79,7 +79,7 @@ Map<Plant>& Petani::getLahan() {
 }
 
 void Petani::budidaya(){
-    if (isPlantInInventory()) throw NoPlantInInventoryException();
+    if (!isPlantInInventory()) throw NoPlantInInventoryException();
     if (jumlah_tumbuhan >= getMaxTumbuhan()) throw LahanFullException();
     string slot;
     tuple<int, int> pos;
@@ -93,16 +93,21 @@ void Petani::budidaya(){
     cout << "Pilih petak tanah yang akan ditanami" << endl << endl;
 
     displayGrid(); 
+    cout << endl;
     while(true){
         cout << "Slot: ";
         cin >> slot;
         pos = convertToCoordinate(slot);
         int y = get<0>(pos);
         int x = get<1>(pos);
+        if (x == -1 || y == -1) {
+            cout << "Slot tidak valid. Silakan masukkan slot yang valid." << endl;
+            continue;
+        }
         if (lahan.getMap()[x][y] != nullptr){
             cout << "Slot sudah terisi" << endl;
         } else {
-            setLahan(x, y, plant);
+            setLahan(y, x, plant);
             cout << "Cangkul, cangkul, cangkul yang dalam~!" << endl;
             cout << convertToReadable(plant->getItemName(), false, false) << " berhasil ditanami" << endl;
             return;
@@ -212,13 +217,13 @@ void Petani::panennn(const vector<Product>& products){
             else {
                 setLahan(x, y, nullptr);
                 slots.push_back(slot);
+                cout << endl;
                 addToInv(plantProduct);
                 break;
             }
         }
     }
 
-    cout << endl;
     cout << choiceSlot << " petak tananam " << chosenPlant.first->getItemCode() << " ";
     for(int i = 0; i < slots.size(); i++){
         cout << slots[i];

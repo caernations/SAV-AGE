@@ -51,17 +51,16 @@ int main(){
         cout << item.first->getItemCode() << " " << item.second << endl;
     }
 
-    vector<Product*> products;
+    vector<Product> products;
     Product* product1 = new Product(1,PRODUCT_MATERIAL_PLANT, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
     Product product2(2,PRODUCT_MATERIAL_PLANT, "TOWOWO", 10, "ASI", "TOWOWOBOIII", 1000);
     Product product3(3,PRODUCT_MATERIAL_PLANT, "TOWOWO_BRONTO", 10, "ABU", "TOWOWOBOIII", 1000);
 
-    products.push_back(product1);
-    products.push_back(&product2);
-    products.push_back(&product3);
-
-    p.Player::displayGrid();
-    p.displayGrid();
-
-
+    products.push_back(*product1);
+    products.push_back(product2);
+    products.push_back(product3);
+    
+    p.budidaya();
+    p.panennn(products);
+    p.consumeFromInv();
 }

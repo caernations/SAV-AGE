@@ -52,12 +52,14 @@ void Player::addToInvEmptySlot(Item* item) {
 
 void Player::addToInvSpecific(Item* item) {
     string slot;
+    Player::displayGrid();
+    cout << endl;
     while(true) {
         cout << "Slot: ";
         cin >> slot;
         tuple<int, int> slots = convertToCoordinate(slot);
-        int y = get<0>(slots);
-        int x = get<1>(slots);
+        int x = get<0>(slots);
+        int y = get<1>(slots);
         if (inventory.getMap()[x][y] == nullptr) {
             inventory.set(x, y, item);
             itemCountInInventory++;
@@ -117,7 +119,6 @@ Item& Player::takeFromInv(ItemType ItemType) {
             cout << "Invalid slot." << endl;
             continue; 
         }
-
         if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
         } else if (inventory.getMap()[x][y]->getItemType() != ItemType) {
@@ -140,6 +141,7 @@ void Player::consumeFromInv() {
     tuple<int,int> slots;
     cout <<"Pilih makanan dari penyimpanan"<<endl << endl;
     Player::displayGrid();
+    cout << endl;
     Product* product;
     while (true) {
         cout << "Slot: ";
@@ -147,7 +149,10 @@ void Player::consumeFromInv() {
         slots = convertToCoordinate(slot);
         int y = get<0>(slots);
         int x = get<1>(slots);
-        cout << endl << endl;
+        if (x == -1 || y == -1) {
+            cout << "Slot tidak valid. Silakan masukkan slot yang valid." << endl;
+            continue;
+        }
         if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
         } else if (product = dynamic_cast<Product*>(inventory.getMap()[x][y])) {
@@ -188,7 +193,6 @@ void Player::displayGrid() {
         getInventory().print_divider(invenSizeW,5);
     }
 }
-
 
 void Player::addWeight(int addedWeight){
     this->beratBadan+=addedWeight;
@@ -328,7 +332,6 @@ string Player::itemTypeToString(ItemType type) {
         "recipe" 
     };
 
-    // Check if the type is within range
     if (type >= 0 && type < NUM_ITEM_TYPES) {
         return itemTypeStrings[type];
     } else {

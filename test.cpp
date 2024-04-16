@@ -1,34 +1,18 @@
 #include <iostream>
-#include <vector>
+#include <cctype> // For tolower function
 #include <string>
 
 int main() {
-    // Membuat vector untuk menyimpan nama
-    std::vector<std::string> names;
+    std::string input;
+    std::cout << "Enter a string: ";
+    std::cin >> input;
 
-    // Menambahkan nama ke dalam vector
-    names.push_back("John");
-    names.push_back("Alice");
-    names.push_back("Bob");
-    names.push_back("Charlie");
-
-    // Mengurutkan nama secara leksikografis dengan iterasi
-    for (int i = 0; i < names.size(); ++i) {
-        for (int j = i + 1; j < names.size(); ++j) {
-            if (names[i] > names[j]) {
-                std::cout << names[i] << " > " << names[j] << std::endl;
-                std::string temp = names[i];
-                names[i] = names[j];
-                names[j] = temp;
-            }
-        }
+    // Convert each character to lowercase
+    for (char& c : input) {
+        c = std::tolower(c);
     }
 
-    // Menampilkan nama yang sudah diurutkan
-    std::cout << "Nama yang diurutkan secara leksikografis:\n";
-    for(const auto& name : names) {
-        std::cout << name << std::endl;
-    }
+    std::cout << "Lowercase string: " << input << std::endl;
 
     return 0;
 }

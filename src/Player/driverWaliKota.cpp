@@ -5,7 +5,7 @@
 // #include "../Item/Product.cpp"
 // #include "../Item/Building.cpp"
 
-// g++ -o test driverWaliKota.cpp Walikota.cpp Petani.cpp Player.cpp ../Item/Product.cpp ../Item/Building.cpp ../Item/Item.cpp ../Item/Recipe.cpp ../utils/StringProcessor.cpp
+// g++ -o test driverWaliKota.cpp Walikota.cpp Petani.cpp Player.cpp ../Item/Product.cpp ../Item/Item.cpp ../Item/Recipe.cpp ../utils/StringProcessor.cpp
 
 #include <iostream>
 
@@ -39,9 +39,10 @@ int main(){
 
     b3.addToInvEmptySlot(&p);
 
-
     players.push_back(&w);
     players.push_back(&b1);
     players.push_back(&b2);
     players.push_back(&b3);
+
+    w.buildBuilding();
 }
