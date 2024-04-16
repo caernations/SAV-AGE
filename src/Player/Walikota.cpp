@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cctype>
 #include "../utils/StringProcessor.hpp"
+#include "../GameManager/EnumConverter.hpp"
+
 using namespace std;
 
 Walikota::Walikota() : Player() {
@@ -250,26 +252,30 @@ void Walikota::buildBuilding(){
     cout << convertToReadable(buildingName, true, false) << " berhasil dibangun dan telah menjadi hak milik walikota!" << endl;
 }
 
-tuple<string, string> Walikota::addPlayer(vector<Player*> listPlayer){
+tuple<PlayerType, string> Walikota::addPlayer(vector<Player*> listPlayer){
     if (getGulden() - 50 < 0) throw NotEnoughGuldenException();
     string jenisPemain;
     string namaPemain;
+    PlayerType pt;
 
     while(true){
         cout << "Masukkan jenis pemain: ";
         cin >> jenisPemain;
         cout << endl;
-        if (jenisPemain == "walikota") {
+
+        transform(jenisPemain.begin(),jenisPemain.end(),jenisPemain.begin(), ::toupper);
+        pt = StringToPlayerType[jenisPemain];
+        if (pt == WALIKOTA){
             cout << "Walikota hanya bisa satu" << endl;
+            continue;
         }
-        else if (jenisPemain != "petani" || jenisPemain != "peternak") {
+        else if (pt == 0){
             cout << "Jenis pemain tidak valid!" << endl;
             continue;
         }
-        else{
-            break;
-        }
+        break;
     }
+    
 
     while(true){
         cout << "Masukkan nama pemain: ";
@@ -284,5 +290,5 @@ tuple<string, string> Walikota::addPlayer(vector<Player*> listPlayer){
     }
     
     changeGulden(-50);
-    return make_tuple(jenisPemain, namaPemain);
+    return make_tuple(pt, namaPemain);
 }

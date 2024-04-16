@@ -83,12 +83,12 @@ class Walikota : public Player {
         /**
          * Pungut pajak dari pemain lain
         */
-        void collectTax();
+        void collectTax(vector<Player*> playerlist);
 
         /**
          * menambahkan pemain baru ke dalam game
         */
-        void addPlayer();
+        tuple<PlayerType, string> addPlayer(vector<Player*> listPlayer);
 
         /**
          * menghapus pemain dari game
