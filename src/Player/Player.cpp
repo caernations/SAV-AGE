@@ -112,7 +112,14 @@ Item& Player::takeFromInv(ItemType ItemType) {
         cout << "Slot: ";
         cin >> itemSlot;
         cout << endl;
-        slot = convertToCoordinate(itemSlot);
+
+        try {
+            slot = convertToCoordinate(itemSlot);
+        }
+        catch (StringProcessorException e){
+            cout << "StringProcessor error : " << e.message << endl;
+            continue;
+        }
         int y = get<0>(slot);
         int x = get<1>(slot);
         
@@ -128,7 +135,7 @@ Item& Player::takeFromInv(ItemType ItemType) {
             cout << "Kamu tidak bisa mengambil " << inventory.getMap()[x][y]->getItemName() << endl;
         } else {
             Item& item = *inventory.getMap()[x][y];
-            inventory.set(x, y, nullptr);
+            inventory.set(y, x, nullptr);
             itemCountInInventory--;
             return item;
         }
