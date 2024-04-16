@@ -365,9 +365,9 @@ void GameManager::gameloop(){
         catch (GMException){
 
         }
-        catch (exception e){
-            cout << "Exception occured! : " << e.what();
-        }
+        catch (GameException& e) {
+        cout << e.what() << endl;
+    }
 
     }
 }
