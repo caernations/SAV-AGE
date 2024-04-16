@@ -7,7 +7,7 @@
 #include <string>
 #include "../Player/Player.hpp"
 #include "../Player/Petani.hpp"
-//#include "../Player/Peternak.hpp"
+#include "../Player/Peternak.hpp"
 #include "../Player/Walikota.hpp"
 #include "../utils/StringProcessor.hpp"
 #include "Codex.hpp"

@@ -135,7 +135,7 @@ void GameManager::initloop(){
                 getCorrectInput = true;
                 // JANGAN LUPA GANTI KE WALIKOTA KALO UDAH DI FIX
                 addPlayer("Petani1",40,50,PETANI);
-                //addPlayer("Peternak1",40,50,PETERNAK);
+                addPlayer("Peternak1",40,50,PETERNAK);
                 addPlayer("Walikota",40,50,WALIKOTA);
             }
             catch(GMException){}
@@ -235,10 +235,10 @@ Player* GameManager::addPlayer(const string& name,const int& weight, const int& 
         Petani* petani = (new Petani(0,name,gold,weight,get<1>(lahanSize),get<0>(lahanSize),get<1>(invSize),get<0>(invSize)));
         player = petani;
     }
-    // else if (playerType == PETERNAK){
-    //     Peternak* peternak = (new Peternak(0,name,gold,weight,get<1>(ternakSize),get<0>(ternakSize),get<1>(invSize),get<0>(invSize)));
-    //     player = peternak;
-    // }
+    else if (playerType == PETERNAK){
+        Peternak* peternak = (new Peternak(0,name,gold,weight,get<1>(ternakSize),get<0>(ternakSize),get<1>(invSize),get<0>(invSize)));
+        player = peternak;
+    }
     else if (playerType == WALIKOTA){
         //add recipes to walikota
         Walikota* wk = new Walikota(0,name,gold,weight,get<1>(invSize),get<0>(invSize));
@@ -342,15 +342,17 @@ void GameManager::gameloop(){
                 activePlayers[turn]->consumeFromInv();
             }
             else if (checkLastInput({"KASIH_MAKAN","FEED"})){
+                Peternak* farmer = dynamic_cast<Peternak*>(activePlayers[turn]);
+                farmer->memberiPangan();
                 //activePlayers[turn]->consumeFromInv();
             }
             else if (checkLastInput({"BELI"})){
-                buyLoop(); //
+                buyLoop();
             }
             else if (checkLastInput({"JUAL"})){
-                sellLoop(); //
+                sellLoop();
             }
-            else if (checkLastInput({"PANEN"}) && activePlayers[turn]->getType() == PETANI){
+            else if (checkLastInput({"PANEN"}) && (activePlayers[turn]->getType() == PETANI || activePlayers[turn]->getType() == PETERNAK)){
                 activePlayers[turn]->panennn(codex.getProducts());
             }
             else if (checkLastInput({"SAVE","SIMPAN"})){
