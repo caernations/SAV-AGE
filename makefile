@@ -6,7 +6,13 @@ SOURCE	= 	src
 TESTEE	=	$(SOURCE)/GameManager/driverGameManager.cpp
 TARGET	=	$(BIN)/test
 
-build : game clean
+
+run	: build clean
+	@./$(BIN)/sav_game
+
+build : game
+	@echo "Creating game"
+	@g++ $(SOURCE)/GameManager/driverGameManager.cpp $(BIN)/*.o -o $(BIN)/sav_game
 
 clean : 
 	@rm -rf $(BIN)/*.o
