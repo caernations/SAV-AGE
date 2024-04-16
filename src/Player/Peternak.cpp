@@ -33,11 +33,11 @@ void Peternak::displayGrid() {
         cout << setw(2) << setfill('0') << i+1 << " ";
         cout << "|";
         for (int j = 0; j < w_kandang; j++){
-            if (kandang.getMap()[j][i] == nullptr){
+            if (kandang.getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
                 cout << " ";
-                if(kandang.getMap()[j][i]->isReadyToHarvest())
+                if(kandang.getMap()[i][j]->isReadyToHarvest())
                     color.colorGreen(kandang.getMap()[j][i]->getItemCode());
                 else
                     color.colorRed(kandang.getMap()[j][i]->getItemCode());
@@ -48,28 +48,6 @@ void Peternak::displayGrid() {
         getKandang().print_divider(w_kandang,5);
     }
 }
-
-// void Peternak::displayInventory() {
-//     int w_inventory = this->getInvenW();
-//     int h_inventory = this->getInvenH();
-//     inventory.iterateAlphabet(w_inventory);
-//     inventory.print_divider(w_inventory,5);
-//     for (int i = 0; i < h_inventory; i++){
-//         cout << setw(2) << setfill('0') << i+1 << " ";
-//         cout << "|";
-//         for (int j = 0; j < w_inventory; j++) {
-//             if (inventory.getMap()[j][i] == nullptr) {
-//                 cout << "     " << "|";
-//             } else {
-//                 cout << " ";
-//                 cout << inventory.getMap()[j][i]->getItemCode();
-//                 cout << " " << "|";
-//             }
-//         }
-//         cout << endl;
-//         inventory.print_divider(w_inventory,5);
-//     }
-// }
 
 int Peternak::getJumlahHewan() const {
     return jumlah_hewan;
@@ -89,6 +67,15 @@ int Peternak::getMaxHewan() const {
 
 void Peternak::setKandang(int kandangX, int kandangY, Animal* item) {
     kandang.set(kandangX, kandangY, item);
+
+    if(kandang.getMap()[y][x] == nullptr){
+        if (item != nullptr){
+            jumlah_hewan++;
+        }
+    }
+    else if(item == nullptr){
+        jumlah_hewan--;
+    }
 }
 
 Map<Animal>& Peternak::getKandang() {
@@ -96,9 +83,11 @@ Map<Animal>& Peternak::getKandang() {
 }
 
 void Peternak::budidaya() {
-    cout << "Pilih hewan dari penyimpanan" << endl << endl;
+    if (isHewanInInventory()) throw NoAnimalInInventoryException();
+    if (jumlah_hewan >= getMaxHewan()) throw KandangFullException();
     string slot;
     tuple<int, int> pos;
+    cout << "Pilih hewan dari penyimpanan" << endl << endl;
     Item& a = takeFromInv(ANIMAL);
     Animal* hewan = dynamic_cast<Animal*>(&a);
 
@@ -107,17 +96,19 @@ void Peternak::budidaya() {
     while(true){
         cout << "Slot: ";
         cin >> slot;
-        pos = convertToCoordinate(slot);
-        if (kandang.getMap()[get<0>(pos)][get<1>(pos)] != nullptr){
+        slot = convertToCoordinate(slot);
+        int y = get<0>(pos);
+        int x = get<1>(pos);
+        if (kandang.getMap()[x][y] != nullptr){
             cout << "Slot sudah terisi" << endl;
-        } else if (get<0>(pos) < 0 || get<0>(pos) >= w_kandang || get<1>(pos) < 0 || get<1>(pos) >= h_kandang) {
+        } else if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang) {
             cout << "Petak kandang tidak valid." << endl;
         } else {
-            kandang.set(get<0>(pos), get<1>(pos), hewan);
+            setKandang(x, y, hewan);
             jumlah_hewan++;
             cout << endl << "Dengan hati-hati, kamu meletakkan seekor " << convertToReadable(std::string(hewan->getItemName()),true,true) << " di kandang." << endl;
             cout << convertToReadable(std::string(hewan->getItemName()), true, true) << " telah menjadi peliharaanmu sekarang!" << endl;
-            break;
+            return;
         }
     }
 }
@@ -137,8 +128,7 @@ bool Peternak::isFoodTypeCompatible(const std::string& animalType, const std::st
 }
 
 void Peternak::memberiPangan() {
-    // if(kandang.isEmpty()) throw KandangKosongException();
-    // vector<pair<Item*, int>> varians = getVarianItem(ANIMAL);
+    if(kandang.isEmpty()) throw KandangKosongException();
 
     // Menampilkan peternakan
     cout << "Pilih petak kandang yang akan diberi makan" << endl << endl;
@@ -210,7 +200,14 @@ void Peternak::memberiPangan() {
 }
 
 int Peternak::hitungKekayaan() const {
-    return this->getGulden();
+    vector<Animal*> kandanglist = kandang.convertToList();
+    int retval = Player::hitungKekayaan();
+
+    for (Animal*& hewan : kandanglist){
+        retval += hewan->getItemPrice();
+    }
+
+    return retval;
 }
 
 bool Peternak::foodForAnimal(string animalType, Item* food) {
@@ -231,7 +228,7 @@ bool Peternak::foodForAnimal(string animalType, Item* food) {
 }
 
 void Peternak::panennn(const vector<Product>& products){
-    // if (isInventoryFull()) throw InventoryFullException();
+    if (isInventoryFull()) throw InventoryFullException();
     string slot;
     tuple<int, int> pos;
     int choiceAnimal;
@@ -244,13 +241,9 @@ void Peternak::panennn(const vector<Product>& products){
     Product* animalProduct = new Product();
 
     displayGrid();
-    // if(varianReadyToHarvest.empty()) throw NoItemToHarvestException();
-    if (varianReadyToHarvest.empty()){
-        cout << "Tidak ada hewan yang siap dipanen" << endl;
-        cout << endl;
-        return;
-    }
+    if(varianReadyToHarvest.empty()) throw NoAnimalToHarvestException();
     cout << endl;
+    
     for (pair<Item*, int> item : varians){
         cout <<" - " << item.first->getItemCode() << ": " << convertToReadable(item.first->getItemName(), true, true) << endl;
     }
@@ -320,8 +313,8 @@ void Peternak::panennn(const vector<Product>& products){
             cout << "Petak ke-" << i+1 << ": ";
             cin >> slot;
             pos = convertToCoordinate(slot);
-            int x = get<0>(pos);
-            int y = get<1>(pos);
+            int x = get<1>(pos);
+            int y = get<0>(pos);
             Animal* mapItem = dynamic_cast<Animal*>(kandang.getMap()[x][y]);
 
             if (x < 0 || x >= w_kandang || y < 0 || y >= h_kandang){
@@ -355,8 +348,8 @@ void Peternak::panennn(const vector<Product>& products){
 
 vector<pair<Item*, int>> Peternak::getVarianReadyToHarvest(){
     vector<pair<Item*, int>> items;
-    for (int i = 0; i < w_kandang; i++) {
-        for (int j = 0; j < h_kandang; j++) {
+    for (int i = 0; i < h_kandang; i++) {
+        for (int j = 0; j < w_kandang; j++) {
             if (kandang.getMap()[i][j] != nullptr && kandang.getMap()[i][j]->getItemType() == ANIMAL && kandang.getMap()[i][j]->isReadyToHarvest()){
                 bool found = false;
                 for (auto& item : items) {
@@ -373,4 +366,9 @@ vector<pair<Item*, int>> Peternak::getVarianReadyToHarvest(){
         }
     }
     return items;
+}
+
+bool Peternak::isAnimalInInventory(){
+    vector<pair<Item*, int>> items = getVarianItem(ANIMAL);
+    return !items.empty();
 }

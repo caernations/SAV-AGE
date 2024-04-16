@@ -59,7 +59,7 @@ int main() {
     products.push_back(&product3);
 
     cout << "O PANEN TESTING" << endl;
-    p.panennn(products);
+    // p.panennn(products);
 
     cout << "O MEMAKAN TESTING" << endl << "Berat badan saat ini: " << p.getBeratBadan() << endl;
     cout << endl;

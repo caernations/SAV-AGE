@@ -35,7 +35,7 @@ item :
 	@g++ -c $(SOURCE)/Item/Item.cpp -o $(BIN)/Item.o
 	@echo "Finishing job"
 	@g++ -c $(SOURCE)/Item/Animal.cpp -o $(BIN)/Animal.o
-#	@g++ -c $(SOURCE)/Item/Building.cpp -o $(BIN)/Building.o
+	@g++ -c $(SOURCE)/Item/Building.cpp -o $(BIN)/Building.o
 	@g++ -c $(SOURCE)/Item/Recipe.cpp -o $(BIN)/Recipe.o
 	@g++ -c $(SOURCE)/Item/Plant.cpp -o $(BIN)/Plant.o
 	@g++ -c $(SOURCE)/Item/Product.cpp -o $(BIN)/Product.o
@@ -50,7 +50,7 @@ player : item
 	@echo "Finishing job"
 	@g++ -c $(SOURCE)/Player/Peternak.cpp -o $(BIN)/Peternak.o
 	@g++ -c $(SOURCE)/Player/Petani.cpp -o $(BIN)/Petani.o
-	@g++ -c $(SOURCE)/Player/Walikota.cpp -o $(BIN)/Walikota.o
+#	@g++ -c $(SOURCE)/Player/Walikota.cpp -o $(BIN)/Walikota.o
 	@echo "Player job done!"
 	@echo ""
 
@@ -59,3 +59,8 @@ util	:
 	@g++ -c $(SOURCE)/utils/Color.cpp -o $(BIN)/Color.o
 	@g++ -c $(SOURCE)/utils/StringProcessor.cpp -o $(BIN)/StringProcessor.o
 	@echo ""
+
+testfarm	: item player util
+	@echo "Generating peternak test"
+	@g++ $(SOURCE)/Player/driverPeternak.cpp $(BIN)/*.o -o $(BIN)/peternaktest
+	@./$(BIN)/peternaktest

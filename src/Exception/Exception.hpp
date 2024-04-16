@@ -46,4 +46,28 @@ struct NoFoodInInventoryException : public exception {
     }
 };
 
+struct KandangFullException : public exception {
+    const char* what() const throw() {
+        return "Kandang penuh";
+    }
+};
+
+struct NoAnimalInInventoryException : public exception {
+    const char* what() const throw() {
+        return "Tidak ada hewan di inventory";
+    }
+};
+
+struct NoAnimalToHarvestException : public exception {
+    const char* what() const throw() {
+        return "Tidak ada hewan yang bisa dipanen";
+    }
+};
+
+struct KandangKosongException : public exception {
+    const char* what() const throw() {
+        return "Kandang kosong";
+    }
+}
+
 #endif
