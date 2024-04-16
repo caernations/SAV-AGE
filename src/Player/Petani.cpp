@@ -64,7 +64,7 @@ int Petani::getMaxTumbuhan() const {
 void Petani::setLahan(int x, int y, Plant* item){
     lahan.set(x, y, item);
     
-    if(lahan.getMap()[x][y] == nullptr){
+    if(lahan.getMap()[y][x] == nullptr){
         if (item != nullptr){
             jumlah_tumbuhan++;
         }

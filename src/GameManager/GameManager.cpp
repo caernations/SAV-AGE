@@ -373,7 +373,7 @@ void GameManager::gameloop(){
                 }
             }
             else{
-                throw string("Invalid command!");
+                cout << endl << "Invalid command!" << endl;
             }
         
         }
