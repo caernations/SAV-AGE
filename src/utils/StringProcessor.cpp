@@ -142,3 +142,15 @@ string removeSpaces(const string& x){
     }
     return retval;
 }
+
+bool digitOnly(string text){
+    for (char& x : text){
+        if (x == text[0] && x == '-'){
+            continue;
+        }
+        if (!isdigit(x)){
+            return false;
+        }
+    }
+    return true;
+}

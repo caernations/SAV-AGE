@@ -25,6 +25,7 @@ bool lexCompare(const string& a, const string& b);
 
 string removeSpaces(const string& x);
 
+bool digitOnly(string text);
 
 
 #endif
