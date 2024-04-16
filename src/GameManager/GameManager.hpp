@@ -13,6 +13,7 @@
 #include "Codex.hpp"
 #include "../Item/GeneralStore.hpp"
 #include <fstream>
+#include "../Exception/Exception.hpp"
 
 using namespace std;
 

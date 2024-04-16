@@ -246,6 +246,7 @@ void Walikota::buildBuilding(){
         removeFromInv(it->first, it->second);
         ++it;
     }
+    cout << endl;
     addToInv(recipe);
 
     Player::displayGrid();
@@ -288,7 +289,7 @@ tuple<PlayerType, string> Walikota::addPlayer(vector<Player*> listPlayer){
         }
         break;
     }
-    
+
     changeGulden(-50);
     return make_tuple(pt, namaPemain);
 }

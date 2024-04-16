@@ -381,9 +381,9 @@ void GameManager::gameloop(){
         catch (GMException){
 
         }
-        catch (exception e){
-            cout << "Exception occured! : " << e.what() << endl;
-        }
+        catch (GameException& e) {
+        cout << e.what() << endl;
+    }
 
         //check money and weight
 
