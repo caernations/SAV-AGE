@@ -45,4 +45,6 @@ int main(){
     players.push_back(&b3);
 
     w.buildBuilding();
+
+    w.collectTax(players);
 }
