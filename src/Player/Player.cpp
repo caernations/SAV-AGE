@@ -166,24 +166,21 @@ void Player::displayGrid() {
     getInventory().printTitle(invenSizeW, 5);
     getInventory().iterateAlphabet(invenSizeW);
     getInventory().print_divider(invenSizeW,5);
-    for (int i = 0; i <invenSizeH; i++){
+    for (int i = 0; i <invenSizeW; i++){
         cout << setw(2) << setfill('0') << i+1 << " ";
         cout << "|";
-        for (int j = 0; j < invenSizeW; j++){
-            if (getInventory().getMap()[i][j] == nullptr){
+        for (int j = 0; j < invenSizeH; j++){
             if (getInventory().getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
-                cout << " " << getInventory().getMap()[i][j]->getItemCode() << " " << "|";
                 cout << " " << getInventory().getMap()[i][j]->getItemCode() << " " << "|";
             }
         }
         cout << "\n";
         getInventory().print_divider(invenSizeW,5);
-
     }
 }
-}
+
 
 void Player::addWeight(int addedWeight){
     this->beratBadan+=addedWeight;

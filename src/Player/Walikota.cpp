@@ -282,7 +282,7 @@ tuple<string, string> Walikota::addPlayer(vector<Player*> listPlayer){
         }
         break;
     }
-
+    
     changeGulden(-50);
     return make_tuple(jenisPemain, namaPemain);
 }

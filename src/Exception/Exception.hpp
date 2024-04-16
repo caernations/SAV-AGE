@@ -70,4 +70,10 @@ struct KandangKosongException : public exception {
     }
 };
 
+struct NotEnoughGuldenException : public exception {
+    const char* what() const throw() {
+        return "Gulden tidak cukup";
+    }
+};
+
 #endif

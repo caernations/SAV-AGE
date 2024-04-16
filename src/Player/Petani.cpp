@@ -30,23 +30,18 @@ void Petani::displayGrid(){
         cout << "|";
         for (int j = 0; j < w_lahan; j++){
             if (lahan.getMap()[i][j] == nullptr){
-            if (lahan.getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
                 cout << " ";
                 if(lahan.getMap()[i][j]->isReadyToHarvest())
                     color.colorGreen(lahan.getMap()[i][j]->getItemCode());
-                if(lahan.getMap()[i][j]->isReadyToHarvest())
-                    color.colorGreen(lahan.getMap()[i][j]->getItemCode());
                 else
-                    color.colorRed(lahan.getMap()[i][j]->getItemCode());
                     color.colorRed(lahan.getMap()[i][j]->getItemCode());
                 cout << " " << "|";
             }
         }
         cout << endl;
         getLahan().print_divider(w_lahan,5);
-    }
     }
 }
 

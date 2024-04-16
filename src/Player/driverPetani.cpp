@@ -60,5 +60,8 @@ int main(){
     products.push_back(&product2);
     products.push_back(&product3);
 
+    p.Player::displayGrid();
+    p.displayGrid();
+
 
 }
