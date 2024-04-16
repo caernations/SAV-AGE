@@ -47,6 +47,11 @@ void GameManager::saveState(const string& path){
         }
     }
     //write store state
+    auto shopItems = store.limitedItems();
+    writer << shopItems.size() << endl;
+    for (pair<string,int> item : shopItems){
+        writer << item.first << " " << item.second << endl;
+    }
 
     writer.close();
 }
@@ -92,7 +97,7 @@ void GameManager::loadState(const string& path){
         //populate inventory
         getline(reader,line);
         int itemammt = stoi(line);
-        cout << "InventorySize : " << playerCount << endl; //DEBUG
+        cout << "InventorySize : " << itemammt << endl; //DEBUG
         for (int j = 0; j < itemammt; j++){
             try{
                 getline(reader,line);
@@ -104,9 +109,11 @@ void GameManager::loadState(const string& path){
         }
         
         //populate field if any
-        getline(reader,line);
-        cout << "Populating field of size : " << line << endl; //DEBUG
+        
+        
         if (ptype == PETANI){
+            getline(reader,line);
+            cout << "Populating field of size : " << line << endl; //DEBUG
             int fieldsize = stoi(line);
             Petani* petani = dynamic_cast<Petani*>(player);
             for (int j = 0; j < fieldsize ; j++){
@@ -117,14 +124,23 @@ void GameManager::loadState(const string& path){
                 plant->setAge(stoi(lineholder[2]));
                 petani->setLahan(get<0>(location),get<1>(location),plant);
                 }
-            //DEBUG
-            cout << "Report item" << endl;
             //petani->displayGrid();
             }
         else if (ptype == PETERNAK) {
 
         };
+
     }
+    //populate shop
+        getline(reader,line);
+        cout << "POPULATING SHOP WITH ITEMS : " << line << endl;
+        int shopitems = stoi(line);
+        for (int i = 0; i < shopitems; i++){
+            getline(reader,line);
+            vector<string> splitted = split(line,' ');
+            cout << splitted[0] << "|" << stoi(splitted[1]) << endl;
+            store.addItem(splitted[0],stoi(splitted[1]));
+        }
 
     reader.close();
 }
