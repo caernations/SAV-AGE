@@ -1,16 +1,18 @@
 #include "Walikota.hpp"
+#include "Petani.hpp"
 // #include "Walikota.cpp"
 // #include "Player.cpp"
 // #include "../Item/Product.cpp"
 // #include "../Item/Building.cpp"
 
-// g++ -o test driverWaliKota.cpp Walikota.cpp Player.cpp ../Item/Product.cpp ../Item/Building.cpp ../Item/Item.cpp ../Item/Recipe.cpp ../utils/StringProcessor.cpp
+// g++ -o test driverWaliKota.cpp Walikota.cpp Petani.cpp Player.cpp ../Item/Product.cpp ../Item/Building.cpp ../Item/Item.cpp ../Item/Recipe.cpp ../utils/StringProcessor.cpp
 
 #include <iostream>
 
 int main(){
+    vector<Player*> players;
     Walikota w(1, "Joni", 10, 10, 5, 5);
-    Recipe r(1, "SML", "SMALL_HOUSE", 10);
+    Recipe r(1, "SML", "SMALL_HOUSE");
     r.addMaterial("WOOD", 4);
     r.addMaterial("IRON", 1);
 
@@ -30,14 +32,16 @@ int main(){
 
     vector<pair<Product*, int>> materials = w.getVarianMaterial();
 
-    w.buildBuilding();
-    // w.isEnoughToBuild("SMALL_HOUSE");
-    
-    cout<<w.getItemCountInInventory()<<endl;
-    w.displayGrid();
+    Petani b1(1, "Budi", 10, 10, 5, 5, 10, 10);
+    b1.changeGulden(1000);
+    Petani b2(2, "Alex", 10, 10, 5, 5, 10, 10);
+    Petani b3(3, "Joko", 10, 10, 5, 5, 10, 10);
 
-    
+    b3.addToInvEmptySlot(&p);
 
-    
 
+    players.push_back(&w);
+    players.push_back(&b1);
+    players.push_back(&b2);
+    players.push_back(&b3);
 }

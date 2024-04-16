@@ -25,34 +25,101 @@ class Item {
         int itemPrice;
         ItemType itemType;
     public:
+        /**
+         * Constructor awal dengan itemID = 0, itemCode = "", itemName = "", itemPrice = 0, itemType = ""
+        */
         Item();
-
+        
+        /**
+         * Constructor dengan parameter
+         * @param itemID Kode unik untuk class Item
+         * @param itemCode Kode unik untuk class Item
+         * @param itemName Nama item
+         * @param itemPrice Harga item
+         * @param itemType Tipe item
+        */
         Item(int itemID, const string& itemCode, const string& itemName, int itemPrice, ItemType itemType);
         
-        virtual ~Item(); // virtual dtor
+        /**
+         * Destructor
+        */
+        virtual ~Item();
 
-        // getters
+        /**
+         * Mengembalikan ID
+         * @return itemID
+        */
         int getItemID() const;
+
+        /**
+         * Mengembalikan kode unik untuk class Item
+         * @return itemCode
+        */
         string getItemCode() const;
+
+        /**
+         * Mengembalikan nama item
+         * @return itemName
+        */
         string getItemName() const;
+
+        /**
+         * Mengembalikan harga item
+         * @return itemPrice
+        */
         int getItemPrice() const;
+
+        /**
+         * Mengembalikan tipe item
+         * @return itemType
+        */
         ItemType getItemType() const;
 
-        // setters
+        /**
+         * Mengubah ID
+         * @param newItemID ID baru
+        */
         void setItemID(int newItemID);
+
+        /**
+         * Mengubah kode unik untuk class Item
+         * @param newItemCode Kode unik baru
+        */
         void setItemCode(const string& newItemCode);
+
+        /**
+         * Mengubah nama item
+         * @param newItemName Nama item baru
+        */
         void setItemName(const string& newItemName);
+
+        /**
+         * Mengubah harga item
+         * @param newItemPrice Harga item baru
+        */
         void setItemPrice(int newItemPrice);
+
+        /**
+         * Mengubah tipe item
+         * @param newItemType Tipe item baru
+        */
         void setItemType(ItemType newItemType);
 
-        // operator overloads
+        /**
+         * Apakah item ini sama dengan item lain
+         * @param other item yang ingin dibandingkan
+        */
         bool operator==(const Item& other) const;
-        bool operator<(const Item& other) const;
 
-        // polymorphic behavior
-        virtual void displayItem() const = 0; // display each item differently
+        /**
+         * Menampilkan item
+        */
+        virtual void displayItem() const = 0;
         
-        virtual Item* cloneItem() const = 0; // create copies tanpa tau tipe objeknya
+        /**
+         * Mengembalikan clone dari item
+        */
+        virtual Item* cloneItem() const = 0;
 };
 
 #endif

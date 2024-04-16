@@ -1,11 +1,4 @@
 #include "Petani.hpp"
-// #include "../Item/Plant.cpp"
-// #include "Petani.cpp"
-// #include "../Item/Product.cpp"
-// #include "../utils/Color.cpp"
-// #include "../utils/StringProcessor.cpp"
-// #include "Player.cpp"
-// #include "../Item/Item.cpp"
 
 // g++ -o driverPetani driverPetani.cpp Petani.cpp ../Item/Item.cpp ../Item/Plant.cpp ../Item/Product.cpp ../utils/StringProcessor.cpp ../utils/Color.cpp Player.cpp
 
@@ -22,11 +15,12 @@ int main(){
         inven[i].resize(5,nullptr);
     }
 
-    Petani p(1,"dani",100,50,5,5, 10, 10);
+    Petani p(1,"dani", 100, 50 , 5, 5, 10, 10);
     cout << p.getJumlahTumbuhan() << endl;
     cout << p.getWLahan() << endl;
     cout << p.getHLahan() << endl;
     cout << p.getMaxTumbuhan() << endl;
+    cout << p.getGulden() << endl;
 
     Plant* p1 = new Plant(1, "TWD", "TOWOWO", MATERIAL_PLANT, 5, 10);
     Plant p2(2, "ASU", "TOWOWO", MATERIAL_PLANT, 5, 10);
@@ -66,16 +60,11 @@ int main(){
     products.push_back(&product2);
     products.push_back(&product3);
 
-    p.budidaya();
+    pair<Player*, int> pajak = p.hitungPajak();
 
-    p.panennn(products);
+    cout << pajak.first->getPlayerName() << " " << pajak.second << endl;
 
-    cout << endl;
-    cout << p.getBeratBadan() << endl;
-    cout << endl;
+    cout << "MONEY = " << p.getGulden() << endl;
 
-    p.consumeFromInv();
 
-    // p.displayGrid();
-    delete p1;
 }

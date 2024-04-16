@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 #include "Item.hpp"
-#include "/root/Tubes1_OOP/PetaniPPP/src/Player/Player.hpp"
+#include "../Player/Player.hpp"
 using namespace std;
 
 enum Action{

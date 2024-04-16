@@ -31,10 +31,6 @@ void Item::setItemType(ItemType newItemType) { itemType = newItemType; }
 bool Item::operator==(const Item& other) const {
     return itemID == other.itemID;
 }
-bool Item::operator<(const Item& other) const {
-    return itemID < other.itemID;
-}
-
 
 
 // polymorphic behavior

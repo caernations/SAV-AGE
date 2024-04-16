@@ -30,19 +30,23 @@ void Petani::displayGrid(){
         cout << "|";
         for (int j = 0; j < w_lahan; j++){
             if (lahan.getMap()[i][j] == nullptr){
+            if (lahan.getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
                 cout << " ";
                 if(lahan.getMap()[i][j]->isReadyToHarvest())
                     color.colorGreen(lahan.getMap()[i][j]->getItemCode());
+                if(lahan.getMap()[i][j]->isReadyToHarvest())
+                    color.colorGreen(lahan.getMap()[i][j]->getItemCode());
                 else
+                    color.colorRed(lahan.getMap()[i][j]->getItemCode());
                     color.colorRed(lahan.getMap()[i][j]->getItemCode());
                 cout << " " << "|";
             }
         }
         cout << endl;
         getLahan().print_divider(w_lahan,5);
-
+    }
     }
 }
 
@@ -80,8 +84,8 @@ Map<Plant>& Petani::getLahan() {
 }
 
 void Petani::budidaya(){
-    // if (isInventoryFull()) throw InventoryFullException();
-    // if (jumlah_tumbuhan >= getMaxTumbuhan()) throw LahanFullException();
+    if (isPlantInInventory()) throw NoPlantInInventoryException();
+    if (jumlah_tumbuhan >= getMaxTumbuhan()) throw LahanFullException();
     string slot;
     tuple<int, int> pos;
     cout << "Pilih tanaman dari penyimpanan:" << endl;
@@ -98,20 +102,21 @@ void Petani::budidaya(){
         cout << "Slot: ";
         cin >> slot;
         pos = convertToCoordinate(slot);
-        if (lahan.getMap()[get<0>(pos)][get<1>(pos)] != nullptr){
+        int y = get<0>(pos);
+        int x = get<1>(pos);
+        if (lahan.getMap()[x][y] != nullptr){
             cout << "Slot sudah terisi" << endl;
         } else {
-            lahan.set(get<0>(pos), get<1>(pos), plant);
+            setLahan(x, y, plant);
             cout << "Cangkul, cangkul, cangkul yang dalam~!" << endl;
             cout << convertToReadable(plant->getItemName(), false, false) << " berhasil ditanami" << endl;
             return;
         }
     }
-
 }
 
 void Petani::panennn(const vector<Product>& products){
-    // if (isInventoryFull()) throw InventoryFullException();
+    if (isInventoryFull()) throw InventoryFullException();
     string slot;
     tuple<int, int> pos;
     int choicePlant;
@@ -125,13 +130,8 @@ void Petani::panennn(const vector<Product>& products){
     Product* plantProduct = new Product();
 
     displayGrid();
-    // if(varianReadyToHarvest.empty()) throw NoItemToHarvestException();
-    if (varianReadyToHarvest.empty()){
-        cout << "Tidak ada tanaman yang siap dipanen" << endl;
-        cout << endl;
-        return;
-    }
-    cout << endl;
+    if(varianReadyToHarvest.empty()) throw NoPlantToHarvestException();
+
     for (pair<Item*, int> item : varians){
         cout <<" - " << item.first->getItemCode() << ": " << convertToReadable(item.first->getItemName(), true, true) << endl;
     }
@@ -201,8 +201,8 @@ void Petani::panennn(const vector<Product>& products){
             cout << "Petak ke-" << i+1 << ": ";
             cin >> slot;
             pos = convertToCoordinate(slot);
-            int x = get<1>(pos);
             int y = get<0>(pos);
+            int x = get<1>(pos);
             Plant* mapItem = dynamic_cast<Plant*>(lahan.getMap()[x][y]);
 
             if (x < 0 || x >= w_lahan || y < 0 || y >= h_lahan){
@@ -215,9 +215,9 @@ void Petani::panennn(const vector<Product>& products){
                 cout << "Tanaman belum siap dipanen" << endl;
             }
             else {
-                lahan.set(x, y, nullptr);
+                setLahan(x, y, nullptr);
                 slots.push_back(slot);
-                addToInvEmptySlot(plantProduct);
+                addToInv(plantProduct);
                 break;
             }
         }
@@ -266,4 +266,9 @@ int Petani::hitungKekayaan() const{
     }
 
     return retval;
+}
+
+bool Petani::isPlantInInventory(){
+    vector<pair<Item*, int>> items = getVarianItem(PLANT);
+    return !items.empty();
 }

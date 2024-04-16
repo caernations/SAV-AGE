@@ -9,7 +9,6 @@ map<PlantType,string> PlantTypeToString = {
     {FRUIT_PLANT,"FRUIT_PLANT"}
 };
 
-
 map<string,ProductType> StringToProductType {
     {"PRODUCT_MATERIAL_PLANT",PRODUCT_MATERIAL_PLANT},
     {"PRODUCT_FRUIT_PLANT",PRODUCT_FRUIT_PLANT},

@@ -8,11 +8,12 @@
 #include "../Map/Map.hpp"
 #include "../Item/Product.hpp"
 #include "../utils/StringProcessor.hpp"
+#include "../Exception/Exception.hpp"
 
 using namespace std;
 
 enum PlayerType {
-    PETANI = 1,
+    PETANI,
     PETERNAK,
     WALIKOTA
 };
@@ -21,27 +22,16 @@ class Player {
     private:
         const int STARTING_WEIGHT = 40;
         const int STARTING_GULDEN = 50;
-
         PlayerType playerType;
-
         int playerID;
-
         string playerName;
-
         int gulden;
-
         int beratBadan;
-
         Map<Item> inventory; 
-
         int invenSizeW;
-
         int invenSizeH;
-
         int maxItemInInventory;
-
         int itemCountInInventory;
-
     public:
         Player();
 
@@ -69,7 +59,13 @@ class Player {
          * @param invenX
          * @param invenY
         */
-        void addToInv(Item* item, int invenX, int invenY);
+        void addToInvSpecific(Item* item);
+
+        /**
+         * Menambahkan item ke inventory dengan pilihan opsi
+         * @param item item yang ingin ditambahkan
+        */
+        void addToInv(Item* item);
 
         /**
          * Mengambil item dari invento-ry
@@ -126,26 +122,88 @@ class Player {
         */
         int getInvenH();
 
+        /**
+         * Mengembalikan gulden player
+         * @return int gulden player
+        */
         int getGulden() const;
 
+        /**
+         * Mengembalikan berat badan player
+         * @return int berat badan player
+        */
         int getBeratBadan() const;
 
+        /**
+         * Mengembalikan nama player
+         * @return string nama player
+        */
         string getPlayerName() const;
 
+        /**
+         * Mengembalikan tipe player dalam string
+         * @return string tipe player dalam string
+        */
+        string playerTypeToString() const;
+
+        /**
+         * Mengembalikan id player
+         * @return int id player
+        */
         int getPlayerID() const;
 
+        /**
+         * Mengembalikan jumlah item maksimal yang dapat dimiliki player
+         * @return int jumlah item maksimal yang dapat dimiliki player
+        */
         int getMaxItemInInventory() const;
 
+        /**
+         * Mengembalikan jumlah item yang dimiliki player
+         * @return int jumlah item yang dimiliki player
+        */
         int getItemCountInInventory() const;
 
+        /**
+         * Menampilkan info player
+        */
         void displayPlayerInfo() const;
 
+        /**
+         * Mengembalikan tipe player
+         * @return PlayerType tipe player
+        */
         PlayerType getType() const;
 
+        /**
+         * Mengembalikan apakah inventory player penuh
+         * @return bool true jika inventory player penuh
+         * false jika inventory player tidak penuh
+        */
         bool isInventoryFull();
 
+        /**
+         * Mengembalikan apakah inventory player kosong
+         * @return bool true jika inventory player kosong
+        */
+        bool isInventoryEmpty();
+
+        /**
+         * apakah terdapat makanan di inventory
+         * @return bool true jika terdapat makanan di inventory
+        */
+        bool isThereFood();
+
+        /**
+         * Mengembalikan apakah inventory player memiliki item
+         * @return bool true jika inventory player memiliki item
+        */
         string itemTypeToString(ItemType type);
 
+        /**
+         * Mengembalikan apakah inventory player memiliki item
+         * @return bool true jika inventory player memiliki item
+        */
         virtual int hitungKekayaan() const;
 
         /**
@@ -157,6 +215,8 @@ class Player {
          * panen mahkluk hidup
         */
         virtual void panennn(const vector<Product>& products);
+
+
     };
 
 #endif 

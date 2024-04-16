@@ -3,14 +3,6 @@
 #include "../utils/StringProcessor.hpp"
 using namespace std;
 
-        WKException::WKException(){
-            message = "Generic WK Exception occured!";
-        };
-        WKException::WKException(string message){
-            this->message = message;
-        };
-        WKException::~WKException(){};
-
 Walikota::Walikota() : Player() {
     resep = vector<Recipe>();
 }
@@ -115,7 +107,7 @@ vector<pair<Product*, int>> Walikota::getVarianMaterial(){
     return materials;
 }
 
-vector<tuple<Player*, int>> Walikota::calculateTax(vector<Player *> playerlist)
+void Walikota::collectTax(vector<Player*> playerlist)
 {
     vector<tuple<Player*, int>> retval;
     int total = 0;
@@ -163,26 +155,24 @@ vector<tuple<Player*, int>> Walikota::calculateTax(vector<Player *> playerlist)
             }
             else{
                 auto i = retval.begin();
-                //!lexCompare(player->getPlayerName(),get<0>(*i)->getPlayerName()) IN THEORY, karena player list udah lexografik, ini gkk perllu
                 while((i != retval.end() && tax <= get<1>(*i))){
                     i++;
                 }
                 retval.insert(i,make_tuple(player,tax));
             }
-            ///print
         }
     };
     cout << "Cring cring cring..." << endl << "Pajak sudah dipungut!" << endl;
             cout << "Berikut adalah detil dari pemungutan pajak:" << endl;
 
             for (int i = 0; i < retval.size(); i++){
-                cout << "   " << i << ". " << get<0>(retval[i])->getPlayerName() << " - " << PlayerTypeToLCase[get<0>(retval[i])->getType()];
+                string tipePlayer = get<0>(retval[i])->playerTypeToString();
+                cout << "   " << i+1 << ". " << get<0>(retval[i])->getPlayerName() << " - " << tipePlayer;
                 cout << ": " << get<1>(retval[i]) << " gulden" << endl;
             }
 
             cout << "Negara mendapatkan pemasukan sebesar " << total << " gulden." << endl;
             cout << "Gunakan dengan baik dan jangan dikorupsi ya!" << endl;
-    return retval;
 }
 
 bool Walikota::isEnoughToBuild(const string& buildingName) {
@@ -207,41 +197,30 @@ bool Walikota::isEnoughToBuild(const string& buildingName) {
             ++it;
         }
     }
-
     
-    if (needs.empty() && moneyLeft <= 0) {
+    if (needs.empty()) {
         return true;
-    } else {
-        cout << "Kamu tidak punya sumber daya yang cukup! Masih memerlukan ";
-        if (moneyLeft > 0) {
-            cout << moneyLeft << " gulden";
+    } 
+    cout << "Kamu tidak punya sumber daya yang cukup! Masih memerlukan ";
+
+    for (auto it = needs.begin(); it != needs.end();) {
+        cout << it->second << " " << convertToReadable(it->first, false, false);
+        if (++it != needs.end()) {
+            cout << ", ";
         }
-        if (!needs.empty()) {
-            if (moneyLeft > 0) {
-                cout << ", ";
-            }
-            for (auto it = needs.begin(); it != needs.end();) {
-                cout << it->second << " " << convertToReadable(it->first, false, false);
-                if (++it != needs.end()) {
-                    cout << ", ";
-                }
-            }
-        }
-        cout <<"!"<< endl;
-        return false;
     }
+    
+    cout <<"!"<< endl;
+    return false;
+    
 }
 
 void Walikota::buildBuilding(){
     string buildingName;
-    // if (!isEnoughToBuild()) throw NotEnoughRequirementException();
+    if (!isAbleToBuild()) throw NotAbleToBuildException();
 
-    if (!isAbleToBuild()){
-        cout << "Anda tidak bisa membangun apapun!" << endl;
-    }
-    else{
-        while(true) {
-        displayRecipe();
+    displayRecipe();
+    while(true) {
         cout << endl;
         cout << "Bangunan yang ingin dibangun: ";
         cin >> buildingName;
@@ -255,23 +234,68 @@ void Walikota::buildBuilding(){
         else {
             break;
         }
-        }
-        Recipe* recipe = new Recipe(getRecipe(buildingName));
-        map<string, int> needs = recipe->getMaterials();
-        changeGulden(-recipe->getItemPrice());
-
-        for(auto it = needs.begin(); it != needs.end();){
-            removeFromInv(it->first, it->second);
-            ++it;
-        }
-        addToInvEmptySlot(recipe);
-
-        Player::displayGrid();
-        cout << convertToReadable(buildingName, true, false) << " berhasil dibangun dan telah menjadi hak milik walikota!" << endl;
-
     }
-    
+    Recipe* recipe = new Recipe(getRecipe(buildingName));
+    map<string, int> needs = recipe->getMaterials();
+    changeGulden(-recipe->getItemPrice());
+
+    for(auto it = needs.begin(); it != needs.end();){
+        removeFromInv(it->first, it->second);
+        ++it;
+    }
+    addToInv(recipe);
+
+    Player::displayGrid();
+    cout << convertToReadable(buildingName, true, false) << " berhasil dibangun dan telah menjadi hak milik walikota!" << endl;
 }
 
+// vector<pair<Player*, int>> Walikota::sortPlayerTax(vector<pair<Player*, int>>& taxes) {
+//     for (int i = 0; i < taxes.size(); i++) {
+//         for (int j = i + 1; j < taxes.size(); j++) {
+//             if (taxes[i].second < taxes[j].second) {
+//                 pair<Player*, int> temp = taxes[i];
+//                 taxes[i] = taxes[j];
+//                 taxes[j] = temp;
+//             } else if (taxes[i].second == taxes[j].second) {
+//                 if (taxes[i].first->getPlayerName() > taxes[j].first->getPlayerName()) {
+//                     pair<Player*, int> temp = taxes[i];
+//                     taxes[i] = taxes[j];
+//                     taxes[j] = temp;
+//                 }
+                
+//             }
+//         }
+//     }
+//     return taxes;
+// }
 
+// void Walikota::collectTax(vector<Player*>& players) {
+//     vector<pair<Player*,int>> taxes;
+//     int totalTax = 0;
+
+//     for (Player* player : players) {
+//         if (player->getType() != WALIKOTA) {
+//             taxes.push_back(player->hitungPajak());
+//             totalTax += taxes.back().second;
+//         }
+//     }
+
+//     taxes = sortPlayerTax(taxes);
+
+//     cout << "Cring cring cring..." << endl;
+//     cout << "Pajak sudah dipungut!" << endl;
+
+//     cout << endl;
+
+//     cout << "Berikut adalah detil dari pemungutan pajak: " << endl;
+//     for (int i = 0; i < taxes.size(); i++) {
+//         string tipePlayer = taxes[i].first->playerTypeToString();
+//         cout << i + 1 << ". " << taxes[i].first->getPlayerName() << " - " << tipePlayer << " " << taxes[i].second << " gulden." << endl;
+//     }
+
+//     cout << "Negara mendapatkan pemasukan sebesar " << totalTax << " gulden." << endl;
+//     cout << "Gunakan dengan baik dan jangan dikorupsi ya!" << endl;
+//     changeGulden(totalTax);
+
+// }
 

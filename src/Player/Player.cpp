@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <limits>
 using namespace std;
 
 Player::Player() :
@@ -49,11 +50,53 @@ void Player::addToInvEmptySlot(Item* item) {
     } 
 }
 
-void Player::addToInv(Item* item, int invenX, int invenY) {
-    inventory.set(invenX, invenY, item);
+void Player::addToInvSpecific(Item* item) {
+    string slot;
+    while(true) {
+        cout << "Slot: ";
+        cin >> slot;
+        tuple<int, int> slots = convertToCoordinate(slot);
+        int y = get<0>(slots);
+        int x = get<1>(slots);
+        if (inventory.getMap()[x][y] == nullptr) {
+            inventory.set(x, y, item);
+            itemCountInInventory++;
+            return;
+        } else {
+            cout << "Slot sudah terisi. Silakan masukkan slot yang kosong." << endl;
+        }
+    }
+
 }
 
-
+void Player::addToInv(Item* item) {
+    int option;
+    cout << "Pilihan penambahan item ke penyimpanan: " << endl;
+    cout << "1. Tambahkan ke slot kosong" << endl;
+    cout << "2. Pilih slot" << endl;
+    while (true)
+    {
+        cout << "Pilihan angka: ";
+        cin >> option;
+        cout << endl;
+        if (cin.fail() || option < 1 || option > 2)
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Pilihan tidak valid. Silakan masukkan angka 1 atau 2: " << endl;
+        }
+        else
+        {
+            break;
+        }
+    }
+    
+    if (option == 1) {
+        addToInvEmptySlot(item);
+    } else {
+        addToInvSpecific(item);
+    }
+}
 
 Item& Player::takeFromInv(ItemType ItemType) {
     string itemSlot;
@@ -65,8 +108,8 @@ Item& Player::takeFromInv(ItemType ItemType) {
         cin >> itemSlot;
         cout << endl;
         slot = convertToCoordinate(itemSlot);
-        int x = get<0>(slot);
-        int y = get<1>(slot);
+        int y = get<0>(slot);
+        int x = get<1>(slot);
         if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
         } else if (inventory.getMap()[x][y]->getItemType() != ItemType) {
@@ -83,19 +126,19 @@ Item& Player::takeFromInv(ItemType ItemType) {
 }
 
 void Player::consumeFromInv() {
-    // if (inventory.isEmpty()) throw InventoryEmptyException();
+    if (isInventoryEmpty()) throw InventoryEmptyException();
+    if (!isThereFood()) throw NoFoodInInventoryException();
     string slot;
     tuple<int,int> slots;
     cout <<"Pilih makanan dari penyimpanan"<<endl << endl;
     Player::displayGrid();
     Product* product;
-    
     while (true) {
         cout << "Slot: ";
         cin >> slot;
         slots = convertToCoordinate(slot);
-        int x = get<0>(slots);
-        int y = get<1>(slots);
+        int y = get<0>(slots);
+        int x = get<1>(slots);
         cout << endl << endl;
         if (inventory.getMap()[x][y] == nullptr) {
             cout << "Kamu mengambil harapan kosong dari penyimpanan." << endl;
@@ -105,6 +148,7 @@ void Player::consumeFromInv() {
                 cout << "Dengan lahapnya, kamu memakanan hidangan itu" << endl;
                 cout << "Alhasil, berat badan kamu naik menjadi " << beratBadan << endl;
                 inventory.getMap()[x][y] = nullptr;
+                itemCountInInventory--;
                 return;
             } else {
                 cout << "Apa yang kamu lakukan??\\!! Kamu mencoba untuk memakan itu?\\!!" << "\n";
@@ -127,8 +171,10 @@ void Player::displayGrid() {
         cout << "|";
         for (int j = 0; j < invenSizeW; j++){
             if (getInventory().getMap()[i][j] == nullptr){
+            if (getInventory().getMap()[i][j] == nullptr){
                 cout << "     " << "|";
             } else {
+                cout << " " << getInventory().getMap()[i][j]->getItemCode() << " " << "|";
                 cout << " " << getInventory().getMap()[i][j]->getItemCode() << " " << "|";
             }
         }
@@ -136,6 +182,7 @@ void Player::displayGrid() {
         getInventory().print_divider(invenSizeW,5);
 
     }
+}
 }
 
 void Player::addWeight(int addedWeight){
@@ -194,6 +241,18 @@ PlayerType Player::getType() const {
     return playerType;
 }
 
+string Player::playerTypeToString() const {
+    if (playerType == WALIKOTA) {
+        return "Walikota";
+    } else if (playerType == PETANI) {
+        return "Petani";
+    } else if (playerType == PETERNAK) {
+        return "Peternak";
+    } else {
+        return "UNKNOWN";
+    }
+}
+
 int Player::getInvenW() {
     return invenSizeW;
 }
@@ -212,6 +271,23 @@ int Player::getItemCountInInventory() const {
 
 bool Player::isInventoryFull() {
     return itemCountInInventory == maxItemInInventory;
+}
+
+bool Player::isInventoryEmpty() {
+    return itemCountInInventory == 0;
+}
+
+bool Player::isThereFood() {
+    int foodCount = 0;
+    vector<Item*> items = inventory.convertToList();
+    for (Item*& item : items) {
+        if (dynamic_cast<Product*>(item) != nullptr) {
+            if(dynamic_cast<Product*>(item)->isProductConsumable()) {
+                foodCount++;
+            }
+        }
+    }
+    return foodCount > 0;
 }
 
 string Player::itemTypeToString(ItemType type) {
@@ -252,8 +328,6 @@ void Player::removeFromInv(const string& itemName, int amount) {
         }
     }
 }
-
-
 
 int Player::hitungKekayaan() const{
     int retval = 0;

@@ -3,9 +3,9 @@
 #include "Product.hpp"
 #include "Plant.hpp"
 #include "Animal.hpp"
-#include "/root/Tubes1_OOP/PetaniPPP/src/Player/Walikota.hpp"
-#include "/root/Tubes1_OOP/PetaniPPP/src/Player/Petani.hpp"
-#include "/root/Tubes1_OOP/PetaniPPP/src/Player/Peternak.hpp"
+#include "../Player/Walikota.hpp"
+#include "../Player/Petani.hpp"
+#include "../Player/Peternak.hpp"
 
 int main() {
     cout << "flag1" << endl;

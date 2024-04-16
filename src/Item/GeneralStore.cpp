@@ -1,5 +1,5 @@
 #include "GeneralStore.hpp"
-#include "/root/Tubes1_OOP/PetaniPPP/src/utils/StringProcessor.hpp"
+#include "../utils/StringProcessor.hpp"
 Store::Store() {
     vector<Item*> item;
     vector<int> quantity;

@@ -97,7 +97,16 @@ class Petani : public Player{
         */
         Map<Plant>& getLahan();
 
+        /**
+         * menghitung kekayaan yang dimiliki
+        */
         int hitungKekayaan() const;
+
+        /**
+         * apakah terdapat tumbuhan yang siap dipanen
+        */
+        bool isPlantInInventory();
+
 };
 
 #endif

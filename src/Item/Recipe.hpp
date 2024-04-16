@@ -19,9 +19,8 @@ class Recipe : public Item {
          * @param itemID id item
          * @param itemCode kode item
          * @param itemName nama item
-         * @param itemPrice harga item
         */
-        Recipe(int itemID, const std::string& itemCode, const std::string& itemName, int itemPrice);
+        Recipe(int itemID, const std::string& itemCode, const std::string& itemName);
 
         /**
          * dtor
@@ -62,6 +61,10 @@ class Recipe : public Item {
         */
         map<string, int> getMaterials() const;
 
+        /**
+         * mengembalikan clone item
+         * @return clone item
+        */
         Item* cloneItem() const;
         
 };

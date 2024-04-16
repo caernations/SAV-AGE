@@ -7,7 +7,7 @@
 using namespace std;
 
 enum PlantType {
-    MATERIAL_PLANT = 1,
+    MATERIAL_PLANT,
     FRUIT_PLANT
 };
 
@@ -130,6 +130,9 @@ class Plant :public Item {
          */
         bool isReadyToHarvest() const;
 
+        /**
+         * Menambahkan umur tanaman
+        */
         void addAge();
 
 };
