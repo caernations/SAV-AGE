@@ -139,7 +139,7 @@ Item& Player::takeFromInv(ItemType ItemType) {
             itemCountInInventory--;
             return item;
         }
-        cout << "Silahkan masukan slot yang berisi " << itemTypeToString(ItemType) << "." << endl;
+        cout << "Silahkan masukan slot yang berisi " << (ItemType) << "." << endl;
         cout << endl;
     }
 }
@@ -343,18 +343,22 @@ void Player::updateItemCount()
 }
 
 string Player::itemTypeToString(ItemType type) {
-    static const char* itemTypeStrings[] = {
-        "building",
-        "plant",
-        "animal",
-        "product",
-        "recipe" 
-    };
-
-    if (type >= 0 && type < NUM_ITEM_TYPES) {
-        return itemTypeStrings[type];
-    } else {
-        return "UNKNOWN";
+    switch (type){
+        case ANIMAL:
+            return "animal";
+            break;
+        case PLANT:
+            return "plant";
+            break;
+        case PRODUCT:
+            return "product";
+            break;
+        case RECIPE:
+            return "building";
+            break;
+        default:
+            return "UNKNOWN";
+            break;
     }
 }
 
