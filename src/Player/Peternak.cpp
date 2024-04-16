@@ -68,7 +68,7 @@ int Peternak::getMaxHewan() const {
 void Peternak::setKandang(int kandangX, int kandangY, Animal* item) {
     kandang.set(kandangX, kandangY, item);
 
-    if(kandang.getMap()[y][x] == nullptr){
+    if(kandang.getMap()[kandangY][kandangX] == nullptr){
         if (item != nullptr){
             jumlah_hewan++;
         }
@@ -83,7 +83,7 @@ Map<Animal>& Peternak::getKandang() {
 }
 
 void Peternak::budidaya() {
-    if (isHewanInInventory()) throw NoAnimalInInventoryException();
+    if (!isAnimalInInventory()) throw NoAnimalInInventoryException();
     if (jumlah_hewan >= getMaxHewan()) throw KandangFullException();
     string slot;
     tuple<int, int> pos;
@@ -96,7 +96,7 @@ void Peternak::budidaya() {
     while(true){
         cout << "Slot: ";
         cin >> slot;
-        slot = convertToCoordinate(slot);
+        pos = convertToCoordinate(slot);
         int y = get<0>(pos);
         int x = get<1>(pos);
         if (kandang.getMap()[x][y] != nullptr){
@@ -127,8 +127,19 @@ bool Peternak::isFoodTypeCompatible(const std::string& animalType, const std::st
     }
 }
 
+bool Peternak::isKandangKosong() {
+    for (int i = 0; i < h_kandang; i++) {
+        for (int j = 0; j < w_kandang; j++) {
+            if (kandang.getMap()[i][j] != nullptr) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void Peternak::memberiPangan() {
-    if(kandang.isEmpty()) throw KandangKosongException();
+    if(isKandangKosong()) throw KandangKosongException();
 
     // Menampilkan peternakan
     cout << "Pilih petak kandang yang akan diberi makan" << endl << endl;
@@ -238,7 +249,6 @@ void Peternak::panennn(const vector<Product>& products){
     pair<Item*,int> chosenAnimal;
     tuple<int, int> posAnimal;
     vector<string> slots;
-    Product* animalProduct = new Product();
 
     displayGrid();
     if(varianReadyToHarvest.empty()) throw NoAnimalToHarvestException();
@@ -272,18 +282,17 @@ void Peternak::panennn(const vector<Product>& products){
 
     chosenAnimal = varianReadyToHarvest[choiceAnimal-1];
 
+    vector<Product> animalProducts;
     for(int i = 0; i < products.size(); i++){
         if (products[i].getOrigin() == chosenAnimal.first->getItemName()){
-            animalProduct = new Product(products[i]);
-            break;
+            animalProducts.push_back(products[i]);
         }
     }
 
-    if(animalProduct->getItemCode() == ""){
-        cout << "Produk tidak ditemukan" << endl;
-        return;
-    }
-
+    if(animalProducts.empty()){
+    cout << "Produk tidak ditemukan" << endl;
+    return;
+}
     while (true){
         cout << endl;
         cout << "Berapa petak yang ingin dipanen: ";
@@ -330,7 +339,9 @@ void Peternak::panennn(const vector<Product>& products){
                 kandang.set(x, y, nullptr);
                 this->jumlah_hewan--;
                 slots.push_back(slot);
-                addToInvEmptySlot(animalProduct);
+                for (const auto& animalProduct : animalProducts) {
+                    addToInvEmptySlot(new Product(animalProduct));
+                }
                 break;
             }
         }

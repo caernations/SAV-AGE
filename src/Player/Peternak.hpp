@@ -92,6 +92,10 @@ class Peternak : public Player {
         bool foodForAnimal(string animalType, Item* food);
 
         vector<pair<Item*, int>> getVarianReadyToHarvest();
+
+        bool isAnimalInInventory();
+
+        bool isKandangKosong();
 };
 
 #endif

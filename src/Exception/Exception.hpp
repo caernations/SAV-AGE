@@ -68,6 +68,6 @@ struct KandangKosongException : public exception {
     const char* what() const throw() {
         return "Kandang kosong";
     }
-}
+};
 
 #endif
