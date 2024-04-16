@@ -132,3 +132,13 @@ bool isOneOf(const string& input, const vector<string>& comparison){
 bool lexCompare(const string& a, const string& b){
     return lexicographical_compare(a.begin(),a.end(),b.begin(),b.end());
 };
+
+string removeSpaces(const string& x){
+    string retval;
+    for (char c : x){
+        if (c != ' '){
+            retval.push_back(c);
+        }
+    }
+    return retval;
+}

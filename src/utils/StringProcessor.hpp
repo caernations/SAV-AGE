@@ -23,4 +23,8 @@ bool isOneOf(const string& input, const vector<string>& comparison);
 //returns true when A < B
 bool lexCompare(const string& a, const string& b);
 
+string removeSpaces(const string& x);
+
+
+
 #endif
