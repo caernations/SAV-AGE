@@ -39,7 +39,7 @@ item :
 	@g++ -c $(SOURCE)/Item/Plant.cpp -o $(BIN)/Plant.o
 	@g++ -c $(SOURCE)/Item/Product.cpp -o $(BIN)/Product.o
 	@echo "Generate shop"
-#	@g++ -c $(SOURCE)/Item/GeneralStore.cpp -o $(BIN)/GeneralStore.o
+	@g++ -c $(SOURCE)/Item/GeneralStore.cpp -o $(BIN)/GeneralStore.o
 	@echo "Item job done!"
 	@echo ""
 
@@ -49,7 +49,7 @@ player : item
 	@echo "Finishing job"
 	@g++ -c $(SOURCE)/Player/Peternak.cpp -o $(BIN)/Peternak.o
 	@g++ -c $(SOURCE)/Player/Petani.cpp -o $(BIN)/Petani.o
-#	@g++ -c $(SOURCE)/Player/Walikota.cpp -o $(BIN)/Walikota.o
+	@g++ -c $(SOURCE)/Player/Walikota.cpp -o $(BIN)/Walikota.o
 	@echo "Player job done!"
 	@echo ""
 
