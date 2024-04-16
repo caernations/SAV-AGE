@@ -304,6 +304,21 @@ bool Player::isThereFood() {
     return foodCount > 0;
 }
 
+void Player::updateItemCount()
+{
+    int retval = 0;
+
+    for (vector<Item*> x : inventory.getMap()){
+        for (Item* item : x){
+            if (item != nullptr){
+                retval++;
+            }
+        }
+    }
+
+    itemCountInInventory = retval;
+}
+
 string Player::itemTypeToString(ItemType type) {
     static const char* itemTypeStrings[] = {
         "building",
