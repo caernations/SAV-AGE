@@ -5,18 +5,20 @@ using namespace std;
 //cheat menu, if you will
 void GameManager::cheat(){
     awaitMultiInput("What is your command?: ",' ');
-    string commands[] = {"INSIGHT","CONJURE","GIVE","DESTROY","CHRONOS","GREED","MASS"};
+    string commands[] = {"INSIGHT","CONJURE","GIVE","DESTROY","CHRONOS","GREED","MASS","FORCEFEED"};
     string codexpage[] = {"PLANTS","ANIMALS","PRODUCTS","BUILDINGS","SOURCE","PLAYERS"};
     Item* thing; //placeholder for case 0,4
     tuple<int,int> pos;
     int x;
+    int y;
+    int w;
     int i = 0;
 
     if (lastMultiInput.size() <= 1){
         throw GMException("Incorrect cheat command size", "Size : " + to_string(lastMultiInput.size()));
     }
 
-    switch (findIn(lastMultiInput[0],commands,7))
+    switch (findIn(lastMultiInput[0],commands,8))
     {
     case 0:
         switch (findIn(lastMultiInput[1],codexpage,6)){
@@ -43,7 +45,8 @@ void GameManager::cheat(){
                 break;
             case 5:
                 for (Player*& item : activePlayers){
-                    cout << item->getPlayerName() << " : " << PlayerTypeToString[item->getType()] << endl;
+                    cout << item->getPlayerName() << " : " << PlayerTypeToString[item->getType()] << " ";
+                    cout << "Gold : " << item->getGulden() << " Weight : " << item->getBeratBadan() << endl;
                 }
                 break;
             default:
@@ -64,9 +67,16 @@ void GameManager::cheat(){
             cout << "Conjured " << convertToReadable(thing->getItemName(),true, false) << " at " << coordinateToString(pos) << endl;
         }
         break;
-    case 2:
+    case 2: //GIVE
         thing = codex.getItemByName(lastMultiInput[1]);
-        x = min(stoi(lastMultiInput[2]),activePlayers[turn]->getInventory().remainingSlots());
+
+        if (lastMultiInput.size() < 3){
+            x = 0;
+        }
+        else{
+            x = stoi(lastMultiInput[2]);
+        }
+        x = min(x,activePlayers[turn]->getInventory().remainingSlots());
         if (thing == nullptr){
             cout << "Item does not exist!" << endl;
         }
@@ -97,7 +107,7 @@ void GameManager::cheat(){
         break;
     case 5: //GREED
         if (digitOnly(lastMultiInput[1])){
-            int x = stoi(lastMultiInput[1]);
+            x = stoi(lastMultiInput[1]);
 
             if (x + activePlayers[turn]->getGulden() < 0){
                 cout << "Cannot lose gold more than" << activePlayers[turn]->getGulden() <<"!" << endl;
@@ -114,7 +124,7 @@ void GameManager::cheat(){
         break;    
     case 6: //MASS
         if (digitOnly(lastMultiInput[1])){
-            int x = stoi(lastMultiInput[1]);
+            x = stoi(lastMultiInput[1]);
 
             if (x + activePlayers[turn]->getBeratBadan() < 0){
                 cout << "Cannot lose weight more than" << activePlayers[turn]->getBeratBadan() <<"!" << endl;
@@ -129,9 +139,40 @@ void GameManager::cheat(){
             }
         }
         break;
+    case 7: //FORCEFEED
+        if (activePlayers[turn]->getType() != PETERNAK){
+            cout << "No animals of yours to feed..." << endl;
+        }
+        else if (lastMultiInput.size() < 3){
+                cout << "Not enough parameters";
+            }
+        else{
+                tuple<int,int> pos;
+                pos = convertToCoordinate(lastMultiInput[1]); 
+                Peternak* pk = dynamic_cast<Peternak*>(activePlayers[turn]);
+                y = get<0>(pos);
+                x = get<1>(pos);
+                if (x < 0 || x >= get<1>(ternakSize) || y < 0 || y >= get<0>(ternakSize)) {
+                    cout << "Petak kandang tidak valid." << endl;
+                    return;
+                }
+                else if (pk->getKandang().getMap()[x][y] == nullptr){
+                    cout << "No animal found..." << endl;
+                }
+                else{
+                    w = stoi(lastMultiInput[2]);
+                    if (w + pk->getKandang().getMap()[x][y]->getWeight() < 0){
+                        w = -pk->getKandang().getMap()[x][y]->getWeight();
+                    }
+                    pk->getKandang().getMap()[x][y]->addWeight(w);
+                }
+            }
+        break;
     default:
         cout << "Cheat "<< lastMultiInput[0] << " doesnt exist!" << endl;
         break;
     }
+    
+
     
 }
